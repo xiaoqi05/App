@@ -1,10 +1,11 @@
-package com.ps.app;
+package com.ps.app.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.MapView;
+import com.ps.app.R;
 
 public class MainActivity extends AppCompatActivity {
     private  MapView mMapView;
