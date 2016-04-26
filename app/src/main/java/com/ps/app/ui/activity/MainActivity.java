@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.baidu.mapapi.map.MapView;
@@ -14,7 +13,7 @@ import com.ps.app.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final int SDK_PERMISSION_REQUEST = 127;
     private  MapView mMapView;
     private String permissionInfo;
@@ -107,4 +106,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this,LocationActivity.class));
         
     }
+    
+    
 }
