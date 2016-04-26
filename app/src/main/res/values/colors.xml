@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="bt_blue">#3F51B5</color>
+    <color name="red">#d9473a</color>
+    <color name="gray">#8b8f8f</color>
+    <color name="colorControlNormal">#d42d1e</color>
+    <color name="blue">#2196f3</color>
 </resources>

@@ -30,6 +30,11 @@ public class LocationActivity extends AppCompatActivity {
         locationResult = (TextView) findViewById(R.id.textView1);
         locationResult.setMovementMethod(ScrollingMovementMethod.getInstance());
         startButton = (Button) findViewById(R.id.addfence);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         startLocation();
     }
 
@@ -85,9 +90,14 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         locationService.unregisterListener(mListener); //注销掉监听
         locationService.stop(); //停止定位服务
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 
