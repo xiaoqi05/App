@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
 
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/icon_app"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="搜索" />
+
+
     <item
         android:id="@+id/user_p"
         android:icon="@drawable/icon_app"
@@ -18,5 +27,7 @@
         android:icon="@drawable/icon_app"
         app:showAsAction="never"
         android:title="收藏"/>
+    
+    
 
 </menu>
