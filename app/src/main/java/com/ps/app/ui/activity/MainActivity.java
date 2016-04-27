@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,15 +26,13 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //获取地图控件引用
-       //  mMapView = (MapView) findViewById(R.id.bmapView);
+         //获取地图控件引用
+        //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
-        ActionBar actionBar = getSupportActionBar();
-        // actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setIcon(R.drawable.icon_app);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        initActionBar(R.drawable.icon_app,"肖齐");
     }
+
+  
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

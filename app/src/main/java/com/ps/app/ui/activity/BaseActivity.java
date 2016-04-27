@@ -2,7 +2,9 @@ package com.ps.app.ui.activity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.ps.app.R;
@@ -72,6 +74,24 @@ public class BaseActivity  extends AppCompatActivity{
      */
     public void defaultFinish() {
         super.finish();
+    }
+
+    /**
+     * 初始化actionbar
+     * @param logo -1为不设置logo
+     * @param title title
+     */
+    public void initActionBar(int logo, String title) {
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        if (logo!=-1){
+            actionBar.setIcon(logo);
+        }
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        if (!TextUtils.isEmpty(title)){
+            actionBar.setTitle(title);
+        }
     }
     
 }
