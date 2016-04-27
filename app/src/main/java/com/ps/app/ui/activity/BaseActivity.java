@@ -5,6 +5,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.ps.app.R;
 import com.ps.app.support.utils.NetWorkHelper;
 
 public class BaseActivity  extends AppCompatActivity{
@@ -44,8 +45,33 @@ public class BaseActivity  extends AppCompatActivity{
     public void showLongToast(String msg){
         Toast.makeText(BaseActivity.this,msg,Toast.LENGTH_LONG).show();
     }
-    
 
 
+    public void activityAnim() {
+        overridePendingTransition(R.anim.right_in,
+                R.anim.right_out);
+    }
+
+    public void openActivityAnim() {
+        overridePendingTransition(R.anim.left_in,
+                R.anim.left_out);
+    }
+
+
+    /**
+     * 带动画效果的关闭
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        activityAnim();
+    }
+
+    /**
+     * 系统默认关闭
+     */
+    public void defaultFinish() {
+        super.finish();
+    }
     
 }

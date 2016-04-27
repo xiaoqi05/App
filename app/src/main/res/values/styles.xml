@@ -10,8 +10,10 @@
     </style>
     
     <style name="ActivitySwitchAnimation">
-        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
-        <item name="android:activityOpenExitAnimation">@anim/out_from_left</item>
+        <item name="android:activityOpenEnterAnimation">@anim/right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/left_out</item>
         
     </style>
 

@@ -6,7 +6,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.ps.app.R;
@@ -25,9 +30,42 @@ public class MainActivity extends BaseActivity {
         //获取地图控件引用
        //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
+        ActionBar actionBar = getSupportActionBar();
+        // actionBar.setLogo(R.mipmap.ic_launcher);
+        actionBar.setIcon(R.drawable.icon_app);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.user_p:
+                Toast.makeText(this, "你点击了“用户”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.write_p:
+                Toast.makeText(this, "你点击了“发布”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.favo_p:
+                Toast.makeText(this, "你点击了“收藏”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
+    }
 
     @TargetApi(23)
     private void getPersimmions() {
@@ -104,8 +142,10 @@ public class MainActivity extends BaseActivity {
     
     public void location(View v){
         startActivity(new Intent(MainActivity.this,LocationActivity.class));
-        
+        openActivityAnim();
     }
+    
+    
     
     
 }
