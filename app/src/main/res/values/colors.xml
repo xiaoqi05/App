@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2B324E</color>
-    <color name="colorPrimaryDark">#2B324E</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimary">#2a324d</color>
+    <color name="colorPrimaryDark">#242b43</color>
+    <color name="colorAccent">#e45974</color>
 
     <color name="bt_blue">#3F51B5</color>
     <color name="colorControlNormal">#d42d1e</color>
 
+    <color name="bt_normal">#e45974</color>
+    <color name="bg_normal">#DBDBDB</color>
+
     <!-- grayscale -->
-    <color name="white"     >#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="gray_light">#DBDBDB</color>
-    <color name="gray"      >#939393</color>
-    <color name="gray_dark" >#5F5F5F</color>
-    <color name="black"     >#323232</color>
+    <color name="gray">#9497a1</color>
+    <color name="gray_dark">#5F5F5F</color>
+    <color name="black">#323232</color>
 
     <!-- basic colors -->
     <color name="green">#27D34D</color>
     <color name="blue">#2A91BD</color>
     <color name="orange">#FF9D2F</color>
     <color name="red">#FF432F</color>
+
+
 </resources>
