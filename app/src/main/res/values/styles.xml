@@ -8,11 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowAnimationStyle">@style/ActivitySwitchAnimation</item>
     </style>
-    
+
     <style name="ActivitySwitchAnimation">
         <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
         <item name="android:activityOpenExitAnimation">@anim/out_from_left</item>
-        
+
     </style>
 
     <style name="LightEditText" parent="Material.Widget.EditText.Light">
@@ -33,10 +33,11 @@
         <item name="et_labelTextColor">@drawable/color_label_dark</item>
         <item name="et_supportTextErrorColor">#FFFF0000</item>
         <item name="et_dividerErrorColor">#FFFF0000</item>
+        <item name="et_dividerHeight">0.2dip</item>
     </style>
 
     <style name="LightRaiseWaveColorButtonRippleStyle" parent="Material.Drawable.Ripple.Wave.Light">
-        <item name="android:background">@drawable/bg_bt_raise_color</item>
+
         <item name="rd_rippleColor">#33000000</item>
         <item name="rd_leftPadding">1dp</item>
         <item name="rd_topPadding">1dp</item>
@@ -55,6 +56,7 @@
         <item name="di_inAnimation">@anim/anim_scale_in</item>
         <item name="di_outAnimation">@anim/anim_scale_out</item>
     </style>
+
 
 
 </resources>
