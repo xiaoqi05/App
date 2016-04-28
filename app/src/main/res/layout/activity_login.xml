@@ -37,8 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/policeman"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
+                android:hint="@string/name"
+                android:inputType="text"
                 android:textSize="16sp"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -96,7 +96,7 @@
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="16sp"
@@ -116,6 +116,18 @@
                     android:background="@color/gray"
                     />
 
+                <ImageView
+                    android:id="@+id/iv_image"
+                    style="@style/LightRaiseWaveColorButtonRippleStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/send_verification_code"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    />
+
             </LinearLayout>
 
             <com.rey.material.widget.Button
@@ -128,7 +140,7 @@
                 android:layout_marginRight="@dimen/activity_content_margin_left_right"
                 android:text="@string/next_step"
                 android:textStyle="bold"
-                android:background="@color/red"
+                android:background="@color/colorAccent"
                 />
 
         </LinearLayout>

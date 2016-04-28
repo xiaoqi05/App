@@ -20,6 +20,7 @@
     </string>
     <string name="phone">手机号码</string>
     <string name="verification_code">验证码</string>
-    <string name="send_verification_code">图片验证码</string>
+    <string name="send_verification_code">获取图片验证码</string>
     <string name="next_step">下一步</string>
+    <string name="name">姓名</string>
 </resources>

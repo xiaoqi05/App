@@ -21,41 +21,29 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ps.app.R;
+import com.ps.app.support.view.Code;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A login screen that offers login via email/password.
- */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, View.OnClickListener {
+
+
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -63,6 +51,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private com.rey.material.widget.EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private com.rey.material.widget.Button bt_iamge;
+    private ImageView iv_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +73,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+        bt_iamge = (com.rey.material.widget.Button) findViewById(R.id.bt_image);
+        bt_iamge.setOnClickListener(this);
 
-
-
+        iv_image = (ImageView) findViewById(R.id.iv_image);
+        iv_image.setOnClickListener(this);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -273,6 +265,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_image:
+                iv_image.setVisibility(View.VISIBLE);
+                bt_iamge.setVisibility(View.GONE);
+                iv_image.setImageBitmap(Code.getInstance().createBitmap());
+                System.out.println(Code.getInstance().getCode()+">>>>>>>>>>>>>");
+                break;
+            case R.id.iv_image:
+                iv_image.setImageBitmap(Code.getInstance().createBitmap());
+                System.out.println(Code.getInstance().getCode()+">>>>>>>>>>>>>");
+                break;
+        }
     }
 
 
