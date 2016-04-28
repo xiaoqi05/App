@@ -57,7 +57,6 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="哈哈">
-           
         </activity>
         <activity
             android:name=".ui.activity.LocationActivity"
@@ -68,18 +67,19 @@
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:label="@string/title_activity_login">
+           
+        </activity>
+        <activity
+            android:name=".ui.activity.SetPassWordActivity"
+            android:label="@string/title_activity_set_pass_word"
+            android:parentActivityName=".ui.activity.RegisterActivity">
+        </activity>
+        <activity android:name=".ui.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.activity.SetPassWordActivity"
-            android:label="@string/title_activity_set_pass_word"
-            android:parentActivityName=".ui.activity.RegisterActivity"
-            >
-            
         </activity>
     </application>
 
