@@ -19,7 +19,7 @@ import com.ps.app.support.view.Code;
 import com.rey.material.widget.Button;
 
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
 
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             
             case R.id.bt_next_step:
                 
-                startActivity(new Intent(LoginActivity.this,SetPassWordActivity.class));
+                startActivity(new Intent(RegisterActivity.this,SetPassWordActivity.class));
                 break;
         }
     }

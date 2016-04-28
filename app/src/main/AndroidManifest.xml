@@ -66,7 +66,7 @@
             android:name=".ui.activity.PoliceMan"
             android:label="@string/title_activity_police_man"/>
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.RegisterActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -77,7 +77,7 @@
         <activity
             android:name=".ui.activity.SetPassWordActivity"
             android:label="@string/title_activity_set_pass_word"
-            android:parentActivityName=".ui.activity.LoginActivity"
+            android:parentActivityName=".ui.activity.RegisterActivity"
             >
             
         </activity>
