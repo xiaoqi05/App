@@ -3,10 +3,10 @@ package com.ps.app.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,9 +16,10 @@ import android.widget.TextView;
 
 import com.ps.app.R;
 import com.ps.app.support.view.Code;
+import com.rey.material.widget.Button;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
 
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -35,11 +36,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private View mProgressView;
     private View mLoginFormView;
     private ImageView iv_image;
+    private Button bt_next_step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initActionBar(-1,"警员注册");
         // Set up the login form.
         findView();
         initData();
@@ -64,13 +67,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
-      
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
         assert iv_image != null;
         iv_image.setOnClickListener(this);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        bt_next_step = (Button) findViewById(R.id.bt_next_step);
+        assert bt_next_step != null;
+        bt_next_step.setOnClickListener(this);
     }
 
  
@@ -180,6 +185,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.iv_image:
                 iv_image.setImageBitmap(Code.getInstance().createBitmap());
                 System.out.println(Code.getInstance().getCode()+">>>>>>>>>>>>>");
+                break;
+            
+            case R.id.bt_next_step:
+                
+                startActivity(new Intent(LoginActivity.this,SetPassWordActivity.class));
                 break;
         }
     }
