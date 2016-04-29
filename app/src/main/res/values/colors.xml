@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">#2a324d</color>
     <color name="colorPrimaryDark">#242b43</color>
     <color name="colorAccent">#e45974</color>
@@ -22,6 +23,8 @@
     <color name="blue">#2A91BD</color>
     <color name="orange">#FF9D2F</color>
     <color name="red">#FF432F</color>
+
+    <color name="black_overlay">#66000000</color>
 
 
 </resources>

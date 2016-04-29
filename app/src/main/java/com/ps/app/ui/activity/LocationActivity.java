@@ -1,8 +1,8 @@
 package com.ps.app.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +17,7 @@ import com.ps.app.service.LocationService;
 /**
  * 此demo用来展示如何结合定位SDK实现定位，并使用MyLocationOverlay绘制定位位置 同时展示如何使用自定义图标绘制并点击时弹出泡泡
  */
-public class LocationActivity extends AppCompatActivity {
+public class LocationActivity extends BaseActivity {
     private LocationService locationService;
     private TextView locationResult;
     private Button startButton;
@@ -27,15 +27,29 @@ public class LocationActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+        initActionBar(-1,"呵呵");
         locationResult = (TextView) findViewById(R.id.textView1);
         locationResult.setMovementMethod(ScrollingMovementMethod.getInstance());
         startButton = (Button) findViewById(R.id.addfence);
+        
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startLocation();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void startLocation() {

@@ -2,11 +2,18 @@ package com.ps.app.ui.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.ps.app.R;
@@ -22,12 +29,50 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //获取地图控件引用
-       //  mMapView = (MapView) findViewById(R.id.bmapView);
+         //获取地图控件引用
+        //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
+        initActionBar(R.drawable.icon_app,"肖齐");
     }
 
+  
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main,menu);
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.user_p:
+                Toast.makeText(this, "你点击了“用户”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.write_p:
+                Toast.makeText(this, "你点击了“发布”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.favo_p:
+                Toast.makeText(this, "你点击了“收藏”按键！", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
+    }
 
     @TargetApi(23)
     private void getPersimmions() {
@@ -104,8 +149,10 @@ public class MainActivity extends BaseActivity {
     
     public void location(View v){
         startActivity(new Intent(MainActivity.this,LocationActivity.class));
-        
+        openActivityAnim();
     }
+    
+    
     
     
 }
