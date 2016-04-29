@@ -105,7 +105,7 @@
                     style="@style/DarkEditText"
                     />
 
-                <ImageView
+                <com.rey.material.widget.Button
                     android:id="@+id/iv_image"
                     style="@style/LightRaiseWaveColorButtonRippleStyle"
                     android:layout_width="0dp"
@@ -113,6 +113,8 @@
                     android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:textStyle="bold"
+                    android:text="获取验证码"
+                    android:background="@color/gray"
                     />
 
             </LinearLayout>

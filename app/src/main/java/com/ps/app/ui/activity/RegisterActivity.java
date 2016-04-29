@@ -36,7 +36,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private com.rey.material.widget.EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private ImageView iv_image;
     private Button bt_next_step;
 
     @Override
@@ -51,8 +50,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
-        iv_image.setImageBitmap(Code.getInstance().createBitmap());
-        System.out.println(Code.getInstance().getCode()+">>>>>>>>>>>>>");
+
     }
 
     private void findView() {
@@ -69,9 +67,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        iv_image = (ImageView) findViewById(R.id.iv_image);
-        assert iv_image != null;
-        iv_image.setOnClickListener(this);
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         bt_next_step = (Button) findViewById(R.id.bt_next_step);
@@ -193,11 +189,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_image:
-                iv_image.setImageBitmap(Code.getInstance().createBitmap());
-                System.out.println(Code.getInstance().getCode()+">>>>>>>>>>>>>");
-                break;
-            
             case R.id.bt_next_step:
                 
                 startActivity(new Intent(RegisterActivity.this,SetPassWordActivity.class));
