@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity {
     
     public void location(View v){
         startActivity(new Intent(MainActivity.this,LocationActivity.class));
-        openActivityAnim();
+        //openActivityAnim();
     }
     
     
