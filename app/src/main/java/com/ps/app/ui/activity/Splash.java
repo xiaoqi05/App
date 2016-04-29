@@ -31,8 +31,10 @@ public class Splash extends BaseActivity {
                         activity.showProgress(activity.progressBar, false);
                         if (activity.getSharePreference("").getBoolean("isLogin", true)) {
                             activity.startActivity(new Intent(activity, MainActivity.class));
+                            activity.finish();
                         } else {
                             activity.startActivity(new Intent(activity, LoginActivity.class));
+                            activity.finish();
                         }
                         break;
                 }

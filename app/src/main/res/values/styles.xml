@@ -9,6 +9,13 @@
         <item name="android:windowAnimationStyle">@style/ActivitySwitchAnimation</item>
     </style>
 
+    <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <style name="ActivitySwitchAnimation">
         <item name="android:activityOpenEnterAnimation">@anim/right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/left_out</item>
