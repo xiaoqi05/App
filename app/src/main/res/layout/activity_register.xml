@@ -47,7 +47,7 @@
                 />
 
             <com.rey.material.widget.EditText
-                android:id="@+id/et_police_id"
+                android:id="@+id/et_register_police_id"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:drawableLeft="@drawable/number"
@@ -87,15 +87,12 @@
                 android:orientation="horizontal"
                 >
                 <com.rey.material.widget.EditText
-                    android:id="@+id/password"
+                    android:id="@+id/et_register_verification"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:drawableLeft="@drawable/verification_code"
                     android:hint="@string/verification_code"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"

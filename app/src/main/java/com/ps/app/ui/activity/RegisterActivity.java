@@ -5,15 +5,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.rey.material.widget.Button;
+import com.rey.material.widget.EditText;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -32,11 +30,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     // UI references.
     private com.rey.material.widget.EditText mUserName;
-    private com.rey.material.widget.EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private Button bt_next_step;
     private Button bt_get_verification;
+
+    private EditText et_register_name;
+    private EditText et_register_police_id;
+    private EditText et_register_phone;
+    private EditText et_register_verification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +48,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         // Set up the login form.
         findView();
         initData();
-        
+
     }
 
-    private void getVerificationCode() {
-        SMSSDK.getVerificationCode(Constant.DEFAULT_COUNTRY_ID,"15682070830");
+    private void getVerificationCode(String phone) {
+        SMSSDK.getVerificationCode(Constant.DEFAULT_COUNTRY_ID, phone);
     }
 
     private void initData() {
-        SMSSDK.initSDK(this, Constant.APPKEY,Constant.APPSECRET,true);
-        EventHandler eh=new EventHandler(){
+        SMSSDK.initSDK(this, Constant.APPKEY, Constant.APPSECRET, true);
+        EventHandler eh = new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
 
@@ -64,17 +66,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
                         System.out.println("提交验证码成功");
-                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                        startActivity(new Intent(RegisterActivity.this, SetPassWordActivity.class));
+                    } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功
                         System.out.println("获取验证码成功");
-                    }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                        showShortToast("获取验证码成功");
+                    } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                         //返回支持发送验证码的国家列表
                         System.out.println("返回支持发送验证码的国家列表");
 
                     }
-                }else{
+                } else {
                     System.out.println("返回支持发送验证码的cuowu");
-                    ((Throwable)data).printStackTrace();
+                    ((Throwable) data).printStackTrace();
+                    showLongToast("返回支持发送验证码的cuowu");
                 }
             }
         };
@@ -83,18 +88,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private void findView() {
         mUserName = (com.rey.material.widget.EditText) findViewById(R.id.et_register_name);
-        mPasswordView = (com.rey.material.widget.EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    //attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -104,6 +97,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_get_verification = (Button) findViewById(R.id.bt_get_verification);
         assert bt_get_verification != null;
         bt_get_verification.setOnClickListener(this);
+
+        et_register_name = (EditText) findViewById(R.id.et_register_name);
+        et_register_police_id = (EditText) findViewById(R.id.et_register_police_id);
+        et_register_phone = (EditText) findViewById(R.id.et_register_phone);
+        et_register_verification = (EditText) findViewById(R.id.et_register_verification);
 
     }
 
@@ -120,21 +118,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         // Reset errors.
         mUserName.setError(null);
-        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mUserName.getText().toString();
-        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
@@ -150,7 +140,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, "");
             mAuthTask.execute((Void) null);
         }
     }
@@ -178,23 +168,37 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_next_step:
-
-                startActivity(new Intent(RegisterActivity.this, SetPassWordActivity.class));
+                String userName = et_register_name.getText().toString().trim();
+                String policeId = et_register_police_id.getText().toString().trim();
+                String phone = et_register_phone.getText().toString().trim();
+                String verificationCode = et_register_verification.getText().toString().trim();
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(policeId) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(verificationCode)) {
+                    showLongToast("请填写完整信息");
+                } else {
+                    //验证手机验证码
+                    SMSSDK.submitVerificationCode("86", phone, verificationCode);
+                }
                 break;
 
-
             case R.id.bt_get_verification:
-
+                final String newPhone = et_register_phone.getText().toString().trim();
+                if (newPhone.length() != 11) {
+                    showShortToast("请输入正确的手机号码");
+                    return;
+                }
                 new CountDownTimer(60000, 1000) {
                     // 第一个参数是总的倒计时时间
                     // 第二个参数是每隔多少时间(ms)调用一次onTick()方法
                     public void onTick(long millisUntilFinished) {
                         bt_get_verification.setText(millisUntilFinished / 1000 + "s后重新发送");
                         bt_get_verification.setEnabled(false);
-                        getVerificationCode();
+                        if (TextUtils.isEmpty(newPhone)) {
+                            showLongToast("请输入电话号码");
+                        } else {
+                            getVerificationCode(et_register_phone.getText().toString().trim());
+                        }
 
                     }
-
                     public void onFinish() {
                         bt_get_verification.setText("重新获取验证码");
                         bt_get_verification.setEnabled(true);
@@ -204,10 +208,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -247,8 +247,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                /*mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();*/
             }
         }
 
