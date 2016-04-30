@@ -12,7 +12,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.ps.app.R;
+import com.ps.app.base.Constant;
 import com.rey.material.widget.Button;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
@@ -27,7 +31,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private com.rey.material.widget.EditText mEmailView;
+    private com.rey.material.widget.EditText mUserName;
     private com.rey.material.widget.EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -42,15 +46,43 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         // Set up the login form.
         findView();
         initData();
+        
+    }
 
+    private void getVerificationCode() {
+        SMSSDK.getVerificationCode(Constant.DEFAULT_COUNTRY_ID,"15682070830");
     }
 
     private void initData() {
+        SMSSDK.initSDK(this, Constant.APPKEY,Constant.APPSECRET,true);
+        EventHandler eh=new EventHandler(){
+            @Override
+            public void afterEvent(int event, int result, Object data) {
 
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    //回调完成
+                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                        //提交验证码成功
+                        System.out.println("提交验证码成功");
+                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                        //获取验证码成功
+                        System.out.println("获取验证码成功");
+                    }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                        //返回支持发送验证码的国家列表
+                        System.out.println("返回支持发送验证码的国家列表");
+
+                    }
+                }else{
+                    System.out.println("返回支持发送验证码的cuowu");
+                    ((Throwable)data).printStackTrace();
+                }
+            }
+        };
+        SMSSDK.registerEventHandler(eh); //注册短信回调
     }
 
     private void findView() {
-        mEmailView = (com.rey.material.widget.EditText) findViewById(R.id.et_name);
+        mUserName = (com.rey.material.widget.EditText) findViewById(R.id.et_register_name);
         mPasswordView = (com.rey.material.widget.EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -87,11 +119,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mUserName.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String email = mUserName.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -106,8 +138,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mUserName.setError(getString(R.string.error_field_required));
+            focusView = mUserName;
             cancel = true;
         }
 
@@ -159,6 +191,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     public void onTick(long millisUntilFinished) {
                         bt_get_verification.setText(millisUntilFinished / 1000 + "s后重新发送");
                         bt_get_verification.setEnabled(false);
+                        getVerificationCode();
+
                     }
 
                     public void onFinish() {

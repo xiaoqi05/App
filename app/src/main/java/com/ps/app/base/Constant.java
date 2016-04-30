@@ -1,11 +1,11 @@
 package com.ps.app.base;
 
-/**
- * Created by wangjuan on 2016/4/29.
- */
+
 public class Constant {
 
-    public static String APPKEY = "1248676819aae";
+    public static String APPKEY = "124d12d1d49d8";
     // 填写从短信SDK应用后台注册得到的APPSECRET
-    public static String APPSECRET = "ca83d6d27c17e4f393dba122dc1f9330";
+    public static String APPSECRET = "76ebbea54422c6a93a7be1464bb6aa94";
+    // 默认使用中国区号
+    public static final String DEFAULT_COUNTRY_ID = "86";
 }
