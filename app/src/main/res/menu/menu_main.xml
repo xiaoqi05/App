@@ -4,20 +4,23 @@
     tools:context=".MainActivity" >
 
 
-    <item
+<!--    <item
         android:id="@+id/action_search"
-        android:icon="@drawable/icon_app"
+        android:icon="@drawable/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"
-        android:title="搜索" />
-
-
+        android:title="搜索" />-->
     <item
-        android:id="@+id/user_p"
-        android:icon="@drawable/icon_app"
+        android:id="@+id/user_search"
+        android:icon="@drawable/search"
+        app:showAsAction="ifRoom"
+        android:title="搜索"/>
+    <item
+        android:id="@+id/user_message"
+        android:icon="@drawable/massage"
         app:showAsAction="ifRoom"
         android:title="用户"/>
-    <item
+   <!-- <item
         android:id="@+id/write_p"
         android:icon="@drawable/icon_geo"
         app:showAsAction="ifRoom"
@@ -26,7 +29,7 @@
         android:id="@+id/favo_p"
         android:icon="@drawable/icon_app"
         app:showAsAction="never"
-        android:title="收藏"/>
+        android:title="收藏"/>-->
     
     
 
