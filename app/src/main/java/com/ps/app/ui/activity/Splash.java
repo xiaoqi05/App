@@ -29,7 +29,7 @@ public class Splash extends BaseActivity {
                 switch (msg.what) {
                     case DISMISS_PROGRESSBAR:
                         activity.showProgress(activity.progressBar, false);
-                        if (activity.getSharePreference("").getBoolean("isLogin", false)) {
+                        if (activity.getSharePreference("").getBoolean("isLogin", true)) {
                             activity.startActivity(new Intent(activity, MainActivity.class));
                             activity.finish();
                         } else {

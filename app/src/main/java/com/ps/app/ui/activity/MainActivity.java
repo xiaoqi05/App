@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,31 +20,71 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.ps.app.R;
+import com.ps.app.support.utils.ViewFindUtils;
+import com.ps.app.ui.fragment.AssetsSeizedFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
-    private  MapView mMapView;
+    private MapView mMapView;
     private String permissionInfo;
- 
+    private Context mContext = this;
+    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private final String[] mTitles = {
+            "资产查封", "保外人员"
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         //获取地图控件引用
+        //获取地图控件引用
         //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
-        initActionBar(R.drawable.icon_app,"肖齐");
+        initActionBar(R.drawable.icon_app, "肖齐");
+        initTab();
     }
 
-  
+    private void initTab() {
+        for (String title : mTitles) {
+            mFragments.add(AssetsSeizedFragment.getInstance(title));
+        }
+
+        View decorView = getWindow().getDecorView();
+        ViewPager vp = ViewFindUtils.find(decorView, R.id.vp);
+        vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
+
+        /**自定义部分属性*/
+        SlidingTabLayout tabLayout_2 = ViewFindUtils.find(decorView, R.id.tl_2);
+
+
+        tabLayout_2.setViewPager(vp);
+        tabLayout_2.setOnTabSelectListener(this);
+
+        /*vp.setCurrentItem(1);
+        tabLayout_2.showDot(1);
+*/
+      /*  tabLayout_2.showMsg(3, 5);
+        tabLayout_2.setMsgMargin(3, 0, 10);
+        MsgView rtv_2_3 = tabLayout_2.getMsgView(3);
+        if (rtv_2_3 != null) {
+            rtv_2_3.setBackgroundColor(Color.parseColor("#6D8FB0"));
+        }
+
+        tabLayout_2.showMsg(5, 5);
+        tabLayout_2.setMsgMargin(5, 0, 10);*/
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main,menu);
+        inflater.inflate(R.menu.menu_main, menu);
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -53,7 +97,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.user_p:
                 Toast.makeText(this, "你点击了“用户”按键！", Toast.LENGTH_SHORT).show();
                 return true;
@@ -66,7 +110,7 @@ public class MainActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-        
+
     }
 
     @Override
@@ -82,13 +126,13 @@ public class MainActivity extends BaseActivity {
              * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
              */
             // 定位精确位置
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-            if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-			/*
+            /*
 			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
 			 */
             // 读写权限
@@ -109,14 +153,14 @@ public class MainActivity extends BaseActivity {
     @TargetApi(23)
     private boolean addPermission(ArrayList<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请	
-            if (shouldShowRequestPermissionRationale(permission)){
+            if (shouldShowRequestPermissionRationale(permission)) {
                 return true;
-            }else{
+            } else {
                 permissionsList.add(permission);
                 return false;
             }
 
-        }else{
+        } else {
             return true;
         }
     }
@@ -131,28 +175,56 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-       // mMapView.onDestroy();
+        // mMapView.onDestroy();
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-      //  mMapView.onResume();
+        //  mMapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-       // mMapView.onPause();
+        // mMapView.onPause();
     }
-    
-    public void location(View v){
-        startActivity(new Intent(MainActivity.this,LocationActivity.class));
+
+    public void location(View v) {
+        startActivity(new Intent(MainActivity.this, LocationActivity.class));
         //openActivityAnim();
     }
-    
-    
-    
-    
+
+
+    @Override
+    public void onTabSelect(int position) {
+
+    }
+
+    @Override
+    public void onTabReselect(int position) {
+
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTitles[position];
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+    }
 }
