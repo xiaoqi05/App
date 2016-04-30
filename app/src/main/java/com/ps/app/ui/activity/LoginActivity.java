@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void findView() {
         findViewById(R.id.bt_login).setOnClickListener(this);
         findViewById(R.id.bt_register).setOnClickListener(this);
-        mImageView= (ImageView) findViewById(R.id.iv_image);
+        mImageView= (ImageView) findViewById(R.id.bt_get_verification);
         assert mImageView != null;
         mImageView.setOnClickListener(this);
     }
@@ -48,7 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.bt_login:
                 break;
-            case R.id.iv_image:
+            case R.id.bt_get_verification:
                 mImageView.setImageBitmap(Code.getInstance().createBitmap());
                 break;
             case R.id.bt_register:

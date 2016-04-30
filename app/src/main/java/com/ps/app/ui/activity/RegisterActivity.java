@@ -3,6 +3,7 @@ package com.ps.app.ui.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -31,16 +32,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private View mProgressView;
     private View mLoginFormView;
     private Button bt_next_step;
+    private Button bt_get_verification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        initActionBar(-1,"警员注册");
+        initActionBar(-1, "警员注册");
         // Set up the login form.
         findView();
         initData();
-      
+
     }
 
     private void initData() {
@@ -54,7 +56,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //attemptLogin();
                     return true;
                 }
                 return false;
@@ -67,9 +69,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         bt_next_step = (Button) findViewById(R.id.bt_next_step);
         assert bt_next_step != null;
         bt_next_step.setOnClickListener(this);
+        bt_get_verification = (Button) findViewById(R.id.bt_get_verification);
+        assert bt_get_verification != null;
+        bt_get_verification.setOnClickListener(this);
+
     }
 
- 
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -103,10 +109,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
         }
 
         if (cancel) {
@@ -121,10 +123,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
@@ -148,9 +146,26 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_next_step:
-                
-                startActivity(new Intent(RegisterActivity.this,SetPassWordActivity.class));
+
+                startActivity(new Intent(RegisterActivity.this, SetPassWordActivity.class));
                 break;
+
+
+            case R.id.bt_get_verification:
+
+                new CountDownTimer(60000, 1000) {
+                    // 第一个参数是总的倒计时时间
+                    // 第二个参数是每隔多少时间(ms)调用一次onTick()方法
+                    public void onTick(long millisUntilFinished) {
+                        bt_get_verification.setText(millisUntilFinished / 1000 + "s后重新发送");
+                        bt_get_verification.setEnabled(false);
+                    }
+
+                    public void onFinish() {
+                        bt_get_verification.setText("重新获取验证码");
+                        bt_get_verification.setEnabled(true);
+                    }
+                }.start();
         }
     }
 
