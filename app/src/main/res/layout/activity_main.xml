@@ -37,12 +37,7 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
-
-    <TextView
-        android:text="Hello World!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -50,5 +45,6 @@
         android:text="定位测试"
         android:layout_marginTop="20dp"
         android:onClick="location"
+        android:visibility="gone"
         />
 </LinearLayout>
