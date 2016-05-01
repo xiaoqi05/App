@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import com.ps.app.R;
 import com.ps.app.support.view.Code;
 
-import cn.smssdk.SMSSDK;
-
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private boolean isReady;
     private ImageView mImageView;
@@ -18,7 +16,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        initActionBar(-1, " ");
         findView();
         initData();
         

@@ -57,7 +57,9 @@
             android:label="哈哈"></activity>
         <activity
             android:name=".ui.activity.LocationActivity"
-            android:parentActivityName=".ui.activity.MainActivity" />
+            android:parentActivityName=".ui.activity.MainActivity" 
+          
+            />
         <activity
             android:name=".ui.activity.PoliceMan"
             android:label="@string/title_activity_police_man" />
@@ -69,7 +71,9 @@
             android:name=".ui.activity.SetPassWordActivity"
             android:label="@string/title_activity_set_pass_word"
             android:parentActivityName=".ui.activity.RegisterActivity"></activity>
-        <activity android:name=".ui.activity.LoginActivity">
+        <activity android:name=".ui.activity.LoginActivity"
+                  android:theme="@style/MyNoActionBar"
+            >
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
