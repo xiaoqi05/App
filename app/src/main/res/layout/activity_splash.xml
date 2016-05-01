@@ -47,6 +47,22 @@
                 android:text="-警员版-"
                 android:textColor="@color/gray"
                 android:textSize="14sp" />
+            
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="toLogin"
+                android:id="@+id/bt_to_login"
+                android:onClick="toLogin"
+                />
+            
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="toMainActivity"
+                android:id="@+id/bt_to_main"
+                android:onClick="toMain"
+                />
         </LinearLayout>
     </ScrollView>
     <ProgressBar

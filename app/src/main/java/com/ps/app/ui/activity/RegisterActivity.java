@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +14,8 @@ import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
+
+import java.lang.ref.WeakReference;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -25,20 +29,55 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    public static final int DISMISS_PROGRESSBAR = 1;
+
+    private static final int VER_SUCCESS = 2;
+    private static final int GET_VER_SUCCESS = 3;
 
     private UserLoginTask mAuthTask = null;
-
     // UI references.
     private com.rey.material.widget.EditText mUserName;
     private View mProgressView;
     private View mLoginFormView;
     private Button bt_next_step;
-    private Button bt_get_verification;
 
+    private Button bt_get_verification;
     private EditText et_register_name;
     private EditText et_register_police_id;
     private EditText et_register_phone;
     private EditText et_register_verification;
+
+    private boolean isGetVerificaton = false;
+    private MyHandler myHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private WeakReference<RegisterActivity> activityWeakReference;
+
+        public MyHandler(RegisterActivity activity) {
+            activityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            RegisterActivity activity = activityWeakReference.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case DISMISS_PROGRESSBAR:
+                        break;
+                    case VER_SUCCESS:
+                        System.out.println("提交验证码成功");
+                        activity.showShortToast("验证成功");
+                        activity.startActivity(new Intent(activity, SetPassWordActivity.class));
+                        break;
+                    case GET_VER_SUCCESS:
+                        activity.showShortToast("获取验证码成功");
+                        System.out.println("获取验证码成功");
+                        break;
+
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +104,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     //回调完成
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
-                        System.out.println("提交验证码成功");
-                        startActivity(new Intent(RegisterActivity.this, SetPassWordActivity.class));
+                        myHandler.sendEmptyMessage(VER_SUCCESS);
+
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功
-                        System.out.println("获取验证码成功");
-                        showShortToast("获取验证码成功");
+                        myHandler.sendEmptyMessage(GET_VER_SUCCESS);
+
                     } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                         //返回支持发送验证码的国家列表
                         System.out.println("返回支持发送验证码的国家列表");
@@ -182,6 +221,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.bt_get_verification:
                 final String newPhone = et_register_phone.getText().toString().trim();
+
                 if (newPhone.length() != 11) {
                     showShortToast("请输入正确的手机号码");
                     return;
@@ -194,14 +234,21 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         bt_get_verification.setEnabled(false);
                         if (TextUtils.isEmpty(newPhone)) {
                             showLongToast("请输入电话号码");
+                            isGetVerificaton = false;
+                            return;
                         } else {
-                            getVerificationCode(et_register_phone.getText().toString().trim());
+                            if (!isGetVerificaton) {
+                                getVerificationCode(et_register_phone.getText().toString().trim());
+                                isGetVerificaton = true;
+                            }
                         }
 
                     }
+
                     public void onFinish() {
                         bt_get_verification.setText("重新获取验证码");
                         bt_get_verification.setEnabled(true);
+                        isGetVerificaton = false;
                     }
                 }.start();
         }
@@ -256,6 +303,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         protected void onCancelled() {
             mAuthTask = null;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 销毁回调监听接口
+        SMSSDK.unregisterAllEventHandler();
+        super.onDestroy();
     }
 }
 
