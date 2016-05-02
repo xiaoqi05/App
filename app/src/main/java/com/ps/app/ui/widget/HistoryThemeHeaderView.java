@@ -82,7 +82,7 @@ public class HistoryThemeHeaderView extends LinearLayout implements IHeaderView 
         tv = (TextView)findViewById(R.id.message);
 
         mImageView = (ImageView)findViewById(R.id.image);
-        iv.setImageDrawable(getResources().getDrawable(R.drawable.up_icon));
+        iv.setImageDrawable(getResources().getDrawable(R.drawable.pull_refresh_arrow_up));
     }
 
     @Override
