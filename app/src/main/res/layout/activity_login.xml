@@ -34,7 +34,7 @@
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/activity_top_margin"
+                android:layout_marginTop="56dp"
                 android:src="@drawable/logo" />
 
             <TextView

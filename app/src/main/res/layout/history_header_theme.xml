@@ -31,7 +31,7 @@
                     android:id="@+id/arrow"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/up"
+                    android:src="@drawable/pull_refresh_arrow_up"
                     android:layout_centerInParent="true"
                     />
                 <ProgressBar

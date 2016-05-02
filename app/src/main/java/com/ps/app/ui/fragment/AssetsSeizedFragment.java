@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ps.app.R;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
@@ -136,13 +137,14 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
-                if (position == 0) {
+               /* if (position == 0) {
                     datas.add(1, R.mipmap.ic_launcher);
                     adapter.notifyItemInserted(1);
                 } else if (position == 1) {
                     datas.remove(1);
                     adapter.notifyItemRemoved(1);
-                }
+                }*/
+                Toast.makeText(getContext(),"onItemClick: " + position,Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onItemClick: " + position);
             }
         });
@@ -289,7 +291,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
 
             public void setImage(int idImage) {
                 Picasso.with(iv.getContext()).
-                        load(idImage).
+                        load(R.drawable.suspect).
                         centerCrop().
                         resize(130,130).
                         into(iv);

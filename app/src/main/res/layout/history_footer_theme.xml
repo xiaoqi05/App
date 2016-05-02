@@ -24,7 +24,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/up"/>
+                android:background="@drawable/pull_refresh_arrow_up"/>
 
             <ProgressBar
                 android:id="@+id/progress"
