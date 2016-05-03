@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ps.app.R;
-import com.ps.app.support.adapter.MyRecAdapter;
+import com.ps.app.support.adapter.MyAssetRecAdapter;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
 import com.zjutkz.powerfulrecyclerview.animator.impl.ZoomInAnimator;
@@ -33,7 +33,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
 
     private PowerfulRecyclerView recycler;
 
-    private MyRecAdapter adapter;
+    private MyAssetRecAdapter adapter;
 
     private List<Integer> datas;
 
@@ -100,7 +100,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
             }
         }, 500);
 
-        adapter = new MyRecAdapter(getContext(),datas);
+        adapter = new MyAssetRecAdapter(getContext(),datas);
 
         recycler.setAdapter(adapter);
 

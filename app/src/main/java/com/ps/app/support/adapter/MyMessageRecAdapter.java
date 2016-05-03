@@ -14,19 +14,19 @@ import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 import java.util.Collections;
 import java.util.List;
 
-public class MyRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
+public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
 
     private Context mContext;
     private List<Integer> datas;
 
-    public MyRecAdapter(Context mContext,List<Integer> datas){
+    public MyMessageRecAdapter(Context mContext, List<Integer> datas){
         this.mContext = mContext;
         this.datas = datas;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.fr_asset_list_item,parent,false));
+        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ac_message_list_item,parent,false));
 
 
         return vh;
@@ -65,12 +65,10 @@ public class MyRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView iv;
-        public ImageView android_icon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView)itemView.findViewById(R.id.item_iv);
-            android_icon = (ImageView)itemView.findViewById(R.id.android_icon);
+            iv = (ImageView)itemView.findViewById(R.id.message_item_iv);
         }
 
         public void setImage(int idImage) {

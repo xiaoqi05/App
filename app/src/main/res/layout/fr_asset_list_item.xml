@@ -14,7 +14,7 @@
         >
 
         <ImageView
-            android:id="@+id/item_iv"
+            android:id="@+id/message_item_iv"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center"

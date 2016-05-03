@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.ps.app.ui.activity.MessageActivity">
     <com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView
+        
         android:id="@+id/ptr_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +16,7 @@
         app:position_to_show="7"
         app:max_to_pull="80dp"
         app:refresh_distance="60dp"
+        
         />
 
 </RelativeLayout>
