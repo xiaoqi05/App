@@ -2,12 +2,11 @@ package com.ps.app.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -138,6 +137,13 @@ public class BaseActivity extends AppCompatActivity {
             return getSharedPreferences(config, MODE_PRIVATE);
         }
     }
+    
+    public void showSnackbar(View view,String content){
+        Snackbar.make(view, content, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+    }
+
 
 
 }
