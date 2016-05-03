@@ -97,9 +97,14 @@
             android:theme="@android:style/Theme.Translucent"
             />
         -->
-        <activity android:name=".ui.activity.MessageActivity"
-            android:parentActivityName=".ui.activity.MainActivity"
-            >
+        <activity
+            android:name=".ui.activity.MessageActivity"
+            android:parentActivityName=".ui.activity.MainActivity">
+        </activity>
+        <activity
+            android:name=".ui.activity.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
