@@ -69,7 +69,7 @@ public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView)itemView.findViewById(R.id.message_item_iv);
+            iv = (ImageView)itemView.findViewById(R.id.iv_message_icon);
             android_icon = (ImageView)itemView.findViewById(R.id.android_icon);
         }
 

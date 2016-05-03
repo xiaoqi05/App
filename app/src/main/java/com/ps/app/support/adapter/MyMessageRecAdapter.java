@@ -68,7 +68,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView)itemView.findViewById(R.id.message_item_iv);
+            iv = (ImageView)itemView.findViewById(R.id.iv_message_icon);
         }
 
         public void setImage(int idImage) {
