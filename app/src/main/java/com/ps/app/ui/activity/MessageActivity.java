@@ -79,14 +79,14 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         initActionBar(-1, "消息提醒");
+        initRecylerView();
+    }
 
-
+    private void initRecylerView() {
         recycler = (PowerfulRecyclerView) findViewById(R.id.ptr_container);
-
         if (datas == null) {
             datas = new ArrayList<Integer>();
         }
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -96,37 +96,17 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 recycler.stopLoadMore();
             }
         }, 500);
-
         adapter = new MyMessageRecAdapter(this, datas);
-
         recycler.setAdapter(adapter);
-
         recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        //recycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
         header = (HistoryThemeHeaderView) LayoutInflater.from(this).inflate(R.layout.history_header_theme, recycler, false);
-
         footer = (HistoryThemeFooterView) LayoutInflater.from(this).inflate(R.layout.history_footer_theme, recycler, false);
-
         recycler.setHeaderView(header);
-
         recycler.setFooterView(footer);
-
-        //listHeader = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.list_header_viewpager, null);
-
-        //  recycler.setPositionToShowBtn(4);
-
-        // recycler.addRecyclerViewHeader(listHeader, true);
-
         recycler.prepareForDragAndSwipe(false, false);
-
         recycler.setScrollBarEnable(false);
-
         recycler.setOnRefreshListener(this);
-
         recycler.setOnLoadMoreListener(this);
-
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
@@ -145,7 +125,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     }
 
     private void getDatas(int msg) {
-
         if (msg == 0) {
             datas.clear();
         }
