@@ -106,6 +106,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         switch (item.getItemId()) {
             case R.id.user_search:
                 Toast.makeText(this, "你点击了搜索按键！", Toast.LENGTH_SHORT).show();
+                Intent intents = new Intent(MainActivity.this,AssetSearchActivity.class);
+                startActivity(intents);
                 return true;
             case R.id.user_message:
                 badgeCount= Integer.MIN_VALUE;

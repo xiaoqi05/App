@@ -106,6 +106,10 @@
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".ui.activity.AssetSearchActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
+            >
+        </activity>
     </application>
 
 </manifest>
