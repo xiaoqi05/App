@@ -129,14 +129,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             datas.clear();
         }
         datas.add(R.drawable.img1);
-        datas.add(R.drawable.img2);
-        datas.add(R.drawable.img3);
-        datas.add(R.drawable.img4);
-        datas.add(R.drawable.img5);
-        datas.add(R.drawable.img6);
-        datas.add(R.drawable.img7);
-        datas.add(R.drawable.img8);
-        datas.add(R.drawable.img9);
+     
     }
 
     @Override

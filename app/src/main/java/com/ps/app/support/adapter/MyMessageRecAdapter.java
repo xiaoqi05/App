@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ps.app.R;
 import com.squareup.picasso.Picasso;
@@ -28,7 +29,6 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ac_message_list_item,parent,false));
 
-
         return vh;
     }
 
@@ -36,6 +36,8 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof MyViewHolder){
             ((MyViewHolder) holder).setImage(datas.get(position));
+           ((MyViewHolder) holder).tv_title.setText(datas.get(position));
+            
         }
     }
 
@@ -64,19 +66,25 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        public ImageView iv;
+        public ImageView iv_icon;
+        public TextView tv_title;
+        private TextView tv_content;
+        private ImageView iv_flag;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView)itemView.findViewById(R.id.iv_message_icon);
+            iv_icon = (ImageView)itemView.findViewById(R.id.iv_message_icon);
+            tv_content = (TextView)itemView.findViewById(R.id.tv_message_content);
+            tv_title = (TextView)itemView.findViewById(R.id.tv_message_title);
+            iv_flag = (ImageView)itemView.findViewById(R.id.iv_read_flag);
         }
 
         public void setImage(int idImage) {
-            Picasso.with(iv.getContext()).
+            Picasso.with(iv_icon.getContext()).
                     load(R.drawable.suspect).
                     centerCrop().
                     resize(130,130).
-                    into(iv);
+                    into(iv_icon);
         }
     }
     
