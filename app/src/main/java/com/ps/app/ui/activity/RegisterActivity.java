@@ -33,6 +33,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private static final int VER_SUCCESS = 2;
     private static final int GET_VER_SUCCESS = 3;
+    private static final int ERROR_GET_VER = 4;
 
     private UserLoginTask mAuthTask = null;
     // UI references.
@@ -72,6 +73,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     case GET_VER_SUCCESS:
                         activity.showShortToast("获取验证码成功");
                         System.out.println("获取验证码成功");
+                        break;
+                    case ERROR_GET_VER:
+                        activity.showShortToast("获取验证码失败，请重试");
+                        System.out.println("获取验证码失败，请重试");
                         break;
 
                 }
@@ -117,8 +122,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                 } else {
                     System.out.println("返回支持发送验证码的cuowu");
-                    ((Throwable) data).printStackTrace();
+                    myHandler.sendEmptyMessage(ERROR_GET_VER);
                     showLongToast("返回支持发送验证码的cuowu");
+                    ((Throwable) data).printStackTrace();
                 }
             }
         };
