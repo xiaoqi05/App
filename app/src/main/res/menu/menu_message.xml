@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity" >
+
+    <item
+        android:id="@+id/marker_already_read"
+        app:actionLayout="@layout/menu_action_item_badge"
+        app:showAsAction="never"
+        android:title="全部标记为已读"/>
+   
+    <item
+        android:id="@+id/clear_message"
+        android:icon="@drawable/massage"
+        app:showAsAction="never"
+        android:title="清空消息"/>
+   
+    
+    
+
+</menu>
