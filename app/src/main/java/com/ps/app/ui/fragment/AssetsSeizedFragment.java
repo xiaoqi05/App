@@ -1,7 +1,6 @@
 package com.ps.app.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,21 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ps.app.R;
+import com.ps.app.support.adapter.MyRecAdapter;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
-import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.animator.impl.ZoomInAnimator;
-import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 import com.zjutkz.powerfulrecyclerview.listener.OnLoadMoreListener;
 import com.zjutkz.powerfulrecyclerview.listener.OnRefreshListener;
 import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -37,7 +33,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
 
     private PowerfulRecyclerView recycler;
 
-    private MyAdapter adapter;
+    private MyRecAdapter adapter;
 
     private List<Integer> datas;
 
@@ -104,7 +100,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
             }
         }, 500);
 
-        adapter = new MyAdapter(getContext(),datas);
+        adapter = new MyRecAdapter(getContext(),datas);
 
         recycler.setAdapter(adapter);
 
@@ -148,8 +144,6 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                 Log.d(TAG, "onItemClick: " + position);
             }
         });
-
-
 
         recycler.setItemAnimator(new ZoomInAnimator());
         return v;
@@ -229,73 +223,4 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         }
     }
 
-
-    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
-
-        private Context mContext;
-        private List<Integer> datas;
-
-        public MyAdapter(Context mContext,List<Integer> datas){
-            this.mContext = mContext;
-            this.datas = datas;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.fr_asset_list_item,parent,false));
-
-
-            return vh;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if(holder instanceof MyViewHolder){
-                ((MyViewHolder) holder).setImage(datas.get(position));
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return datas.size();
-        }
-
-        @Override
-        public void onMove(int fromPosition, int toPosition) {
-            if(fromPosition < 0 || toPosition >= datas.size()){
-                return;
-            }
-            Collections.swap(datas, fromPosition, toPosition);
-            notifyItemMoved(fromPosition, toPosition);
-        }
-
-        @Override
-        public void onDismiss(int position) {
-            if(position < 0 || position >= datas.size()){
-                return;
-            }
-            datas.remove(position);
-            notifyItemRemoved(position);
-        }
-
-        public class MyViewHolder extends RecyclerView.ViewHolder{
-
-            public ImageView iv;
-            public ImageView android_icon;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                iv = (ImageView)itemView.findViewById(R.id.item_iv);
-                android_icon = (ImageView)itemView.findViewById(R.id.android_icon);
-            }
-
-            public void setImage(int idImage) {
-                Picasso.with(iv.getContext()).
-                        load(R.drawable.suspect).
-                        centerCrop().
-                        resize(130,130).
-                        into(iv);
-            }
-        }
-    }
 }
