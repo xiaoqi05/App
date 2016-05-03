@@ -110,6 +110,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             case R.id.user_message:
                 badgeCount= Integer.MIN_VALUE;
                 ActionItemBadge.update(item,getResources().getDrawable(R.drawable.massage),badgeCount);
+                //to message activity  
+                Intent intent = new Intent(MainActivity.this,MessageActivity.class);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
