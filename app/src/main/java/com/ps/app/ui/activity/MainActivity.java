@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.ps.app.R;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
@@ -35,6 +36,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private final String[] mTitles = {
             "资产查封", "保外人员"
     };
+    private int badgeCount=10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 */
+        if (badgeCount > 0) {
+            ActionItemBadge.update(this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+        } else {
+            ActionItemBadge.hide(menu.findItem(R.id.user_message));
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -100,8 +108,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 Toast.makeText(this, "你点击了搜索按键！", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.user_message:
-                Toast.makeText(this, "你点击了消息按键！", Toast.LENGTH_SHORT).show();
-                return true;
+                badgeCount= Integer.MIN_VALUE;
+                ActionItemBadge.update(item,getResources().getDrawable(R.drawable.massage),badgeCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -128,7 +136,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
             /*
-			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
+             * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
 			 */
             // 读写权限
             if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
