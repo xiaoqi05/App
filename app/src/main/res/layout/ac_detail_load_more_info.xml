@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    >
+
+    <TextView
+        android:id="@+id/tv_show_other_info"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="序号： "
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_id_info"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_show_other_info"
+        android:gravity="center"
+        android:text="EP20165021"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_time"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@id/tv_detail_id_info"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="资产到期日期： "
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_time_info"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignLeft="@id/tv_detail_id_info"
+        android:layout_below="@id/tv_detail_id_info"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/tv_detail_time"
+        android:gravity="center"
+        android:text="2016-5-1"
+        android:textSize="14sp"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_detail_thing_name"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@id/tv_detail_time"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="案件名称： "
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_thing_name_info"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignLeft="@id/tv_detail_time_info"
+        android:layout_below="@id/tv_detail_time"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="一个馒头引发的血案"
+        android:textSize="14sp"
+        />
+
+</RelativeLayout>

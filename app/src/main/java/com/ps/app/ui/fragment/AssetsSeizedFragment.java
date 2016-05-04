@@ -1,6 +1,7 @@
 package com.ps.app.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.ps.app.R;
 import com.ps.app.support.adapter.MyAssetRecAdapter;
+import com.ps.app.ui.activity.DetailActivity;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
 import com.zjutkz.powerfulrecyclerview.animator.impl.ZoomInAnimator;
@@ -152,6 +154,8 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                     adapter.notifyItemRemoved(1);
                 }*/
                 Toast.makeText(getContext(),"onItemClick: " + position,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                startActivity(intent);
                 Log.d(TAG, "onItemClick: " + position);
             }
         });
