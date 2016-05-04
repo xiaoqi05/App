@@ -10,6 +10,7 @@
 
     <color name="bt_normal">#e45974</color>
     <color name="bg_normal">#DBDBDB</color>
+    <color name="bg_dark_normal">#E9EEF2</color>
 
     <!-- grayscale -->
     <color name="white">#FFFFFF</color>

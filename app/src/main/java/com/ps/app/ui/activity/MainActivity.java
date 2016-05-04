@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -105,16 +104,15 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.user_search:
-                Toast.makeText(this, "你点击了搜索按键！", Toast.LENGTH_SHORT).show();
                 Intent intents = new Intent(MainActivity.this,AssetSearchActivity.class);
                 startActivity(intents);
                 return true;
             case R.id.user_message:
-                badgeCount= Integer.MIN_VALUE;
-                ActionItemBadge.update(item,getResources().getDrawable(R.drawable.massage),badgeCount);
                 //to message activity  
                 Intent intent = new Intent(MainActivity.this,MessageActivity.class);
                 startActivity(intent);
+                badgeCount= Integer.MIN_VALUE;
+                ActionItemBadge.update(item,getResources().getDrawable(R.drawable.massage),badgeCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
