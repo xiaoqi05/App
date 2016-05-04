@@ -68,6 +68,15 @@
         <item name="android:textColor">@color/abc_primary_text_material_dark</item>
     </style>
 
+    <style name="LightNoPaddingButtonRippleStyle" parent="Material.Drawable.Ripple.Wave.Light">
+        <item name="rd_rippleColor">#33000000</item>
+        <item name="rd_topPadding">1dp</item>
+        <item name="rd_bottomPadding">2dp</item>
+        <item name="rd_delayClick">afterRelease</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
+        <item name="android:textColor">@color/abc_primary_text_material_dark</item>
+    </style>
+
     <style name="LightNoDividerEditText" parent="LightEditText">
         <item name="et_dividerHeight">0dp</item>
     </style>

@@ -1,5 +1,6 @@
 package com.ps.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,10 +10,11 @@ import android.widget.TextView;
 
 import com.ps.app.R;
 
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity  {
     private ViewStub viewStub;
     private TextView tv_show_all_info;
-    private boolean isShowAllInfo=false;
+    private boolean isShowAllInfo = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,7 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail,menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -38,16 +40,20 @@ public class DetailActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.route_line) {
+            Intent intent = new Intent(DetailActivity.this, RouterActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    public void showAllInfo(View v){
+
+    public void showAllInfo(View v) {
         tv_show_all_info.setVisibility(View.GONE);
         View vs = viewStub.inflate();
         TextView tv_info = (TextView) vs.findViewById(R.id.tv_show_other_info);
-       // tv_info.setText("哈哈: ");
+        // tv_info.setText("哈哈: ");
         View view = findViewById(R.id.vs_stub);
         view = findViewById(R.id.ac_detail_id_after_inflate);
     }
+
 }

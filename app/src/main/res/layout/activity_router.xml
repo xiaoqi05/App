@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ps.app.ui.activity.RouterActivity"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        >
+
+        <com.rey.material.widget.Button
+            android:id="@+id/bt_get_start_date"
+            style="@style/LightNoPaddingButtonRippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="开始时间"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="@color/gray"
+            android:background="@color/white"
+            android:paddingRight="10dp"
+            />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/bt_get_end_date"
+            style="@style/LightNoPaddingButtonRippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="结束时间"
+            android:background="@color/white"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="@color/gray"
+            android:paddingRight="10dp"
+            />
+        <ImageView
+            android:layout_width="0.2dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_light"
+            />
+        
+        <com.rey.material.widget.Button
+            android:id="@+id/bt_date_search"
+            style="@style/LightNoPaddingButtonRippleStyle"
+            android:paddingLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="center"
+            android:text="搜索"
+            android:drawableLeft="@drawable/search"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="#FF000000"
+            android:background="@color/white"
+            
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
