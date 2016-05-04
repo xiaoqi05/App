@@ -46,7 +46,7 @@ public class DetailActivity extends BaseActivity {
         tv_show_all_info.setVisibility(View.GONE);
         View vs = viewStub.inflate();
         TextView tv_info = (TextView) vs.findViewById(R.id.tv_show_other_info);
-        tv_info.setText("哈哈: ");
+       // tv_info.setText("哈哈: ");
         View view = findViewById(R.id.vs_stub);
         view = findViewById(R.id.ac_detail_id_after_inflate);
     }
