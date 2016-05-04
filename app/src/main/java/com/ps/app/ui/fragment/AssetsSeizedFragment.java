@@ -57,13 +57,14 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what == 0){
-                getDatas(0);
+                getDatas(1);
                 adapter.notifyDataSetChanged();
                 loadMoreCount = 0;
                 recycler.stopRefresh();
                 if(!recycler.isLoadMoreEnable()){
                     recycler.setLoadMoreEnable(true);
                 }
+                resetFootView();
             }else if(msg.what == 1){
                 getDatas(1);
                 adapter.notifyItemRangeInserted(adapter.getItemCount(), 9);
@@ -75,6 +76,10 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
             }
         }
     };
+
+    private void resetFootView() {
+        footer.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,12 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                 adapter.notifyDataSetChanged();
                 recycler.stopRefresh();
                 recycler.stopLoadMore();
+                if (datas.size()<9){
+                    footer.setVisibility(View.INVISIBLE);
+                }else {
+                    footer.setVisibility(View.VISIBLE);
+
+                }
             }
         }, 500);
 
@@ -173,10 +184,10 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         datas.add(R.drawable.img3);
         datas.add(R.drawable.img4);
         datas.add(R.drawable.img5);
-        datas.add(R.drawable.img6);
+     /*   datas.add(R.drawable.img6);
         datas.add(R.drawable.img7);
         datas.add(R.drawable.img8);
-        datas.add(R.drawable.img9);
+        datas.add(R.drawable.img9);*/
     }
 
     @Override
