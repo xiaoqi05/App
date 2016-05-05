@@ -7,10 +7,15 @@ import android.view.View;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Polyline;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.ps.app.R;
 import com.ps.app.base.MyApplication;
@@ -21,6 +26,8 @@ import com.rey.material.app.DialogFragment;
 import com.rey.material.widget.Button;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RouterActivity extends BaseActivity implements View.OnClickListener {
     private Button bt_get_start_time;
@@ -29,12 +36,25 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private LocationService mLocationService;
+    private Polyline mPolyline;
+    private Polyline mColorfulPolyline;
+    private Polyline mTexturePolyline;
+    double i = 0;
+    double j = 0;
+    BitmapDescriptor mRedTexture = BitmapDescriptorFactory.fromAsset("icon_road_red_arrow.png");
+    BitmapDescriptor mBlueTexture = BitmapDescriptorFactory.fromAsset("icon_road_blue_arrow.png");
+    BitmapDescriptor mGreenTexture = BitmapDescriptorFactory.fromAsset("icon_road_green_arrow.png");
+    private List<LatLng> points = new ArrayList<>();
 
     private boolean isFirstLoc = true;
     private BDLocationListener mListener = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
-            //showShortToast(location.getAddrStr());
+            System.out.println("经纬度" + location.getLongitude() + location.getLatitude());
+            points.add(new LatLng(location.getLatitude()+j, location.getLongitude()+i));
+            i=i+0.001;
+            j+=0.002;
+            showShortToast(location.getAddrStr()+i);
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMapView == null) {
                 return;
@@ -72,6 +92,8 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         mLocationService.start();
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
+
+      //  addCustomElementsDemo();
     }
 
     private void findView() {
@@ -106,7 +128,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
 
                     @Override
                     public void onNegativeActionClicked(DialogFragment fragment) {
-                        showShortToast("Date is Cancelled");
+                        //showShortToast("Date is Cancelled");
                         super.onNegativeActionClicked(fragment);
                     }
                 };
@@ -128,7 +150,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
 
                     @Override
                     public void onNegativeActionClicked(DialogFragment fragment) {
-                        showShortToast("Date is Cancelled");
+                        //showShortToast("Date is Cancelled");
                         super.onNegativeActionClicked(fragment);
                     }
                 };
@@ -139,7 +161,8 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                 break;
 
             case R.id.bt_date_search:
-
+                clearClick();
+                addCustomElementsDemo();
                 break;
         }
 
@@ -174,6 +197,76 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         mMapView.onDestroy();
         mLocationService.unregisterListener(mListener);
         mLocationService.stop();
+        mRedTexture.recycle();
+        mBlueTexture.recycle();
+        mGreenTexture.recycle();
+    }
+
+    /**
+     * 添加点、线、多边形、圆、文字
+     */
+    public void addCustomElementsDemo() {
+        // 添加普通折线绘制
+        /*LatLng p1 = new LatLng(39.97923, 116.357428);
+        LatLng p2 = new LatLng(39.94923, 116.397428);
+        LatLng p3 = new LatLng(39.97923, 116.437428);
+        List<LatLng> points = new ArrayList<LatLng>();
+        points.add(p1);
+        points.add(p2);
+        points.add(p3);*/
+        OverlayOptions ooPolyline = new PolylineOptions().width(10)
+                .color(0xAAFF0000).points(points);
+        mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
+        //设置虚线
+        mPolyline.setDottedLine(true);
+
+        // 添加多颜色分段的折线绘制
+        LatLng p11 = new LatLng(39.965, 116.444);
+        LatLng p21 = new LatLng(39.925, 116.494);
+        LatLng p31 = new LatLng(39.955, 116.534);
+        LatLng p41 = new LatLng(39.905, 116.594);
+        LatLng p51 = new LatLng(39.965, 116.644);
+        List<LatLng> points1 = new ArrayList<LatLng>();
+        points1.add(p11);
+        points1.add(p21);
+        points1.add(p31);
+        points1.add(p41);
+        points1.add(p51);
+        List<Integer> colorValue = new ArrayList<Integer>();
+        colorValue.add(0xAAFF0000);
+        colorValue.add(0xAA00FF00);
+        colorValue.add(0xAA0000FF);
+        OverlayOptions ooPolyline1 = new PolylineOptions().width(10)
+                .color(0xAAFF0000).points(points1).colorsValues(colorValue);
+        mColorfulPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline1);
+
+        // 添加多纹理分段的折线绘制
+        LatLng p111 = new LatLng(39.865, 116.444);
+        LatLng p211 = new LatLng(39.825, 116.494);
+        LatLng p311 = new LatLng(39.855, 116.534);
+        LatLng p411 = new LatLng(39.805, 116.594);
+        List<LatLng> points11 = new ArrayList<LatLng>();
+        points11.add(p111);
+        points11.add(p211);
+        points11.add(p311);
+        points11.add(p411);
+        List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
+        textureList.add(mRedTexture);
+        textureList.add(mBlueTexture);
+        textureList.add(mGreenTexture);
+        List<Integer> textureIndexs = new ArrayList<Integer>();
+        textureIndexs.add(0);
+        textureIndexs.add(1);
+        textureIndexs.add(2);
+        OverlayOptions ooPolyline11 = new PolylineOptions().width(20)
+                .points(points11).dottedLine(true).customTextureList(textureList).textureIndex(textureIndexs);
+        mTexturePolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline11);
+
+    }
+
+    public void clearClick() {
+        // 清除所有图层
+        mMapView.getMap().clear();
     }
 
 }
