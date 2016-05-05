@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-
     @Override
     protected void onDestroy() {
      
