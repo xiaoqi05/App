@@ -2,15 +2,16 @@
 <RelativeLayout android:id="@+id/item_container"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="15dp">
+                >
 
     <FrameLayout
         android:id="@+id/product_img_parent"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_centerVertical="true"
         >
 
         <ImageView
@@ -20,40 +21,13 @@
             android:layout_gravity="center"
             />
 
-        <ImageView
-            android:id="@+id/flag_seckill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="gone"/>
-
-
-        <RelativeLayout
-            android:id="@+id/marker_parent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="#3f000000"/>
-
-            <ImageView
-                android:id="@+id/marker_flag"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/ic_launcher"/>
-        </RelativeLayout>
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/itemBody"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="10dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
         android:layout_toRightOf="@id/product_img_parent"
         android:orientation="horizontal">
         <RelativeLayout
@@ -62,8 +36,6 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             >
-
-           
             <TextView
                 android:id="@+id/product_title"
                 android:layout_width="wrap_content"
@@ -121,15 +93,9 @@
     <ImageView
         android:id="@+id/split_line"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/itemBody"
-        android:layout_marginTop="15dp"/>
-
-    <ImageView
-        android:id="@+id/android_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        android:visibility="invisible"/>
+        android:layout_height="0.2dp"
+        android:src="@color/gray_light"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

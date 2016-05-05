@@ -41,9 +41,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     private Polyline mTexturePolyline;
     double i = 0;
     double j = 0;
-    BitmapDescriptor mRedTexture = BitmapDescriptorFactory.fromAsset("icon_road_red_arrow.png");
-    BitmapDescriptor mBlueTexture = BitmapDescriptorFactory.fromAsset("icon_road_blue_arrow.png");
-    BitmapDescriptor mGreenTexture = BitmapDescriptorFactory.fromAsset("icon_road_green_arrow.png");
+    BitmapDescriptor mRedTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_red_arrow);
+    BitmapDescriptor mBlueTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_blue_arrow);
+    BitmapDescriptor mGreenTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_green_arrow);
     private List<LatLng> points = new ArrayList<>();
 
     private boolean isFirstLoc = true;
