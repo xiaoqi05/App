@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.ps.app">
+<manifest package="com.ps.app"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -51,14 +51,17 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="tqmhIoyc5p93Alx3ClmbZnaTcugloZy6"/>
-        <!--tqmhIoyc5p93Alx3ClmbZnaTcugloZy6
+            android:value="DAn1IHYBpOIo64OYcKj89m9gFPPYjtXW"/>
+        <!--
+        tqmhIoyc5p93Alx3ClmbZnaTcugloZy6
         DAn1IHYBpOIo64OYcKj89m9gFPPYjtXW
         -->
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="哈哈"/>
+            android:label="哈哈"
+            android:theme="@style/AppMainTheme"
+            />
         <activity
             android:name=".ui.activity.LocationActivity"
             android:parentActivityName=".ui.activity.MainActivity"/>
@@ -114,8 +117,9 @@
         </activity>
         <activity
             android:name=".ui.activity.RouterActivity"
-            android:parentActivityName=".ui.activity.RouterActivity"
-            >
+            android:parentActivityName=".ui.activity.RouterActivity">
+        </activity>
+        <activity android:name=".ui.activity.SettingActivity">
         </activity>
     </application>
 

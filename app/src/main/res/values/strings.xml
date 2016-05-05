@@ -35,4 +35,8 @@
     <string name="login">登录</string>
     <string name="password">密码</string>
     <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="drawer_item_compact_header">drawer_item_compact_header</string>
+    <string name="drawer_item_compact_header_desc">drawer_item_compact_header_desc</string>
+    <string name="drawer_item_section_header">Drawer item</string>
 </resources>

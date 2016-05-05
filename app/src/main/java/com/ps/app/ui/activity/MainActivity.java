@@ -11,15 +11,34 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
@@ -28,6 +47,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
+    private static final int PROFILE_SETTING = 1;
     private MapView mMapView;
     private String permissionInfo;
     private Context mContext = this;
@@ -37,15 +57,24 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     };
     private int badgeCount=10;
 
+    //save our header or result
+    private AccountHeader headerResult = null;
+    private Drawer result = null;
+    private boolean opened = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.ly_toolbar);
+        mToolbar.setTitle(R.string.app_name);
+        setSupportActionBar(mToolbar);
         //获取地图控件引用
         //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
-        initActionBar(R.drawable.policeman, "肖齐");
+        initActionBar(-1, "肖齐");
         initTab();
+        initDraw(mToolbar,savedInstanceState);
     }
 
     private void initTab() {
@@ -233,4 +262,137 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             return mFragments.get(position);
         }
     }
+
+
+    private void initDraw(Toolbar toolbar,Bundle savedInstanceState) {
+        final IProfile profile3 = new ProfileDrawerItem().withName("Max Muster").withEmail("max.mustermann@gmail.com").withIcon(R.drawable.profile2).withIdentifier(102);
+        // Create the AccountHeader
+        headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .addProfiles(
+                        profile3,
+                        new ProfileSettingDrawerItem().withName("添加账户").withDescription("Add new GitHub Account").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
+                        new ProfileSettingDrawerItem().withName("账户管理").withIcon(GoogleMaterial.Icon.gmd_settings)
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        //sample usage of the onProfileChanged listener
+                        //if the clicked item has the identifier 1 add a new profile ;)
+                        if (profile instanceof IDrawerItem && ((IDrawerItem) profile).getIdentifier() == PROFILE_SETTING) {
+                            int count = 100 + headerResult.getProfiles().size() + 1;
+                            IProfile newProfile = new ProfileDrawerItem().withNameShown(true).withName("Batman" + count).withEmail("batman" + count + "@gmail.com").withIcon(R.drawable.profile5).withIdentifier(count);
+                            if (headerResult.getProfiles() != null) {
+                                //we know that there are 2 setting elements. set the new profile above them ;)
+                                headerResult.addProfile(newProfile, headerResult.getProfiles().size() - 2);
+                            } else {
+                                headerResult.addProfiles(newProfile);
+                            }
+                        }
+                        //false if you have not consumed the event and it should close the drawer
+                        return false;
+                    }
+                })
+                .withSavedInstance(savedInstanceState)
+                .build();
+
+        //Create the drawer
+
+        result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withHasStableIds(true)
+                .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("首页").withIcon(GoogleMaterial.Icon.gmd_home).withIdentifier(2).withSelectable(false),
+                        new PrimaryDrawerItem().withName("天气").withIcon(GoogleMaterial.Icon.gmd_sun).withIdentifier(1).withSelectable(false),
+                        new PrimaryDrawerItem().withName("播放").withIcon(GoogleMaterial.Icon.gmd_play).withIdentifier(3).withSelectable(false),
+                        new PrimaryDrawerItem().withName("日历").withIcon(GoogleMaterial.Icon.gmd_calendar).withIdentifier(14).withSelectable(false)
+                       /* new SectionDrawerItem().withName(R.string.drawer_item_section_header),
+                        new SecondaryDrawerItem().withName("Collapsable").withIcon(GoogleMaterial.Icon.gmd_collection_case_play).withIdentifier(19).withSelectable(false),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_section_header).withIcon(GoogleMaterial.Icon.gmd_format_color_fill).withIdentifier(20).withSelectable(false),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_section_header).withIcon(GoogleMaterial.Icon.gmd_format_color_fill).withIdentifier(21).withTag("Bullhorn"),
+                        new DividerDrawerItem(),
+                        new SwitchDrawerItem().withName("Switch").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
+                        new SwitchDrawerItem().withName("Switch2").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener).withSelectable(false),
+                        new ToggleDrawerItem().withName("Toggle").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
+                        new DividerDrawerItem(),
+                        new SecondarySwitchDrawerItem().withName("Secondary switch").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
+                        new SecondarySwitchDrawerItem().withName("Secondary Switch2").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener).withSelectable(false),
+                        new SecondaryToggleDrawerItem().withName("Secondary toggle").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener)*/
+                ) // add the items we want to use with our Drawer
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        //check if the drawerItem is set.
+                        //there are different reasons for the drawerItem to be null
+                        //--> click on the header
+                        //--> click on the footer
+                        //those items don't contain a drawerItem
+
+                        if (drawerItem != null) {
+                            Intent intent = null;
+                            if (drawerItem.getIdentifier() == 0) {
+                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                            } else if (drawerItem.getIdentifier() == 1) {
+                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                            } else if (drawerItem.getIdentifier() == 2) {
+                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                            } else if (drawerItem.getIdentifier() == 3) {
+                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                            } else if (drawerItem.getIdentifier() == 19) {
+                                //showcase a simple collapsable functionality
+                                if (opened) {
+                                    //remove the items which are hidden
+                                    result.removeItems(2000, 2001);
+                                } else {
+                                    int curPos = result.getPosition(drawerItem);
+                                    result.addItemsAtPosition(
+                                            curPos,
+                                            new SecondaryDrawerItem().withName("CollapsableItem").withLevel(2).withIcon(GoogleMaterial.Icon.gmd_8tracks).withIdentifier(2000),
+                                            new SecondaryDrawerItem().withName("CollapsableItem 2").withLevel(2).withIcon(GoogleMaterial.Icon.gmd_8tracks).withIdentifier(2001)
+                                    );
+                                }
+                                opened = !opened;
+                                return true;
+                            }
+                            if (intent != null) {
+                                MainActivity.this.startActivity(intent);
+                            }
+                        }
+
+                        return false;
+                    }
+                })
+                .withSavedInstance(savedInstanceState)
+                .withShowDrawerOnFirstLaunch(true)
+                .build();
+
+        //if you have many different types of DrawerItems you can magically pre-cache those items to get a better scroll performance
+        //make sure to init the cache after the DrawerBuilder was created as this will first clear the cache to make sure no old elements are in
+        RecyclerViewCacheUtil.getInstance().withCacheSize(2).init(result);
+
+        //only set the active selection or active profile if we do not recreate the activity
+        if (savedInstanceState == null) {
+            // set the selection to the item with the identifier 11
+            result.setSelection(21, false);
+
+            //set the active profile
+            headerResult.setActiveProfile(profile3);
+        }
+
+        result.updateBadge(4, new StringHolder(10 + ""));
+    }
+
+    private OnCheckedChangeListener onCheckedChangeListener = new OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+            if (drawerItem instanceof Nameable) {
+                Log.i("material-drawer", "DrawerItem: " + ((Nameable) drawerItem).getName() + " - toggleChecked: " + isChecked);
+            } else {
+                Log.i("material-drawer", "toggleChecked: " + isChecked);
+            }
+        }
+    };
 }

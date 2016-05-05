@@ -8,6 +8,10 @@
     android:orientation="vertical"
     tools:context=".ui.activity.MainActivity"
     >
+    <include
+        android:id="@+id/ly_toolbar"
+        layout="@layout/toolbar"
+        />
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/tl_2"
         android:layout_width="match_parent"
