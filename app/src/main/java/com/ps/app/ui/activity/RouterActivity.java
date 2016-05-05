@@ -7,8 +7,6 @@ import android.view.View;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -41,9 +39,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     private Polyline mTexturePolyline;
     double i = 0;
     double j = 0;
-    BitmapDescriptor mRedTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_red_arrow);
-    BitmapDescriptor mBlueTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_blue_arrow);
-    BitmapDescriptor mGreenTexture = BitmapDescriptorFactory.fromResource(R.drawable.icon_road_green_arrow);
     private List<LatLng> points = new ArrayList<>();
 
     private boolean isFirstLoc = true;
@@ -197,9 +192,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         mMapView.onDestroy();
         mLocationService.unregisterListener(mListener);
         mLocationService.stop();
-        mRedTexture.recycle();
-        mBlueTexture.recycle();
-        mGreenTexture.recycle();
     }
 
     /**
@@ -239,28 +231,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         OverlayOptions ooPolyline1 = new PolylineOptions().width(10)
                 .color(0xAAFF0000).points(points1).colorsValues(colorValue);
         mColorfulPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline1);
-
-        // 添加多纹理分段的折线绘制
-        LatLng p111 = new LatLng(39.865, 116.444);
-        LatLng p211 = new LatLng(39.825, 116.494);
-        LatLng p311 = new LatLng(39.855, 116.534);
-        LatLng p411 = new LatLng(39.805, 116.594);
-        List<LatLng> points11 = new ArrayList<LatLng>();
-        points11.add(p111);
-        points11.add(p211);
-        points11.add(p311);
-        points11.add(p411);
-        List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
-        textureList.add(mRedTexture);
-        textureList.add(mBlueTexture);
-        textureList.add(mGreenTexture);
-        List<Integer> textureIndexs = new ArrayList<Integer>();
-        textureIndexs.add(0);
-        textureIndexs.add(1);
-        textureIndexs.add(2);
-        OverlayOptions ooPolyline11 = new PolylineOptions().width(20)
-                .points(points11).dottedLine(true).customTextureList(textureList).textureIndex(textureIndexs);
-        mTexturePolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline11);
 
     }
 
