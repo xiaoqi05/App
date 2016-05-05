@@ -59,7 +59,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
                         String date = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
-                        showShortToast("Date is " + date);
+                        bt_get_start_time.setText(date);
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -69,16 +69,32 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                         super.onNegativeActionClicked(fragment);
                     }
                 };
-
-                builder.positiveAction("OK")
-                        .negativeAction("CANCEL");
+                builder.positiveAction("确认")
+                        .negativeAction("取消");
                 DialogFragment fragment = DialogFragment.newInstance(builder);
                 fragment.show(getSupportFragmentManager(), null);
                 break;
 
             case R.id.bt_get_end_date:
+                builder = new DatePickerDialog.Builder(R.style.Material_App_Dialog_DatePicker_Light) {
+                    @Override
+                    public void onPositiveActionClicked(DialogFragment fragment) {
+                        DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
+                        String date = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                        bt_get_end_time.setText(date);
+                        super.onPositiveActionClicked(fragment);
+                    }
 
-
+                    @Override
+                    public void onNegativeActionClicked(DialogFragment fragment) {
+                        showShortToast("Date is Cancelled");
+                        super.onNegativeActionClicked(fragment);
+                    }
+                };
+                builder.positiveAction("确认")
+                        .negativeAction("取消");
+                DialogFragment fragments = DialogFragment.newInstance(builder);
+                fragments.show(getSupportFragmentManager(), null);
                 break;
 
             case R.id.bt_date_search:
