@@ -39,4 +39,5 @@
     <string name="drawer_item_compact_header">drawer_item_compact_header</string>
     <string name="drawer_item_compact_header_desc">drawer_item_compact_header_desc</string>
     <string name="drawer_item_section_header">Drawer item</string>
+    <string name="forget_password">忘记密码？</string>
 </resources>

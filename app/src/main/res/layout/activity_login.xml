@@ -72,18 +72,55 @@
                 android:singleLine="true"
                 android:textSize="16sp" />
 
-            <com.rey.material.widget.EditText
-                android:id="@+id/et_name"
-                style="@style/DarkEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:drawableLeft="@drawable/password"
-                android:drawablePadding="15dp"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                >
+                <com.rey.material.widget.EditText
+                    android:id="@+id/et_name"
+                    style="@style/DarkEditText"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="48dp"
+                    android:drawableLeft="@drawable/password"
+                    android:drawablePadding="15dp"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:onClick="resetPassword"
+                    android:orientation="vertical"
+                    android:gravity="bottom"
+                    >
+                    <TextView
+                        android:id="@+id/et_reset_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:text="@string/forget_password"
+                        android:clickable="false"
+                        android:textColor="@color/gray_light"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+
+                        />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.2dip"
+                        android:src="#b3ffffff"
+                        android:layout_gravity="bottom"
+
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

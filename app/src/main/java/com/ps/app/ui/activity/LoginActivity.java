@@ -56,6 +56,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      
         super.onDestroy();
     }
+    
+    public void resetPassword(View v){
+        Intent intent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+        startActivity(intent);
+    }
 
   
 }

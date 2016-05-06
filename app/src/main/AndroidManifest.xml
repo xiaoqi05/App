@@ -60,8 +60,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="哈哈"
-            android:theme="@style/AppMainTheme"
-            />
+            android:theme="@style/AppMainTheme"/>
         <activity
             android:name=".ui.activity.LocationActivity"
             android:parentActivityName=".ui.activity.MainActivity"/>
@@ -120,6 +119,10 @@
             android:parentActivityName=".ui.activity.RouterActivity">
         </activity>
         <activity android:name=".ui.activity.SettingActivity">
+        </activity>
+        <activity android:name=".ui.activity.ResetPasswordActivity"
+            android:parentActivityName=".ui.activity.LoginActivity"
+            >
         </activity>
     </application>
 
