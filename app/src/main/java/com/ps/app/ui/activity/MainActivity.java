@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private final String[] mTitles = {
             "资产查封", "保外人员"
     };
-    private int badgeCount=10;
+    private int badgeCount = 10;
 
     //save our header or result
     private AccountHeader headerResult = null;
@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         getPersimmions();
         initActionBar(-1, "肖齐");
         initTab();
-        initDraw(mToolbar,savedInstanceState);
+        initDraw(mToolbar, savedInstanceState);
     }
 
     private void initTab() {
@@ -133,15 +133,15 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.user_search:
-                Intent intents = new Intent(MainActivity.this,AssetSearchActivity.class);
+                Intent intents = new Intent(MainActivity.this, AssetSearchActivity.class);
                 startActivity(intents);
                 return true;
             case R.id.user_message:
                 //to message activity  
-                Intent intent = new Intent(MainActivity.this,MessageActivity.class);
+                Intent intent = new Intent(MainActivity.this, MessageActivity.class);
                 startActivity(intent);
-                badgeCount= Integer.MIN_VALUE;
-                ActionItemBadge.update(item,getResources().getDrawable(R.drawable.massage),badgeCount);
+                badgeCount = Integer.MIN_VALUE;
+                ActionItemBadge.update(item, getResources().getDrawable(R.drawable.massage), badgeCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -264,12 +264,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
 
-    private void initDraw(Toolbar toolbar,Bundle savedInstanceState) {
-        final IProfile profile3 = new ProfileDrawerItem().withName("Max Muster").withEmail("max.mustermann@gmail.com").withIcon(R.drawable.profile2).withIdentifier(102);
+    private void initDraw(Toolbar toolbar, Bundle savedInstanceState) {
+        final IProfile profile3 = new ProfileDrawerItem().withName("肖齐").withEmail("15682070830").withIcon(R.drawable.profile2).withIdentifier(102);
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.header)
+                .withHeaderBackground(R.color.colorPrimary)
                 .addProfiles(
                         profile3,
                         new ProfileSettingDrawerItem().withName("添加账户").withDescription("Add new GitHub Account").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
@@ -305,10 +305,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 .withHasStableIds(true)
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("首页").withIcon(GoogleMaterial.Icon.gmd_home).withIdentifier(2).withSelectable(false),
-                        new PrimaryDrawerItem().withName("天气").withIcon(GoogleMaterial.Icon.gmd_sun).withIdentifier(1).withSelectable(false),
-                        new PrimaryDrawerItem().withName("播放").withIcon(GoogleMaterial.Icon.gmd_play).withIdentifier(3).withSelectable(false),
-                        new PrimaryDrawerItem().withName("日历").withIcon(GoogleMaterial.Icon.gmd_calendar).withIdentifier(14).withSelectable(false)
+                        new PrimaryDrawerItem().withName("修改密码").withIcon(getResources().getDrawable(R.drawable.change_password)).withIdentifier(2).withSelectable(false),
+                        new PrimaryDrawerItem().withName("操作指南").withIcon(getResources().getDrawable(R.drawable.operations_guide)).withIdentifier(1).withSelectable(false),
+                        new PrimaryDrawerItem().withName("关于").withIcon(getResources().getDrawable(R.drawable.about)).withIdentifier(3).withSelectable(false),
+                        new PrimaryDrawerItem().withName("退出").withIcon(getResources().getDrawable(R.drawable.logout)).withIdentifier(14).withSelectable(false)
                        /* new SectionDrawerItem().withName(R.string.drawer_item_section_header),
                         new SecondaryDrawerItem().withName("Collapsable").withIcon(GoogleMaterial.Icon.gmd_collection_case_play).withIdentifier(19).withSelectable(false),
                         new SecondaryDrawerItem().withName(R.string.drawer_item_section_header).withIcon(GoogleMaterial.Icon.gmd_format_color_fill).withIdentifier(20).withSelectable(false),
@@ -334,13 +334,13 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         if (drawerItem != null) {
                             Intent intent = null;
                             if (drawerItem.getIdentifier() == 0) {
-                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 1) {
-                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
-                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
-                                intent = new Intent(MainActivity.this, SettingActivity.class);
+                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 19) {
                                 //showcase a simple collapsable functionality
                                 if (opened) {
