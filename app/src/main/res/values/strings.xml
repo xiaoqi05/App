@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">警务小秘书（警员版）</string>
     <string name="startlocation">开始定位</string>
     <string name="stoplocation">停止定位</string>
     <string name="title_activity_police_man">PoliceMan</string>
