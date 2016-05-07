@@ -6,6 +6,7 @@ import android.os.Vibrator;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.ps.app.service.LocationService;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 
 public class MyApplication extends Application {
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
         locationService = new LocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
+        OkHttpUtils.getInstance();
 
     }
     private void setupTheme() {
