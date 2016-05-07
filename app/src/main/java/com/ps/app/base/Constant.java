@@ -8,7 +8,7 @@ public class Constant {
     public static String APPKEY = "124d6a9f89af8";//  124d12d1d49d8
     // 默认使用中国区号
     public static final String DEFAULT_COUNTRY_ID = "86";
-    public static final String BASE_URL = "http://localhost:8080";//http://posec.zpy.cn
+    public static final String BASE_URL = "192.168.2.103:8080";//http://posec.zpy.cn
     //登录
     public static final String LOGIN_URL = BASE_URL+"/user/login.action";
     //退出

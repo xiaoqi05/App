@@ -10,9 +10,22 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
+import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.MyApplication;
 import com.ps.app.service.LocationService;
+import com.ps.app.support.Bean.test;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 此demo用来展示如何结合定位SDK实现定位，并使用MyLocationOverlay绘制定位位置 同时展示如何使用自定义图标绘制并点击时弹出泡泡
@@ -27,11 +40,11 @@ public class LocationActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        initActionBar(-1,"呵呵");
+        initActionBar(-1, "呵呵");
         locationResult = (TextView) findViewById(R.id.textView1);
         locationResult.setMovementMethod(ScrollingMovementMethod.getInstance());
         startButton = (Button) findViewById(R.id.addfence);
-        
+
     }
 
     @Override
@@ -195,5 +208,45 @@ public class LocationActivity extends BaseActivity {
 
     };
 
+    public void test_http(View v) {
+        login();
+    }
 
+    public abstract class UserCallback extends Callback<test> {
+        @Override
+        public test parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            test tests = new Gson().fromJson(string, test.class);
+            return tests;
+        }
+    }
+
+    //URLEncoder.encode(stringToBeEncoded, "UTF-8")
+    public void login() {
+        try {
+            String city = URLEncoder.encode("苏州", "UTF-8");
+            Map<String, String> params = new HashMap<>();
+            params.put("cityname", city);
+            params.put("key", "58ab4383f67a86c8549636c0fef7a7ee");
+            OkHttpUtils
+                    .post()//
+                    .url("http://v.juhe.cn/weather/forecast3h")//
+                    .params(params)
+                    .build()//
+                    .execute(new UserCallback() {
+
+                        @Override
+                        public void onError(Call call, Exception e) {
+                            System.out.println("网络异常" + e);
+                        }
+
+                        @Override
+                        public void onResponse(test response) {
+                            System.out.println(response.getResult().toString());
+                        }
+                    });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }

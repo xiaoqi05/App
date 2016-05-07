@@ -78,6 +78,9 @@ public class Splash extends BaseActivity {
     public void toMain(View v){
         startActivity(new Intent(Splash.this, MainActivity.class));
     }
+    public void http_test(View v){
+        startActivity(new Intent(Splash.this, LocationActivity.class));
+    }
 
 
 }
