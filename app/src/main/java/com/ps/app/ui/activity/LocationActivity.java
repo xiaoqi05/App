@@ -14,13 +14,11 @@ import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.MyApplication;
 import com.ps.app.service.LocationService;
-import com.ps.app.support.Bean.test;
+import com.ps.app.support.Bean.CommonResultBean;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -212,41 +210,76 @@ public class LocationActivity extends BaseActivity {
         login();
     }
 
-    public abstract class UserCallback extends Callback<test> {
+    public abstract class UserCallback extends Callback<CommonResultBean> {
         @Override
-        public test parseNetworkResponse(Response response) throws IOException {
+        public CommonResultBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            test tests = new Gson().fromJson(string, test.class);
+            CommonResultBean tests = new Gson().fromJson(string, CommonResultBean.class);
             return tests;
         }
     }
 
     //URLEncoder.encode(stringToBeEncoded, "UTF-8")
     public void login() {
-        try {
-            String city = URLEncoder.encode("苏州", "UTF-8");
-            Map<String, String> params = new HashMap<>();
-            params.put("cityname", city);
-            params.put("key", "58ab4383f67a86c8549636c0fef7a7ee");
-            OkHttpUtils
-                    .post()//
-                    .url("http://v.juhe.cn/weather/forecast3h")//
-                    .params(params)
-                    .build()//
-                    .execute(new UserCallback() {
+        /*
+name：姓名
 
-                        @Override
-                        public void onError(Call call, Exception e) {
-                            System.out.println("网络异常" + e);
-                        }
+phone：手机号
 
-                        @Override
-                        public void onResponse(test response) {
-                            System.out.println(response.getResult().toString());
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+pnum：警员编号
+
+imei：手机串号
+
+password：密码
+
+longitude：经度
+
+latitude：纬度
+
+phoneType：手机型号
+        * */
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "aqc");
+        params.put("phone", "15682070838");
+        params.put("pnum", "110");
+        params.put("imei", "15682070834");
+        params.put("password", "111222333");
+        params.put("longitude", "46.54654");
+        params.put("latitude", "165.4654");
+        params.put("phoneType", "1");
+       /* Map<String, String> params = new HashMap<>();
+        params.put("cityname", "123114564");
+        params.put("key", "58ab4383f67a86c8549636c0fef7a7ee");
+        params.put("pnum", "123114564");
+        params.put("imei", "4654654");
+        params.put("password", "4654654");
+        params.put("longitude", "4654654");
+        params.put("latitude", "4654654");
+        params.put("phoneType", "4654654");*/
+        OkHttpUtils
+                .post()//
+                .url("http://211.149.197.241:8080/posec/m/reg.action")//
+              /*  .addParams("name", "123114564")
+                .addParams("phone", "123114564")
+                .addParams("pnum", "123114564")
+                .addParams("imei", "4654654")
+                .addParams("password", "4654654")
+                .addParams("longitude", "4654654")
+                .addParams("latitude", "4654654")
+                .addParams("phoneType", "4654654")*/
+                .params(params)
+                .build()//
+                .execute(new UserCallback() {
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        System.out.println("网络异常" + e);
+                    }
+
+                    @Override
+                    public void onResponse(CommonResultBean response) {
+                        System.out.println(response.getData());
+                    }
+                });
     }
 }

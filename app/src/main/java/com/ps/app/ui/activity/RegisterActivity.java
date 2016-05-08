@@ -51,6 +51,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private boolean isGetVerificaton = false;
     private MyHandler myHandler = new MyHandler(this);
 
+    
+
     private static class MyHandler extends Handler {
         private WeakReference<RegisterActivity> activityWeakReference;
 
@@ -110,14 +112,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
                         myHandler.sendEmptyMessage(VER_SUCCESS);
-                        //todo 跳转下一步，设置密码 注册信息
-                        
-                        
-
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取验证码成功
                         myHandler.sendEmptyMessage(GET_VER_SUCCESS);
-
                     } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                         //返回支持发送验证码的国家列表
                         System.out.println("返回支持发送验证码的国家列表");
