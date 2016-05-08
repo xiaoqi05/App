@@ -36,8 +36,8 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof MyViewHolder){
             ((MyViewHolder) holder).setImage(datas.get(position));
-           ((MyViewHolder) holder).tv_title.setText(datas.get(position));
-            
+            ((MyViewHolder) holder).tv_title.setText(datas.get(position));
+
         }
     }
 
@@ -73,6 +73,8 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            
+             
             iv_icon = (ImageView)itemView.findViewById(R.id.iv_message_icon);
             tv_content = (TextView)itemView.findViewById(R.id.tv_message_content);
             tv_title = (TextView)itemView.findViewById(R.id.tv_message_title);
@@ -87,5 +89,5 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     into(iv_icon);
         }
     }
-    
+
 }
