@@ -109,9 +109,9 @@ public class SetPassWordActivity extends BaseActivity {
                                 intent.putExtra("policeId", policeId);
                                 startActivity(intent);
                                 */
-                                //登录成功
+                                //注册成功
                                 showProgress(mProgressView,false);
-                                getSharePreference("").edit().putBoolean("isLogin", true).apply();
+                                //getSharePreference("").edit().putBoolean("isLogin", true).apply();
                                 setResult(REGISTER_SUCCESS);
                                 finish();
                             }

@@ -57,7 +57,7 @@
 
 
             <com.rey.material.widget.EditText
-                android:id="@+id/et_phone"
+                android:id="@+id/et_login_phone"
                 style="@style/DarkEditText"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -78,7 +78,7 @@
                 android:orientation="horizontal"
                 >
                 <com.rey.material.widget.EditText
-                    android:id="@+id/et_name"
+                    android:id="@+id/et_login_paw"
                     style="@style/DarkEditText"
                     android:layout_width="0dp"
                     android:layout_weight="3"
