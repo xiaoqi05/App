@@ -1,25 +1,22 @@
 package com.ps.app.support.Bean;
 
 public class CommonResultBean {
-
     /**
+     * desc : 成功
+     * data :
      * code : 2000
-     * data : 成功
-     * error : 
-     * desc : 成功!
      */
 
-    private int code;
-    private String data;
-    private String error;
     private String desc;
+    private String data;
+    private int code;
 
-    public int getCode() {
-        return code;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getData() {
@@ -30,19 +27,11 @@ public class CommonResultBean {
         this.data = data;
     }
 
-    public String getError() {
-        return error;
+    public int getCode() {
+        return code;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setCode(int code) {
+        this.code = code;
     }
 }

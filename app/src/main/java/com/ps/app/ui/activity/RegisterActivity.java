@@ -34,6 +34,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int VER_SUCCESS = 2;
     private static final int GET_VER_SUCCESS = 3;
     private static final int ERROR_GET_VER = 4;
+    private static final int REGISTER_SUCCESS = 5;
 
     private UserLoginTask mAuthTask = null;
     // UI references.
@@ -47,11 +48,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText et_register_police_id;
     private EditText et_register_phone;
     private EditText et_register_verification;
+    private String userName;
+    private String phone;
+    private String policeId;
 
     private boolean isGetVerificaton = false;
     private MyHandler myHandler = new MyHandler(this);
 
-    
 
     private static class MyHandler extends Handler {
         private WeakReference<RegisterActivity> activityWeakReference;
@@ -70,7 +73,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     case VER_SUCCESS:
                         System.out.println("提交验证码成功");
                         activity.showShortToast("验证成功");
-                        activity.startActivity(new Intent(activity, SetPassWordActivity.class));
+                        Intent intent = new Intent(activity, SetPassWordActivity.class);
+                        intent.putExtra("userName", activity.userName);
+                        intent.putExtra("phone", activity.phone);
+                        intent.putExtra("policeId", activity.policeId);
+                        activity.startActivityForResult(intent, 0);
                         break;
                     case GET_VER_SUCCESS:
                         activity.showShortToast("获取验证码成功");
@@ -192,7 +199,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -213,15 +219,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_next_step:
-                String userName = et_register_name.getText().toString().trim();
-                String policeId = et_register_police_id.getText().toString().trim();
-                String phone = et_register_phone.getText().toString().trim();
+                userName = et_register_name.getText().toString().trim();
+                policeId = et_register_police_id.getText().toString().trim();
+                phone = et_register_phone.getText().toString().trim();
                 String verificationCode = et_register_verification.getText().toString().trim();
-                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(policeId) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(verificationCode)) {
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(policeId) || TextUtils.isEmpty(phone) /*|| TextUtils.isEmpty(verificationCode)*/) {
                     showLongToast("请填写完整信息");
                 } else {
                     //验证手机验证码
                     SMSSDK.submitVerificationCode("86", phone, verificationCode);
+
                 }
                 break;
 
@@ -316,6 +323,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == REGISTER_SUCCESS) {
+                //注册成功时finish
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 
