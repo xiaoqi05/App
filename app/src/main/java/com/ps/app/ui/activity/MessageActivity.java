@@ -10,7 +10,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
 import com.ps.app.R;
+import com.ps.app.support.Bean.PushMsgListBean;
+import com.ps.app.support.Bean.PushMsgListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyMessageRecAdapter;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
@@ -30,7 +33,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     private MyMessageRecAdapter adapter;
 
-    private List<Integer> datas;
+    private List<ListBean> datas;
 
     private HistoryThemeFooterView footer;
 
@@ -85,7 +88,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     private void initRecylerView() {
         recycler = (PowerfulRecyclerView) findViewById(R.id.ptr_container);
         if (datas == null) {
-            datas = new ArrayList<Integer>();
+            datas = new ArrayList<ListBean>();
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -124,11 +127,27 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         recycler.setItemAnimator(new ZoomInAnimator());
     }
 
+    private String result = "{\"code\":2000,\"data\":{\"endRow\":2,\"firstPage\":1,\"hasNextPage\":false,\"hasPreviousPage\":false,\"isFirstPage\":true,\"isLastPage\":true,\"lastPage\":1,\"list\":[{\"createTime\":\"2016-05-05 16:15:15\",\"id\":1,\"message\":{\"content\":\"即将到期\",\"id\":1,\"type\":\"ASSET_MANAGEMENT_MSG\"},\"mid\":1,\"successed\":0,\"unread\":0},{\"createTime\":\"2016-05-05 16:15:15\",\"id\":2,\"message\":{\"content\":\"你已离开限制区域，请回去！\",\"id\":3,\"type\":\"ZONE_WARNING\"},\"mid\":1,\"successed\":0,\"unread\":0}],\"navigatePages\":8,\"navigatepageNums\":[1],\"nextPage\":0,\"orderBy\":\"\",\"pageNum\":1,\"pageSize\":5,\"pages\":1,\"prePage\":0,\"size\":2,\"startRow\":1,\"total\":2},\"error\":\"\",\"desc\":\"成功!\"}";
+
     private void getDatas(int msg) {
+
         if (msg == 0) {
             datas.clear();
         }
-        datas.add(R.drawable.img1);
+        //datas.add(R.drawable.img1);
+       /* for (int i = 0; i < 10; i++) {
+            ListBean listBean = new ListBean();
+            ListBean.MessageBean messageBean = new ListBean.MessageBean();
+            messageBean.setContent("haha" + i);
+            listBean.setMessage(messageBean);
+            datas.add(listBean);
+        }*/
+        System.out.println(datas);
+
+        PushMsgListBean pushMsgListBean = new Gson().fromJson(result, PushMsgListBean.class);
+       // datas = pushMsgListBean.getData().getList();
+        datas.addAll(pushMsgListBean.getData().getList());
+        System.out.println(datas.get(0).getMessage().toString());
 
     }
 

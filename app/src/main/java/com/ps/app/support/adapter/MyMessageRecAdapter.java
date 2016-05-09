@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ps.app.R;
+import com.ps.app.support.Bean.PushMsgListBean.DataBean;
 import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 
@@ -18,9 +19,9 @@ import java.util.List;
 public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
 
     private Context mContext;
-    private List<Integer> datas;
+    private List<DataBean.ListBean> datas;
 
-    public MyMessageRecAdapter(Context mContext, List<Integer> datas){
+    public MyMessageRecAdapter(Context mContext, List<DataBean.ListBean> datas){
         this.mContext = mContext;
         this.datas = datas;
     }
@@ -35,8 +36,8 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof MyViewHolder){
-            ((MyViewHolder) holder).setImage(datas.get(position));
-            ((MyViewHolder) holder).tv_title.setText(datas.get(position));
+           // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
+            ((MyViewHolder) holder).tv_title.setText(datas.get(position).getMessage().getContent());
 
         }
     }

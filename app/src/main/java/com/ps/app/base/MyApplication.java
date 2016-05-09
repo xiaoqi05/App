@@ -8,6 +8,8 @@ import com.baidu.mapapi.SDKInitializer;
 import com.ps.app.service.LocationService;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import im.fir.sdk.FIR;
+
 
 public class MyApplication extends Application {
 
@@ -23,7 +25,7 @@ public class MyApplication extends Application {
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         OkHttpUtils.getInstance().getOkHttpClient();
-
+        FIR.init(this);
     }
     private void setupTheme() {
       
