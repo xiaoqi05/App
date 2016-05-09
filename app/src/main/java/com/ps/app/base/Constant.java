@@ -6,6 +6,8 @@ public class Constant {
     // 短信SDK的APPKEY,PPSECRET
     public static String APPSECRET = "1e85092208cae3046cd8bfb1c0c7e6ea";//76ebbea54422c6a93a7be1464bb6aa94
     public static String APPKEY = "124d6a9f89af8";//  124d12d1d49d8
+    //fir
+    public static String FIRTOKEN = "525ef6d95a86dafcf4fe6c21974bce08";
     // 默认使用中国区号
     public static final String DEFAULT_COUNTRY_ID = "86";
     public static final String BASE_URL = "http://211.149.197.241:8080/posec";//http://posec.zpy.cn

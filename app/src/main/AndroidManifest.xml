@@ -55,10 +55,10 @@
 
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
-            android:value="d619d2a63c0d009ace35857de9347888"/>
+            android:value="525ef6d95a86dafcf4fe6c21974bce08"/>
         <!--
-        tqmhIoyc5p93Alx3ClmbZnaTcugloZy6
-        DAn1IHYBpOIo64OYcKj89m9gFPPYjtXW
+        525ef6d95a86dafcf4fe6c21974bce08
+        d619d2a63c0d009ace35857de9347888
         -->
 
         <activity

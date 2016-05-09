@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -40,10 +41,14 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
+import com.ps.app.base.Constant;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
 
 import java.util.ArrayList;
+
+import im.fir.sdk.FIR;
+import im.fir.sdk.VersionCheckCallback;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
@@ -75,6 +80,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initActionBar(-1, "肖齐");
         initTab();
         initDraw(mToolbar, savedInstanceState);
+        checkUpdate(Constant.FIRTOKEN);
     }
 
     private void initTab() {
@@ -395,4 +401,30 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             }
         }
     };
+
+    public void checkUpdate(String firToken) {
+
+        FIR.checkForUpdateInFIR("208f46b04efb5c2920c693094a0e22e5", new VersionCheckCallback() {
+            @Override
+            public void onSuccess(String versionJson) {
+                Log.i("fir", "check from fir.im success! " + "\n" + versionJson);
+            }
+
+            @Override
+            public void onFail(Exception exception) {
+                Log.i("fir", "check fir.im fail! " + "\n" + exception.getMessage());
+            }
+
+            @Override
+            public void onStart() {
+                Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
