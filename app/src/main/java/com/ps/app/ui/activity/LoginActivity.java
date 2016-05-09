@@ -12,6 +12,7 @@ import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.CommonResultBean;
 import com.ps.app.support.utils.CheckPhone;
+import com.ps.app.support.utils.MD5Util;
 import com.ps.app.support.view.Code;
 import com.rey.material.widget.EditText;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -27,9 +28,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private boolean isReady;
     private ImageView mImageView;
     private EditText et_phone;
+    private EditText et_ver_code;
     private EditText et_paw;
     private String phone;
     private String paw;
+    private String verification_code;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +41,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         findView();
         initData();
-
-
     }
 
     private void initData() {
         mImageView.setImageBitmap(Code.getInstance().createBitmap());
-        System.out.println(Code.getInstance().getCode() + ">>>>>>>>>>>>>");
+       
     }
 
     private void findView() {
@@ -55,6 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         et_phone = (EditText) findViewById(R.id.et_login_phone);
         et_paw = (EditText) findViewById(R.id.et_login_paw);
+        et_ver_code = (EditText) findViewById(R.id.et_ver_code);
     }
 
 
@@ -64,7 +67,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.bt_login:
                 phone = et_phone.getText().toString().trim();
                 paw = et_paw.getText().toString().trim();
+                verification_code = et_ver_code.getText().toString().trim();
                 if (!preLogin(v)) return;
+                showNormalPrograssDailogBar(LoginActivity.this);
                 login(phone, paw);
                 break;
             case R.id.bt_get_verification:
@@ -92,10 +97,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             showSnackbar(v, "请填写密码");
             return false;
         }
+        if (TextUtils.isEmpty(verification_code)) {
+            showSnackbar(v, "请输入图片验证码");
+            return false;
+        }
+        if (!verification_code.equalsIgnoreCase(Code.getInstance().getCode())) {
+            showSnackbar(v, "图片验证码错误，请重新输入");
+            return false;
+        }
         if (!isNetworkAvailable()) {
             showSnackbar(v, "请连接网络，并重试");
             return false;
         }
+
         return true;
     }
 
@@ -115,8 +129,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         OkHttpUtils
                 .post()//
                 .url(Constant.LOGIN_URL)//
-                .addParams("phone", "123")//
-                .addParams("password", "123")//
+                .addParams("phone", phone)//
+                .addParams("password", MD5Util.md5(paw))//
                 .build()//
                 .execute(new UserLoginCallback() {
 
@@ -127,7 +141,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void onResponse(CommonResultBean response) {
-                        getSharePreference("").edit().putBoolean("isLogin", true).apply();
+                        if (response.getCode() == 2000) {
+                            showLongToast("登录" + response.getDesc());
+                            getSharePreference("").edit().putBoolean("isLogin", true).apply();
+                            dismissNormalPrograssDailogBar();
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        if (response.getCode() == 2202) {
+                            showLongToast(response.getData());
+                        }
                     }
                 });
     }

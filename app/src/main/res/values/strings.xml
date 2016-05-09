@@ -19,7 +19,7 @@
         completions."
     </string>
     <string name="phone">手机号码</string>
-    <string name="verification_code">短信验证码</string>
+    <string name="verification_code">图片验证码</string>
     <string name="send_verification_code">获取图片验证码</string>
     <string name="next_step">下一步</string>
     <string name="name">姓名</string>
@@ -40,4 +40,5 @@
     <string name="drawer_item_compact_header_desc">drawer_item_compact_header_desc</string>
     <string name="drawer_item_section_header">Drawer item</string>
     <string name="forget_password">忘记密码？</string>
+    <string name="sms_ver_code">短信验证码</string>
 </resources>

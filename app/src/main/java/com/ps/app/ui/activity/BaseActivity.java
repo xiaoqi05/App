@@ -2,6 +2,8 @@ package com.ps.app.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import com.ps.app.R;
 import com.ps.app.support.utils.NetWorkHelper;
 
 public class BaseActivity extends AppCompatActivity {
+    private ProgressDialog progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -127,6 +130,7 @@ public class BaseActivity extends AppCompatActivity {
 
     /**
      * 获取 SharedPreferences
+     *
      * @param config 值为空时使用默认值 config
      * @return
      */
@@ -137,13 +141,27 @@ public class BaseActivity extends AppCompatActivity {
             return getSharedPreferences(config, MODE_PRIVATE);
         }
     }
-    
-    public void showSnackbar(View view,String content){
+
+    public void showSnackbar(View view, String content) {
         Snackbar.make(view, content, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
     }
 
+    public void showNormalPrograssDailogBar(Context context) {
+        progress = new ProgressDialog(context);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setMessage("正在登录");
+        progress.show();
+    }
+
+
+    public void dismissNormalPrograssDailogBar() {
+        if (progress == null) {
+            return;
+        }
+        progress.dismiss();
+    }
 
 
 }
