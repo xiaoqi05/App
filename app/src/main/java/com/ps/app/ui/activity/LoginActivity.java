@@ -33,7 +33,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private String phone;
     private String paw;
     private String verification_code;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initData() {
         mImageView.setImageBitmap(Code.getInstance().createBitmap());
-       
+
     }
 
     private void findView() {
@@ -141,11 +141,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void onResponse(CommonResultBean response) {
+                        dismissNormalPrograssDailogBar();
                         if (response.getCode() == 2000) {
                             showLongToast("登录" + response.getDesc());
                             getSharePreference("").edit().putBoolean("isLogin", true).apply();
-                            dismissNormalPrograssDailogBar();
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }
