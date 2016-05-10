@@ -24,7 +24,6 @@ public class MyApplication extends Application {
         locationService = new LocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
-        OkHttpUtils.getInstance().getOkHttpClient();
         FIR.init(this);
     }
     private void setupTheme() {

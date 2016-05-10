@@ -150,7 +150,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         if (msg == 0) {
             datas.clear();
         }
-        OkHttpUtils.get().addParams("pn", "1").addParams("ps", "5").url(Constant.GET_MSG_URL).build().execute(new UserMsgCallback() {
+        String cookie =  getSharePreference("").getString("cookie", "");
+        showLongToast("cookie:"+cookie);
+        OkHttpUtils.get().addParams("pn", "1").addParams("ps", "5").addHeader("cookie",cookie)
+                .url(Constant.GET_MSG_URL).build().execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
@@ -158,6 +161,11 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
             @Override
             public void onResponse(PushMsgListBean response) {
+                if (response.getData().getSize() == 0) {
+                    Log.i(TAG, "没有数据");
+                    recycler.showNoDataView();
+                    return;
+                }
                 datas.addAll(response.getData().getList());
                 Log.i(TAG, datas.get(0).getMessage().toString());
             }
@@ -173,7 +181,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
             PushMsgListBean pushMsgListBean = new Gson().fromJson(string, PushMsgListBean.class);
-            Log.i(TAG, pushMsgListBean.getData().toString());
+            //Log.i(TAG, pushMsgListBean.getData().toString());
             return pushMsgListBean;
         }
     }
