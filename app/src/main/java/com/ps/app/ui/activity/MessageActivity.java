@@ -5,29 +5,40 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
+import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.PushMsgListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyMessageRecAdapter;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 import com.zjutkz.powerfulrecyclerview.animator.impl.ZoomInAnimator;
 import com.zjutkz.powerfulrecyclerview.listener.OnLoadMoreListener;
 import com.zjutkz.powerfulrecyclerview.listener.OnRefreshListener;
 import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class MessageActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
     public static final int DISMISS_PROGRESSBAR = 1;
+    private static final int DEFAULT_LIST_SIZE = 8;
+    private static final String TAG = "MessageActivity";
 
     private PowerfulRecyclerView recycler;
 
@@ -88,7 +99,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     private void initRecylerView() {
         recycler = (PowerfulRecyclerView) findViewById(R.id.ptr_container);
         if (datas == null) {
-            datas = new ArrayList<ListBean>();
+            datas = new ArrayList<>();
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -104,6 +115,11 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         recycler.setLayoutManager(new LinearLayoutManager(this));
         header = (HistoryThemeHeaderView) LayoutInflater.from(this).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(this).inflate(R.layout.history_footer_theme, recycler, false);
+        if (datas.size() < DEFAULT_LIST_SIZE) {
+            footer.setVisibility(View.INVISIBLE);
+        } else {
+            footer.setVisibility(View.VISIBLE);
+        }
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
         recycler.prepareForDragAndSwipe(false, false);
@@ -134,21 +150,32 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         if (msg == 0) {
             datas.clear();
         }
-        //datas.add(R.drawable.img1);
-       /* for (int i = 0; i < 10; i++) {
-            ListBean listBean = new ListBean();
-            ListBean.MessageBean messageBean = new ListBean.MessageBean();
-            messageBean.setContent("haha" + i);
-            listBean.setMessage(messageBean);
-            datas.add(listBean);
-        }*/
-        System.out.println(datas);
+        OkHttpUtils.get().addParams("pn", "1").addParams("ps", "5").url(Constant.GET_MSG_URL).build().execute(new UserMsgCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
 
-        PushMsgListBean pushMsgListBean = new Gson().fromJson(result, PushMsgListBean.class);
-       // datas = pushMsgListBean.getData().getList();
-        datas.addAll(pushMsgListBean.getData().getList());
-        System.out.println(datas.get(0).getMessage().toString());
+            @Override
+            public void onResponse(PushMsgListBean response) {
+                datas.addAll(response.getData().getList());
+                Log.i(TAG, datas.get(0).getMessage().toString());
+            }
+        });
 
+       /* PushMsgListBean pushMsgListBean = new Gson().fromJson(result, PushMsgListBean.class);
+        // datas = pushMsgListBean.getData().getList();*/
+
+    }
+
+    public abstract class UserMsgCallback extends Callback<PushMsgListBean> {
+        @Override
+        public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            PushMsgListBean pushMsgListBean = new Gson().fromJson(string, PushMsgListBean.class);
+            Log.i(TAG, pushMsgListBean.getData().toString());
+            return pushMsgListBean;
+        }
     }
 
     @Override

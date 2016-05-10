@@ -21,23 +21,29 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context mContext;
     private List<DataBean.ListBean> datas;
 
-    public MyMessageRecAdapter(Context mContext, List<DataBean.ListBean> datas){
+    public MyMessageRecAdapter(Context mContext, List<DataBean.ListBean> datas) {
         this.mContext = mContext;
         this.datas = datas;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ac_message_list_item,parent,false));
+        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ac_message_list_item, parent, false));
 
         return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if(holder instanceof MyViewHolder){
-           // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
+        if (holder instanceof MyViewHolder) {
+            // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
             ((MyViewHolder) holder).tv_title.setText(datas.get(position).getMessage().getContent());
+            if (datas.get(position).getMessage().getType().equals("ASSET_MANAGEMENT_MSG")) {
+                ((MyViewHolder) holder).setImage(R.drawable.house);
+            }
+            if (datas.get(position).getMessage().getType().equals("ZONE_WARNING")) {
+                ((MyViewHolder) holder).setImage(R.drawable.suspect);
+            }
 
         }
     }
@@ -49,7 +55,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onMove(int fromPosition, int toPosition) {
-        if(fromPosition < 0 || toPosition >= datas.size()){
+        if (fromPosition < 0 || toPosition >= datas.size()) {
             return;
         }
         Collections.swap(datas, fromPosition, toPosition);
@@ -58,14 +64,14 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onDismiss(int position) {
-        if(position < 0 || position >= datas.size()){
+        if (position < 0 || position >= datas.size()) {
             return;
         }
         datas.remove(position);
         notifyItemRemoved(position);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView iv_icon;
         public TextView tv_title;
@@ -74,19 +80,17 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            
-             
-            iv_icon = (ImageView)itemView.findViewById(R.id.iv_message_icon);
-            tv_content = (TextView)itemView.findViewById(R.id.tv_message_content);
-            tv_title = (TextView)itemView.findViewById(R.id.tv_message_title);
-            iv_flag = (ImageView)itemView.findViewById(R.id.iv_read_flag);
+            iv_icon = (ImageView) itemView.findViewById(R.id.iv_message_icon);
+            tv_content = (TextView) itemView.findViewById(R.id.tv_message_content);
+            tv_title = (TextView) itemView.findViewById(R.id.tv_message_title);
+            iv_flag = (ImageView) itemView.findViewById(R.id.iv_read_flag);
         }
 
         public void setImage(int idImage) {
             Picasso.with(iv_icon.getContext()).
-                    load(R.drawable.suspect).
+                    load(idImage).
                     centerCrop().
-                    resize(130,130).
+                    resize(130, 130).
                     into(iv_icon);
         }
     }
