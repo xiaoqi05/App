@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.utils.CheckPhone;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
@@ -27,12 +28,15 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     private Button bt_get_verification;
     private Button bt_next_step;
     private EditText et_phone;
+    private EditText et_reset_verification;
+    private String phone;
 
     private MyHandler myHandler = new MyHandler(ResetPasswordActivity.this);
-    private boolean isGetVerificaton =false;
+    private boolean isGetVerificaton = false;
 
     private static class MyHandler extends Handler {
 
+        private static final int RESETPASSWORD = 1;
         private WeakReference<ResetPasswordActivity> activityWeakReference;
 
         public MyHandler(ResetPasswordActivity activity) {
@@ -47,7 +51,10 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                     case VER_SUCCESS:
                         System.out.println("提交验证码成功");
                         activity.showShortToast("验证成功");
-                        activity.startActivity(new Intent(activity, SetPassWordActivity.class));
+                        Intent intent = new Intent(activity, SetPassWordActivity.class);
+                        intent.putExtra("phone", activity.phone);
+                        intent.putExtra("source",RESETPASSWORD);
+                        activity.startActivity(intent);
                         break;
                     case GET_VER_SUCCESS:
                         activity.showShortToast("获取验证码成功");
@@ -81,38 +88,36 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         assert bt_get_verification != null;
         bt_get_verification.setOnClickListener(this);
         et_phone = (EditText) findViewById(R.id.et_reset_phone);
+        et_reset_verification = (EditText) findViewById(R.id.et_reset_verification);
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
+    public void onClick(final View v) {
+        switch (v.getId()) {
             case R.id.bt_get_verification:
-                final String newPhone = et_phone.getText().toString().trim();
-              /*  if (!TextUtils.isEmpty(newPhone)){
-                    getVerificationCode(newPhone);
-                }else {
-                    showSnackbar(v,"请填写手机号码");
-                }
-
-                if (newPhone.length() != 11) {
-                    showShortToast("请输入正确的手机号码");
+                phone = et_phone.getText().toString().trim();
+                if (TextUtils.isEmpty(phone)) {
+                    showSnackbar(v, "请输入电话号码");
                     return;
-                }*/
+                }
+                if (!CheckPhone.isMobileNO(phone)) {
+                    showSnackbar(v, "请输入正确电话号码");
+                    return;
+                }
                 new CountDownTimer(60000, 1000) {
                     // 第一个参数是总的倒计时时间
                     // 第二个参数是每隔多少时间(ms)调用一次onTick()方法
                     public void onTick(long millisUntilFinished) {
                         bt_get_verification.setText(millisUntilFinished / 1000 + "s后重新发送");
                         bt_get_verification.setEnabled(false);
-                        if (TextUtils.isEmpty(newPhone)) {
-                            showLongToast("请输入电话号码");
+                        if (TextUtils.isEmpty(phone)) {
+                            showSnackbar(v, "请输入电话号码");
                             isGetVerificaton = false;
                             return;
-                        } else {
-                            if (!isGetVerificaton) {
-                                getVerificationCode(et_phone.getText().toString().trim());
-                                isGetVerificaton = true;
-                            }
+                        }
+                        if (!isGetVerificaton) {
+                            getVerificationCode(et_phone.getText().toString().trim());
+                            isGetVerificaton = true;
                         }
 
                     }
@@ -124,15 +129,22 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                     }
                 }.start();
                 break;
-            
+
             case R.id.bt_next_step:
-                Intent intent = new Intent(ResetPasswordActivity.this,SetPassWordActivity.class);
-                startActivity(intent);
+                // Intent intent = new Intent(ResetPasswordActivity.this,SetPassWordActivity.class);
+                // startActivity(intent);
+                String verificationCode = et_reset_verification.getText().toString().trim();
+                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(verificationCode)) {
+                    showSnackbar(v, "请填写完整信息");
+                } else {
+                    //验证手机验证码
+                    SMSSDK.submitVerificationCode("86", phone, verificationCode);
+                }
                 break;
-            
+
             default:
                 break;
-            
+
         }
     }
 
@@ -170,7 +182,6 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
 
                     }
                 } else {
-                    System.out.println("返回支持发送验证码的cuowu");
                     myHandler.sendEmptyMessage(ERROR_GET_VER);
                     showLongToast("返回支持发送验证码的cuowu");
                     ((Throwable) data).printStackTrace();
@@ -180,4 +191,9 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         SMSSDK.registerEventHandler(eh); //注册短信回调
     }
 
+    @Override
+    protected void onDestroy() {
+        SMSSDK.unregisterAllEventHandler();
+        super.onDestroy();
+    }
 }

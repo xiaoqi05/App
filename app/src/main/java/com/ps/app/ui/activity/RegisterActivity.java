@@ -129,7 +129,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                 } else {
                     System.out.println("返回支持发送验证码的cuowu");
-                    myHandler.sendEmptyMessage(ERROR_GET_VER);
+                   // myHandler.sendEmptyMessage(ERROR_GET_VER);
                     showLongToast("返回支持发送验证码的cuowu");
                     ((Throwable) data).printStackTrace();
                 }
@@ -223,7 +223,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 policeId = et_register_police_id.getText().toString().trim();
                 phone = et_register_phone.getText().toString().trim();
                 String verificationCode = et_register_verification.getText().toString().trim();
-                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(policeId) || TextUtils.isEmpty(phone) /*|| TextUtils.isEmpty(verificationCode)*/) {
+                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(policeId) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(verificationCode)) {
                     showLongToast("请填写完整信息");
                 } else {
                     //验证手机验证码

@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -44,7 +43,7 @@ public class SetPassWordActivity extends BaseActivity {
     private String userName;
     private String phone;
     private String policeId;
-    private ProgressBar mProgressView;
+    private int source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +58,24 @@ public class SetPassWordActivity extends BaseActivity {
     }
 
     private void initData() {
-        userName = getIntent().getStringExtra("userName");
+        source = getIntent().getIntExtra("source", 0);
         phone = getIntent().getStringExtra("phone");
-        policeId = getIntent().getStringExtra("policeId");
+        if (source == 0) {
+            userName = getIntent().getStringExtra("userName");
+            policeId = getIntent().getStringExtra("policeId");
+        }
+
     }
 
     private void findView() {
         et_set_password = (EditText) findViewById(R.id.et_set_password);
         et_confirm_password = (EditText) findViewById(R.id.et_confirm_password);
-        mProgressView = (ProgressBar) findViewById(R.id.login_progress);
 
     }
 
     public void finish_login(final View view) {
-        showProgress(mProgressView,true);
+        //showProgress(mProgressView, true);
+        showNormalPrograssDailogBar(SetPassWordActivity.this);
         if (!isNetworkAvailable()) {
             showSnackbar(view, "请连接网络,并重试");
             return;
@@ -84,34 +87,35 @@ public class SetPassWordActivity extends BaseActivity {
                 if (isGetLocationInfo) {
                     System.out.println(MD5Util.md5(paw));
                     Map<String, String> params = new HashMap<>();
-                    params.put("name", userName);
-                    params.put("phone", phone);
-                    params.put("pnum", policeId);
-                    params.put("imei", IMEI);
-                    params.put("password", MD5Util.md5(paw));
-                    params.put("longitude", String.valueOf(longitude));
-                    params.put("latitude", String.valueOf(latitude));
-                    params.put("phoneType", phone_type);
-                    OkHttpUtils.post().url(Constant.POLICE_REGISTER_URL).params(params).build().execute(new UserRegCallback() {
+                    String url;
+                    if (source == 0) {
+                        params.put("name", userName);
+                        params.put("phone", phone);
+                        params.put("pnum", policeId);
+                        params.put("imei", IMEI);
+                        params.put("password", MD5Util.md5(paw));
+                        params.put("longitude", String.valueOf(longitude));
+                        params.put("latitude", String.valueOf(latitude));
+                        params.put("phoneType", phone_type);
+                        url = Constant.POLICE_REGISTER_URL;
+                    } else {
+                        params.put("phone", phone);
+                        params.put("password", MD5Util.md5(paw));
+                        url = Constant.FIND_PASSWORD_URL;
+                    }
+                    OkHttpUtils.post().url(url).params(params).build().execute(new UserRegCallback() {
                         @Override
                         public void onError(Call call, Exception e) {
+                            dismissNormalPrograssDailogBar();
                             Log.i(TAG, e.getMessage());
                         }
 
                         @Override
                         public void onResponse(CommonResultBean response) {
+                            dismissNormalPrograssDailogBar();
                             if (response.getCode() == 2000 && response.getDesc().equals("成功")) {
                                 showLongToast("注册成功,请重新登录");
-                                 /*  
-                                Intent intent = new Intent(SetPassWordActivity.this, LoginActivity.class);
-                                intent.putExtra("name", userName);
-                                intent.putExtra("phone", phone);
-                                intent.putExtra("policeId", policeId);
-                                startActivity(intent);
-                                */
                                 //注册成功
-                                showProgress(mProgressView,false);
-                                //getSharePreference("").edit().putBoolean("isLogin", true).apply();
                                 setResult(REGISTER_SUCCESS);
                                 finish();
                             }

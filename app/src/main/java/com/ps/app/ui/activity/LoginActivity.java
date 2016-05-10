@@ -145,6 +145,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (response.getCode() == 2000) {
                             showLongToast("登录" + response.getDesc());
                             getSharePreference("").edit().putBoolean("isLogin", true).apply();
+                            //退出的时候上传sid
+                            getSharePreference("").edit().putString("sid", response.getData()).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
