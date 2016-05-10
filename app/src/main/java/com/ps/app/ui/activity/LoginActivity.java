@@ -13,7 +13,6 @@ import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.CommonResultBean;
 import com.ps.app.support.utils.CheckPhone;
 import com.ps.app.support.utils.MD5Util;
-import com.ps.app.support.utils.PersistentCookieStore;
 import com.ps.app.support.view.Code;
 import com.rey.material.widget.EditText;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Cookie;
-import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -135,13 +133,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .post()//
                 .url(Constant.LOGIN_URL)//
                 .addParams("phone", phone)//
-                .addParams("password", MD5Util.md5(paw))//
+                .addParams("password", MD5Util.md5(paw))//MD5Util.md5(paw)
                 .build()//
                 .execute(new UserLoginCallback() {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        System.out.println("网络异常" + e);
+                        dismissNormalPrograssDailogBar();
+                        System.out.println("异常" + e
+                        );
                     }
 
                     @Override
@@ -152,6 +152,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             getSharePreference("").edit().putBoolean("isLogin", true).apply();
                             //退出的时候上传sid
                             getSharePreference("").edit().putString("sid", response.getData()).apply();
+                            //cookie 持久化管理
+                            //// TODO: 2016-05-10 退出登录时清除sp，cookies 
+                            List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
+                            getSharePreference("").edit().putString("cookie", String.valueOf(cookies)).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -167,15 +171,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public abstract class UserLoginCallback extends Callback<CommonResultBean> {
         @Override
         public CommonResultBean parseNetworkResponse(Response response) throws IOException {
-
-            //cookie 持久化管理
-            //// TODO: 2016-05-10 退出登录时清除sp，cookies 
-            List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
-            System.out.println(cookies.get(0)+"<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            PersistentCookieStore persistentCookieStore = new PersistentCookieStore(LoginActivity.this);
-            persistentCookieStore.add(HttpUrl.parse(Constant.LOGIN_URL),cookies.get(0));
+           
             String string = response.body().string();
-            getSharePreference("").edit().putString("cookie", String.valueOf(cookies)).apply();
             CommonResultBean commonResultBean = new Gson().fromJson(string, CommonResultBean.class);
             Log.i(TAG, commonResultBean.getDesc());
             return commonResultBean;
