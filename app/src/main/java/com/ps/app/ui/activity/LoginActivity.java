@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 paw = et_paw.getText().toString().trim();
                 verification_code = et_ver_code.getText().toString().trim();
                 if (!preLogin(v)) return;
-                showNormalPrograssDailogBar(LoginActivity.this);
+                showNormalPrograssDailogBar(LoginActivity.this,"正在登录");
                 login(phone, paw);
                 break;
             case R.id.bt_get_verification:

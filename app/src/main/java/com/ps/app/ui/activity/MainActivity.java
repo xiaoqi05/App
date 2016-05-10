@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -417,12 +416,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onStart() {
-                Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFinish() {
-                Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.ps.app.ui.activity.MessageActivity">
+
     <com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView
         
         android:id="@+id/ptr_container"
@@ -18,5 +19,13 @@
         app:refresh_distance="60dp"
         
         />
+
+    <ProgressBar
+        android:id="@+id/msg_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

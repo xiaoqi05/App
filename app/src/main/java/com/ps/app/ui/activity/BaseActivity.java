@@ -148,10 +148,10 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public void showNormalPrograssDailogBar(Context context) {
+    public void showNormalPrograssDailogBar(Context context,String msg) {
         progress = new ProgressDialog(context);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setMessage("正在登录");
+        progress.setMessage(msg);
         progress.show();
     }
 

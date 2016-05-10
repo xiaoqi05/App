@@ -36,11 +36,13 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 public class MessageActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
-    public static final int DISMISS_PROGRESSBAR = 1;
-    private static final int DEFAULT_LIST_SIZE = 10;
+    private static final int DEFAULT_LIST_SIZE = 7;
     private static final int REFRESH_DATA = 0;
     private static final int INIT_LOAD = 4;
     private static final int NO_DATA = 2;
+    private static final int LOAD_MORE = 1;
+    private static final int ERROR_LOAD = 3;
+
     private static final String TAG = "MessageActivity";
 
     private PowerfulRecyclerView recycler;
@@ -53,8 +55,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     private HistoryThemeHeaderView header;
 
-    private int ps = 0;
-    private int pn = 0;
+    private int ps = 10;
+    private int pn = 1;
+    private int total = 0;
+    private boolean isFirstLoad = true;
 
 
     private int positionToRestore = 0;
@@ -84,22 +88,29 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                         activity.footer.setVisibility(View.VISIBLE);
                         activity.recycler.setLoadMoreEnable(true);
                     }
-                } else if (msg.what == 1) {
-                    //activity.getDatas(1, 1, 5);
+
+                } else if (msg.what == LOAD_MORE) {
                     // activity.adapter.notifyItemRangeInserted(activity.adapter.getItemCount(), 9);
+                    activity.datas.addAll((List<ListBean>) msg.obj);
+                    activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopLoadMore();
                 } else if (msg.what == NO_DATA) {
                     activity.recycler.setLoadMoreEnable(false);
-                } else if (msg.what == 3) {
+                } else if (msg.what == ERROR_LOAD) {
+                    activity.recycler.stopRefresh();
+                    activity.recycler.stopLoadMore();
+                    activity.recycler.setLoadMoreEnable(false);
+                    activity.showLongToast((String)msg.obj);
                     activity.recycler.hideSpecialInfoView();
                 } else if (msg.what == INIT_LOAD) {
                     //初始化加载
+                    activity.isFirstLoad = false;
                     activity.datas.addAll((List<ListBean>) msg.obj);
+                    if (activity.datas.size() == 0) {
+                        activity.recycler.showNoDataView();
+                    }
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
-                    if (!activity.recycler.isLoadMoreEnable()) {
-                        activity.recycler.setLoadMoreEnable(true);
-                    }
                 }
             }
         }
@@ -113,28 +124,15 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         initRecylerView();
     }
 
+
     private void initRecylerView() {
         recycler = (PowerfulRecyclerView) findViewById(R.id.ptr_container);
         if (datas == null) {
             datas = new ArrayList<>();
         }
-       /* new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getDatas(INIT_LOAD, 1, 5);
-                adapter.notifyDataSetChanged();
-                recycler.stopRefresh();
-                recycler.stopLoadMore();
-            }
-        }, 500);*/
         recycler.setLayoutManager(new LinearLayoutManager(this));
         header = (HistoryThemeHeaderView) LayoutInflater.from(this).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(this).inflate(R.layout.history_footer_theme, recycler, false);
-        if (datas.size() < DEFAULT_LIST_SIZE) {
-            footer.setVisibility(View.INVISIBLE);
-        } else {
-            footer.setVisibility(View.VISIBLE);
-        }
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
         recycler.prepareForDragAndSwipe(false, false);
@@ -144,48 +142,48 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
-               /* if (position == 0) {
-                    datas.add(1, R.mipmap.ic_launcher);
-                    adapter.notifyItemInserted(1);
-                } else if (position == 1) {
-                    datas.remove(1);
-                    adapter.notifyItemRemoved(1);
-                }*/
+
                 showShortToast("onItemClick: " + position);
             }
         });
         recycler.setItemAnimator(new ZoomInAnimator());
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 //初始化数据
-                getDatas(INIT_LOAD, 1, 5);
+                getDatas(INIT_LOAD, ps++, 8);
             }
-        }).start();
+        }).start();*/
+        getDatas(INIT_LOAD, ps, pn);
         adapter = new MyMessageRecAdapter(this, datas);
         recycler.setAdapter(adapter);
-        // recycler.onRefresh();
     }
 
 
-    private void getDatas(final int msg, int ps, int pn) {
+    private void getDatas(final int msg, int pages, int pageNum) {
+        if (ps * pn > total && total != 0) {
+            hideSpecialView("加载完成");
+            return;
+        }
+        //if (!isFirstLoad)
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.get().addParams("pn", String.valueOf(ps)).addParams("ps", String.valueOf(pn)).addHeader("cookie", cookie)
-                .url(Constant.GET_MSG_URL).build().execute(new UserMsgCallback() {
+        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addHeader("cookie", cookie)
+                .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                hideSpecialView("加载失败，请重试");
             }
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                if (response.getData().getSize() == 0) {
-                    Log.i(TAG, "没有数据");
-                    recycler.showNoDataView();
-                    return;
+                total = response.getData().getTotal();
+                if (pn * ps > total) {
+                    recycler.setLoadMoreEnable(false);
                 }
+                pn++;
                 listBeen.addAll(response.getData().getList());
                 Log.i(TAG, listBeen.get(0).getMessage().toString());
                 Message message = new Message();
@@ -195,17 +193,30 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             }
         });
 
-       /* PushMsgListBean pushMsgListBean = new Gson().fromJson(result, PushMsgListBean.class);
-        // datas = pushMsgListBean.getData().getList();*/
+    }
 
+    private void hideSpecialView(final String msg) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    Message message = new Message();
+                    message.what = ERROR_LOAD;
+                    message.obj = msg;
+                    myHandler.sendMessage(message);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public abstract class UserMsgCallback extends Callback<PushMsgListBean> {
         @Override
         public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            PushMsgListBean pushMsgListBean = new Gson().fromJson(string, PushMsgListBean.class);
-            return pushMsgListBean;
+            return new Gson().fromJson(string, PushMsgListBean.class);
         }
     }
 
@@ -221,6 +232,13 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         switch (item.getItemId()) {
             case R.id.clear_message:
                 showShortToast("清空消息");
+                //带动画的删除所有
+                int item_data = datas.size();
+                for (int i = item_data - 1; i >= 0; i--) {
+                    adapter.notifyItemRemoved(i);
+                    datas.remove(i);
+                    --item_data;
+                }
                 return true;
             case R.id.marker_already_read:
                 showShortToast("标记为已读");
@@ -236,37 +254,13 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     @Override
     public void onLoadMore() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                    //myHandler.sendEmptyMessage(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                    myHandler.sendEmptyMessage(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
+        getDatas(LOAD_MORE, ps, pn);
     }
 
     @Override
     public void onRefresh() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getDatas(REFRESH_DATA, 1, 5);
-            }
-        }).start();
+        getDatas(REFRESH_DATA, ps, pn);
     }
+
+
 }

@@ -8,6 +8,8 @@ import com.baidu.mapapi.SDKInitializer;
 import com.ps.app.service.LocationService;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import im.fir.sdk.FIR;
 
 
@@ -24,6 +26,7 @@ public class MyApplication extends Application {
         locationService = new LocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
+        OkHttpUtils.getInstance().setConnectTimeout(10000, TimeUnit.MILLISECONDS);
         FIR.init(this);
     }
     private void setupTheme() {
