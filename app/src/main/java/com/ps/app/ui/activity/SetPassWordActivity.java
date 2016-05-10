@@ -125,12 +125,15 @@ public class SetPassWordActivity extends BaseActivity {
                         }
                     });
                 } else {
+                    dismissNormalPrograssDailogBar();
                     showSnackbar(view, "请开启GPS，获取位置信息");
                 }
             } else {
+                dismissNormalPrograssDailogBar();
                 showSnackbar(view, "两次密码不同,请重新输入");
             }
         } else {
+            dismissNormalPrograssDailogBar();
             showSnackbar(view, "请输入密码");
         }
     }
