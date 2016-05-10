@@ -38,10 +38,10 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof MyViewHolder) {
             // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
             ((MyViewHolder) holder).tv_title.setText(datas.get(position).getMessage().getContent());
-            if (datas.get(position).getMessage().getType().equals("ASSET_MANAGEMENT_MSG")) {
+            ((MyViewHolder) holder).iv_icon.setTag(datas.get(position).getMessage().getType());
+            if (((MyViewHolder) holder).iv_icon.getTag() != null && ((MyViewHolder) holder).iv_icon.getTag().equals("ASSET_MANAGEMENT_MSG")) {
                 ((MyViewHolder) holder).setImage(R.drawable.house);
-            }
-            if (datas.get(position).getMessage().getType().equals("ZONE_WARNING")) {
+            } else {
                 ((MyViewHolder) holder).setImage(R.drawable.suspect);
             }
 
