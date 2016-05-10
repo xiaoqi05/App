@@ -37,7 +37,7 @@ import okhttp3.Response;
 
 public class MessageActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
     public static final int DISMISS_PROGRESSBAR = 1;
-    private static final int DEFAULT_LIST_SIZE = 8;
+    private static final int DEFAULT_LIST_SIZE = 10;
     private static final int REFRESH_DATA = 0;
     private static final int INIT_LOAD = 4;
     private static final int NO_DATA = 2;
@@ -77,11 +77,15 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.datas.addAll((List<ListBean>) msg.obj);
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
-                    if (!activity.recycler.isLoadMoreEnable()) {
+                   /* if (!activity.recycler.isLoadMoreEnable()) {
+                        activity.recycler.setLoadMoreEnable(true);
+                    }*/
+                    if (activity.datas.size() >= DEFAULT_LIST_SIZE) {
+                        activity.footer.setVisibility(View.VISIBLE);
                         activity.recycler.setLoadMoreEnable(true);
                     }
                 } else if (msg.what == 1) {
-                    activity.getDatas(1, 1, 5);
+                    //activity.getDatas(1, 1, 5);
                     // activity.adapter.notifyItemRangeInserted(activity.adapter.getItemCount(), 9);
                     activity.recycler.stopLoadMore();
                 } else if (msg.what == NO_DATA) {
@@ -90,7 +94,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.recycler.hideSpecialInfoView();
                 } else if (msg.what == INIT_LOAD) {
                     //初始化加载
-                    // List<ListBean> initData = (List<ListBean>) msg.obj;
                     activity.datas.addAll((List<ListBean>) msg.obj);
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
@@ -161,15 +164,14 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         }).start();
         adapter = new MyMessageRecAdapter(this, datas);
         recycler.setAdapter(adapter);
-        recycler.onRefresh();
+        // recycler.onRefresh();
     }
 
-    private String result = "{\"code\":2000,\"data\":{\"endRow\":2,\"firstPage\":1,\"hasNextPage\":false,\"hasPreviousPage\":false,\"isFirstPage\":true,\"isLastPage\":true,\"lastPage\":1,\"list\":[{\"createTime\":\"2016-05-05 16:15:15\",\"id\":1,\"message\":{\"content\":\"即将到期\",\"id\":1,\"type\":\"ASSET_MANAGEMENT_MSG\"},\"mid\":1,\"successed\":0,\"unread\":0},{\"createTime\":\"2016-05-05 16:15:15\",\"id\":2,\"message\":{\"content\":\"你已离开限制区域，请回去！\",\"id\":3,\"type\":\"ZONE_WARNING\"},\"mid\":1,\"successed\":0,\"unread\":0}],\"navigatePages\":8,\"navigatepageNums\":[1],\"nextPage\":0,\"orderBy\":\"\",\"pageNum\":1,\"pageSize\":5,\"pages\":1,\"prePage\":0,\"size\":2,\"startRow\":1,\"total\":2},\"error\":\"\",\"desc\":\"成功!\"}";
 
     private void getDatas(final int msg, int ps, int pn) {
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference("").getString("cookie", "");
-        showLongToast("cookie:" + cookie);
+        Log.i(TAG, "cookie:" + cookie);
         OkHttpUtils.get().addParams("pn", String.valueOf(ps)).addParams("ps", String.valueOf(pn)).addHeader("cookie", cookie)
                 .url(Constant.GET_MSG_URL).build().execute(new UserMsgCallback() {
             @Override
@@ -203,7 +205,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
             PushMsgListBean pushMsgListBean = new Gson().fromJson(string, PushMsgListBean.class);
-            //Log.i(TAG, pushMsgListBean.getData().toString());
             return pushMsgListBean;
         }
     }
@@ -240,7 +241,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             public void run() {
                 try {
                     Thread.sleep(3000);
-                    myHandler.sendEmptyMessage(1);
+                    //myHandler.sendEmptyMessage(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -264,13 +265,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(2000);
-                    getDatas(REFRESH_DATA,1,5);
-                
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                getDatas(REFRESH_DATA, 1, 5);
             }
         }).start();
     }
