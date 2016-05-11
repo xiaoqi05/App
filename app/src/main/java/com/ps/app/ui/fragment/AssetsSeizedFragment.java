@@ -29,22 +29,15 @@ import java.util.List;
 
 
 @SuppressLint("ValidFragment")
-public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,OnLoadMoreListener {
+public class AssetsSeizedFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
     private String mTitle;
     private static final String TAG = "AssetsSeizedFragment";
-
     private PowerfulRecyclerView recycler;
-
     private MyAssetRecAdapter adapter;
-
     private List<Integer> datas;
-
     private HistoryThemeFooterView footer;
-
     private HistoryThemeHeaderView header;
-
     private int loadMoreCount = 0;
-
     private int positionToRestore = 0;
 
     public static AssetsSeizedFragment getInstance(String title) {
@@ -53,27 +46,27 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         return sf;
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what == 0){
+            if (msg.what == 0) {
                 getDatas(1);
                 adapter.notifyDataSetChanged();
                 loadMoreCount = 0;
                 recycler.stopRefresh();
-                if(!recycler.isLoadMoreEnable()){
+                if (!recycler.isLoadMoreEnable()) {
                     recycler.setLoadMoreEnable(true);
                 }
                 resetFootView();
-            }else if(msg.what == 1){
+            } else if (msg.what == 1) {
                 getDatas(1);
                 adapter.notifyItemRangeInserted(adapter.getItemCount(), 9);
                 recycler.stopLoadMore();
-            }else if(msg.what == 2){
+            } else if (msg.what == 2) {
                 recycler.setLoadMoreEnable(false);
-            }else if(msg.what == 3){
+            } else if (msg.what == 3) {
                 recycler.hideSpecialInfoView();
             }
         }
@@ -91,12 +84,10 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_asset_seized, null);
-        recycler = (PowerfulRecyclerView)v.findViewById(R.id.ptr_container);
-
-        if(datas == null){
-            datas = new ArrayList<Integer>();
+        recycler = (PowerfulRecyclerView) v.findViewById(R.id.ptr_container);
+        if (datas == null) {
+            datas = new ArrayList<>();
         }
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -104,45 +95,25 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                 adapter.notifyDataSetChanged();
                 recycler.stopRefresh();
                 recycler.stopLoadMore();
-                if (datas.size()<9){
+                if (datas.size() < 9) {
                     footer.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     footer.setVisibility(View.VISIBLE);
 
                 }
             }
         }, 500);
-
-        adapter = new MyAssetRecAdapter(getContext(),datas);
-
+        adapter = new MyAssetRecAdapter(getContext(), datas);
         recycler.setAdapter(adapter);
-
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //recycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
         header = (HistoryThemeHeaderView) LayoutInflater.from(getContext()).inflate(R.layout.history_header_theme, recycler, false);
-
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
-
         recycler.setHeaderView(header);
-
         recycler.setFooterView(footer);
-
-        //listHeader = (LinearLayout)LayoutInflater.from(this).inflate(R.layout.list_header_viewpager, null);
-
-        //  recycler.setPositionToShowBtn(4);
-
-        // recycler.addRecyclerViewHeader(listHeader, true);
-
         recycler.prepareForDragAndSwipe(false, false);
-
         recycler.setScrollBarEnable(false);
-
         recycler.setOnRefreshListener(this);
-
         recycler.setOnLoadMoreListener(this);
-
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
@@ -153,13 +124,12 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                     datas.remove(1);
                     adapter.notifyItemRemoved(1);
                 }*/
-                Toast.makeText(getContext(),"onItemClick: " + position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "onItemClick: " + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 startActivity(intent);
                 Log.d(TAG, "onItemClick: " + position);
             }
         });
-
         recycler.setItemAnimator(new ZoomInAnimator());
         return v;
     }
@@ -179,7 +149,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
 
     private void getDatas(int msg) {
 
-        if(msg == 0){
+        if (msg == 0) {
             datas.clear();
         }
 
@@ -188,10 +158,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         datas.add(R.drawable.img3);
         datas.add(R.drawable.img4);
         datas.add(R.drawable.img5);
-     /*   datas.add(R.drawable.img6);
-        datas.add(R.drawable.img7);
-        datas.add(R.drawable.img8);
-        datas.add(R.drawable.img9);*/
+    
     }
 
     @Override
@@ -211,7 +178,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
 
     @Override
     public void onLoadMore() {
-        if(++loadMoreCount <= 2){
+        if (++loadMoreCount <= 2) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -223,7 +190,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
                     }
                 }
             }).start();
-        }else{
+        } else {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
