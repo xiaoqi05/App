@@ -58,7 +58,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     private int ps = 10;
     private int pn = 1;
     private int total = 0;
-    private boolean isFirstLoad = true;
 
 
     private int positionToRestore = 0;
@@ -81,9 +80,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.datas.addAll((List<ListBean>) msg.obj);
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
-                   /* if (!activity.recycler.isLoadMoreEnable()) {
-                        activity.recycler.setLoadMoreEnable(true);
-                    }*/
                     if (activity.datas.size() >= DEFAULT_LIST_SIZE) {
                         activity.footer.setVisibility(View.VISIBLE);
                         activity.recycler.setLoadMoreEnable(true);
@@ -101,10 +97,9 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.recycler.stopLoadMore();
                     activity.recycler.setLoadMoreEnable(false);
                     activity.showLongToast((String)msg.obj);
-                    activity.recycler.hideSpecialInfoView();
+                   // activity.recycler.hideSpecialInfoView();
                 } else if (msg.what == INIT_LOAD) {
                     //初始化加载
-                    activity.isFirstLoad = false;
                     activity.datas.addAll((List<ListBean>) msg.obj);
                     if (activity.datas.size() == 0) {
                         activity.recycler.showNoDataView();
@@ -147,13 +142,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             }
         });
         recycler.setItemAnimator(new ZoomInAnimator());
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //初始化数据
-                getDatas(INIT_LOAD, ps++, 8);
-            }
-        }).start();*/
         getDatas(INIT_LOAD, ps, pn);
         adapter = new MyMessageRecAdapter(this, datas);
         recycler.setAdapter(adapter);
@@ -165,7 +153,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             hideSpecialView("加载完成");
             return;
         }
-        //if (!isFirstLoad)
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
@@ -200,7 +187,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     Message message = new Message();
                     message.what = ERROR_LOAD;
                     message.obj = msg;
@@ -239,6 +226,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     datas.remove(i);
                     --item_data;
                 }
+                footer.setVisibility(View.VISIBLE);
                 return true;
             case R.id.marker_already_read:
                 showShortToast("标记为已读");
