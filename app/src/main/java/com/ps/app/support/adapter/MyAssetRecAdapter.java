@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ps.app.R;
+import com.ps.app.support.Bean.AssetListBean.DataBean.ListBean;
 import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 
@@ -17,9 +19,9 @@ import java.util.List;
 public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
 
     private Context mContext;
-    private List<Integer> datas;
+    private List<ListBean> datas;
 
-    public MyAssetRecAdapter(Context mContext, List<Integer> datas){
+    public MyAssetRecAdapter(Context mContext, List<ListBean> datas){
         this.mContext = mContext;
         this.datas = datas;
     }
@@ -35,7 +37,8 @@ public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof MyViewHolder){
-            ((MyViewHolder) holder).setImage(datas.get(position));
+            //((MyViewHolder) holder).setImage(datas.get(position).getSn());
+            ((MyViewHolder) holder).tv_name.setText(datas.get(position).getSn());
         }
     }
 
@@ -65,12 +68,14 @@ public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView iv;
-        public ImageView android_icon;
+        public TextView tv_name;
+        public TextView tv_time;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             iv = (ImageView)itemView.findViewById(R.id.iv_message_icon);
-           // android_icon = (ImageView)itemView.findViewById(R.id.android_icon);
+            tv_name = (TextView) itemView.findViewById(R.id.tv_item_name);
+            tv_time = (TextView)itemView.findViewById(R.id.tv_item_name);
         }
 
         public void setImage(int idImage) {

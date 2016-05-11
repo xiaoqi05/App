@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,31 +13,52 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.ps.app.R;
+import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.AssetListBean;
+import com.ps.app.support.Bean.AssetListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyAssetRecAdapter;
 import com.ps.app.ui.activity.DetailActivity;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 import com.zjutkz.powerfulrecyclerview.animator.impl.ZoomInAnimator;
 import com.zjutkz.powerfulrecyclerview.listener.OnLoadMoreListener;
 import com.zjutkz.powerfulrecyclerview.listener.OnRefreshListener;
 import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 
 @SuppressLint("ValidFragment")
-public class AssetsSeizedFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
+public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
+    private static final int DISMISS_PROGRESSBAR = 5;
+    private static final int DEFAULT_LIST_SIZE = 7;
+    private static final int REFRESH_DATA = 0;
+    private static final int INIT_LOAD = 4;
+    private static final int NO_DATA = 2;
+    private static final int LOAD_MORE = 1;
+    private static final int ERROR_LOAD = 3;
     private String mTitle;
     private static final String TAG = "AssetsSeizedFragment";
     private PowerfulRecyclerView recycler;
     private MyAssetRecAdapter adapter;
-    private List<Integer> datas;
+    private List<ListBean> datas;
     private HistoryThemeFooterView footer;
     private HistoryThemeHeaderView header;
-    private int loadMoreCount = 0;
     private int positionToRestore = 0;
+    private int ps = 10;
+    private int pn = 1;
+
+    private int total = 0;
 
     public static AssetsSeizedFragment getInstance(String title) {
         AssetsSeizedFragment sf = new AssetsSeizedFragment();
@@ -46,31 +66,54 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         return sf;
     }
 
-    private Handler mHandler = new Handler() {
+    private MyHandler myHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private WeakReference<AssetsSeizedFragment> activityWeakReference;
+
+        public MyHandler(AssetsSeizedFragment activity) {
+            activityWeakReference = new WeakReference<>(activity);
+        }
 
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                getDatas(1);
-                adapter.notifyDataSetChanged();
-                loadMoreCount = 0;
-                recycler.stopRefresh();
-                if (!recycler.isLoadMoreEnable()) {
-                    recycler.setLoadMoreEnable(true);
+            AssetsSeizedFragment fragment = activityWeakReference.get();
+            if (fragment != null) {
+                if (msg.what == REFRESH_DATA) {
+                    fragment.datas.addAll((List<ListBean>) msg.obj);
+                    fragment.adapter.notifyDataSetChanged();
+                    fragment.recycler.stopRefresh();
+                    if (fragment.datas.size() >= DEFAULT_LIST_SIZE) {
+                        fragment.footer.setVisibility(View.VISIBLE);
+                        fragment.recycler.setLoadMoreEnable(true);
+                    }
+
+                } else if (msg.what == LOAD_MORE) {
+                    // activity.adapter.notifyItemRangeInserted(activity.adapter.getItemCount(), 9);
+                    fragment.datas.addAll((List<ListBean>) msg.obj);
+                    fragment.adapter.notifyDataSetChanged();
+                    fragment.recycler.stopLoadMore();
+                } else if (msg.what == NO_DATA) {
+                    fragment.recycler.setLoadMoreEnable(false);
+                } else if (msg.what == ERROR_LOAD) {
+                    fragment.recycler.stopRefresh();
+                    fragment.recycler.stopLoadMore();
+                    fragment.recycler.setLoadMoreEnable(false);
+                    fragment.showLongToast(fragment.getContext(), (String) msg.obj);
+                    // activity.recycler.hideSpecialInfoView();
+                } else if (msg.what == INIT_LOAD) {
+                    //初始化加载
+                    fragment.datas.addAll((List<ListBean>) msg.obj);
+                    if (fragment.datas.size() == 0) {
+                        fragment.recycler.showNoDataView();
+                    }
+                    fragment.adapter.notifyDataSetChanged();
+                    fragment.recycler.stopRefresh();
                 }
-                resetFootView();
-            } else if (msg.what == 1) {
-                getDatas(1);
-                adapter.notifyItemRangeInserted(adapter.getItemCount(), 9);
-                recycler.stopLoadMore();
-            } else if (msg.what == 2) {
-                recycler.setLoadMoreEnable(false);
-            } else if (msg.what == 3) {
-                recycler.hideSpecialInfoView();
             }
         }
-    };
+    }
+
 
     private void resetFootView() {
         footer.setVisibility(View.VISIBLE);
@@ -88,23 +131,7 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         if (datas == null) {
             datas = new ArrayList<>();
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getDatas(1);
-                adapter.notifyDataSetChanged();
-                recycler.stopRefresh();
-                recycler.stopLoadMore();
-                if (datas.size() < 9) {
-                    footer.setVisibility(View.INVISIBLE);
-                } else {
-                    footer.setVisibility(View.VISIBLE);
-
-                }
-            }
-        }, 500);
-        adapter = new MyAssetRecAdapter(getContext(), datas);
-        recycler.setAdapter(adapter);
+       
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         header = (HistoryThemeHeaderView) LayoutInflater.from(getContext()).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
@@ -131,6 +158,10 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
             }
         });
         recycler.setItemAnimator(new ZoomInAnimator());
+        recycler.setItemAnimator(new ZoomInAnimator());
+        getDatas(INIT_LOAD, ps, pn);
+        adapter = new MyAssetRecAdapter(getContext(), datas);
+        recycler.setAdapter(adapter);
         return v;
     }
 
@@ -147,28 +178,48 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         super.onResume();
     }
 
-    private void getDatas(int msg) {
-
-        if (msg == 0) {
-            datas.clear();
+    private void getDatas(final int msg, int pages, int pageNum) {
+        if (ps * pn > total && total != 0) {
+            hideSpecialView("加载完成");
+            return;
         }
+        final List<ListBean> listBeen = new ArrayList<>();
+        String cookie = getSharePreference(getContext(),"").getString("cookie", "");
+        Log.i(TAG, "cookie:" + cookie);
+        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addHeader("cookie", cookie)
+                .url(Constant.GET_ASET_URL).build().connTimeOut(10000).execute(new UserAssetCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+                hideSpecialView("加载失败，请重试");
+            }
 
-        datas.add(R.drawable.img1);
-        datas.add(R.drawable.img2);
-        datas.add(R.drawable.img3);
-        datas.add(R.drawable.img4);
-        datas.add(R.drawable.img5);
-    
+            @Override
+            public void onResponse(AssetListBean response) {
+                total = response.getData().getTotal();
+                if (pn * ps > total) {
+                    recycler.setLoadMoreEnable(false);
+                }
+                pn++;
+                listBeen.addAll(response.getData().getList());
+                Message message = new Message();
+                message.what = msg;
+                message.obj = listBeen;
+                myHandler.sendMessage(message);
+            }
+        });
+
     }
-
-    @Override
-    public void onRefresh() {
+    private void hideSpecialView(final String msg) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
-                    mHandler.sendEmptyMessage(0);
+                    Thread.sleep(1000);
+                    Message message = new Message();
+                    message.what = ERROR_LOAD;
+                    message.obj = msg;
+                    myHandler.sendMessage(message);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -176,33 +227,22 @@ public class AssetsSeizedFragment extends Fragment implements OnRefreshListener,
         }).start();
     }
 
+    public abstract class UserAssetCallback extends Callback<AssetListBean> {
+        @Override
+        public AssetListBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, AssetListBean.class);
+        }
+    }
+    
     @Override
     public void onLoadMore() {
-        if (++loadMoreCount <= 2) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(3000);
-                        mHandler.sendEmptyMessage(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(3000);
-                        mHandler.sendEmptyMessage(2);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
+        getDatas(LOAD_MORE, ps, pn);
+    }
+
+    @Override
+    public void onRefresh() {
+        getDatas(REFRESH_DATA, ps, pn);
     }
 
 }
