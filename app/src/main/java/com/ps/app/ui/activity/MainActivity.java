@@ -48,23 +48,28 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.VersionBean;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
 import com.ps.app.ui.fragment.WarrantyStaffFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 import okhttp3.Call;
+import okhttp3.Response;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
     private static final int PROFILE_SETTING = 1;
+    private static final String TAG = "MainActivity";
     private MapView mMapView;
     private String permissionInfo;
     private Context mContext = this;
@@ -72,12 +77,13 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private final String[] mTitles = {
             "资产查封", "保外人员"
     };
-    private int badgeCount = 10;
+    private int badgeCount = 0;
 
     //save our header or result
     private AccountHeader headerResult = null;
     private Drawer result = null;
     private boolean opened = false;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initTab();
         initDraw(mToolbar, savedInstanceState);
         checkUpdate(Constant.FIRTOKEN);
+        setMsgNoteNum();
     }
 
     private void initTab() {
@@ -126,11 +133,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         tabLayout_2.setMsgMargin(5, 0, 10);*/
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        this.menu = menu;
       /*  // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -141,11 +148,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         if (badgeCount > 0) {
             ActionItemBadge.update(this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
         } else {
-            ActionItemBadge.hide(menu.findItem(R.id.user_message));
+            ActionItemBadge.update(this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, Integer.MIN_VALUE);
         }
 
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -221,7 +229,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     @TargetApi(23)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        // TODO Auto-generated method stub
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
@@ -249,11 +256,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         //openActivityAnim();
     }
 
-
     @Override
     public void onTabSelect(int position) {
 
     }
+
 
     @Override
     public void onTabReselect(int position) {
@@ -261,6 +268,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
+
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -279,8 +287,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         public Fragment getItem(int position) {
             return mFragments.get(position);
         }
-    }
 
+    }
 
     private void initDraw(Toolbar toolbar, Bundle savedInstanceState) {
         final IProfile profile3 = new ProfileDrawerItem().withName("肖齐").withEmail("15682070830").withIcon(R.drawable.profile2).withIdentifier(102);
@@ -327,18 +335,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         new PrimaryDrawerItem().withName("操作指南").withIcon(getResources().getDrawable(R.drawable.operations_guide)).withIdentifier(1).withSelectable(false),
                         new PrimaryDrawerItem().withName("关于").withIcon(getResources().getDrawable(R.drawable.about)).withIdentifier(3).withSelectable(false),
                         new PrimaryDrawerItem().withName("退出").withIcon(getResources().getDrawable(R.drawable.logout)).withIdentifier(14).withSelectable(false)
-                       /* new SectionDrawerItem().withName(R.string.drawer_item_section_header),
-                        new SecondaryDrawerItem().withName("Collapsable").withIcon(GoogleMaterial.Icon.gmd_collection_case_play).withIdentifier(19).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.drawer_item_section_header).withIcon(GoogleMaterial.Icon.gmd_format_color_fill).withIdentifier(20).withSelectable(false),
-                        new SecondaryDrawerItem().withName(R.string.drawer_item_section_header).withIcon(GoogleMaterial.Icon.gmd_format_color_fill).withIdentifier(21).withTag("Bullhorn"),
-                        new DividerDrawerItem(),
-                        new SwitchDrawerItem().withName("Switch").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
-                        new SwitchDrawerItem().withName("Switch2").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener).withSelectable(false),
-                        new ToggleDrawerItem().withName("Toggle").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
-                        new DividerDrawerItem(),
-                        new SecondarySwitchDrawerItem().withName("Secondary switch").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener),
-                        new SecondarySwitchDrawerItem().withName("Secondary Switch2").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener).withSelectable(false),
-                        new SecondaryToggleDrawerItem().withName("Secondary toggle").withIcon(Octicons.Icon.oct_tools).withChecked(true).withOnCheckedChangeListener(onCheckedChangeListener)*/
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -348,7 +344,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         //--> click on the header
                         //--> click on the footer
                         //those items don't contain a drawerItem
-
                         if (drawerItem != null) {
                             Intent intent = null;
                             if (drawerItem.getIdentifier() == 0) {
@@ -403,6 +398,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         result.updateBadge(4, new StringHolder(10 + ""));
     }
 
+
     private OnCheckedChangeListener onCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
@@ -415,8 +411,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     };
 
     public void checkUpdate(String firToken) {
-
-
         FIR.checkForUpdateInFIR("208f46b04efb5c2920c693094a0e22e5", new VersionCheckCallback() {
             @Override
             public void onSuccess(String versionJson) {
@@ -436,8 +430,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             @Override
@@ -447,12 +439,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onStart() {
-                // Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFinish() {
-                // Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -502,5 +492,33 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    private void setMsgNoteNum() {
+        String cookie = getSharePreference("").getString("cookie", "");
+        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(5)).addHeader("cookie", cookie)
+                .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
+
+            @Override
+            public void onResponse(PushMsgListBean response) {
+                badgeCount = response.getData().getTotal();
+                Log.i(TAG, badgeCount+"badgeCount");
+                ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+
+            }
+        });
+    }
+
+    public abstract class UserMsgCallback extends Callback<PushMsgListBean> {
+        @Override
+        public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, PushMsgListBean.class);
+        }
+    }
+
 
 }
