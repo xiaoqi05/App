@@ -226,7 +226,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     datas.remove(i);
                     --item_data;
                 }
-                footer.setVisibility(View.VISIBLE);
+                footer.setVisibility(View.INVISIBLE);
                 return true;
             case R.id.marker_already_read:
                 showShortToast("标记为已读");
