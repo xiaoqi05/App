@@ -51,6 +51,7 @@ import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.VersionBean;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
+import com.ps.app.ui.fragment.WarrantyStaffFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
@@ -95,9 +96,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private void initTab() {
-        for (String title : mTitles) {
-            mFragments.add(AssetsSeizedFragment.getInstance(title));
-        }
+        mFragments.add(AssetsSeizedFragment.getInstance(mTitles[0]));
+        mFragments.add(WarrantyStaffFragment.getInstance(mTitles[1]));
+
 
         View decorView = getWindow().getDecorView();
         ViewPager vp = ViewFindUtils.find(decorView, R.id.vp);

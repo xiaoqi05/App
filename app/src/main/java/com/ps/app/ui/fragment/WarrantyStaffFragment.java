@@ -2,7 +2,6 @@ package com.ps.app.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.ps.app.R;
 
 
 @SuppressLint("ValidFragment")
-public class WarrantyStaffFragment extends Fragment {
+public class WarrantyStaffFragment extends BaseFragment {
     private String mTitle;
 
     public static WarrantyStaffFragment getInstance(String title) {
