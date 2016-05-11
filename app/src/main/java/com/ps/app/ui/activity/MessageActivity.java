@@ -96,8 +96,8 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.recycler.stopRefresh();
                     activity.recycler.stopLoadMore();
                     activity.recycler.setLoadMoreEnable(false);
-                    activity.showLongToast((String)msg.obj);
-                   // activity.recycler.hideSpecialInfoView();
+                    activity.showLongToast((String) msg.obj);
+                    // activity.recycler.hideSpecialInfoView();
                 } else if (msg.what == INIT_LOAD) {
                     //初始化加载
                     activity.datas.addAll((List<ListBean>) msg.obj);
@@ -169,6 +169,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 total = response.getData().getTotal();
                 if (pn * ps > total) {
                     recycler.setLoadMoreEnable(false);
+                }
+                if (total == 0) {
+                    recycler.showNoDataView();
+                    return;
                 }
                 pn++;
                 listBeen.addAll(response.getData().getList());

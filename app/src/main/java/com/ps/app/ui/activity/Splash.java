@@ -58,7 +58,7 @@ public class Splash extends BaseActivity {
             public void run() {
                 try {
                     Thread.sleep(4000);
-                   // myHandler.sendEmptyMessage(DISMISS_PROGRESSBAR);
+                    // myHandler.sendEmptyMessage(DISMISS_PROGRESSBAR);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -70,15 +70,20 @@ public class Splash extends BaseActivity {
     private void findView() {
         progressBar = (ProgressBar) findViewById(R.id.splash_progress);
     }
-    
-    public void toLogin(View v){
+
+    public void toLogin(View v) {
         startActivity(new Intent(Splash.this, LoginActivity.class));
     }
-    
-    public void toMain(View v){
+
+    public void toMain(View v) {
+        if (!getSharePreference("").getBoolean("isLogin", false)) {
+            showShortToast("请先登录");
+            return;
+        }
         startActivity(new Intent(Splash.this, MainActivity.class));
     }
-    public void http_test(View v){
+
+    public void http_test(View v) {
         startActivity(new Intent(Splash.this, LocationActivity.class));
     }
 

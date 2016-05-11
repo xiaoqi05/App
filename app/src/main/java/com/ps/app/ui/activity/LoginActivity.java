@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 paw = et_paw.getText().toString().trim();
                 verification_code = et_ver_code.getText().toString().trim();
                 if (!preLogin(v)) return;
-                showNormalPrograssDailogBar(LoginActivity.this,"正在登录");
+                showNormalPrograssDailogBar(LoginActivity.this, "正在登录");
                 login(phone, paw);
                 break;
             case R.id.bt_get_verification:
@@ -85,6 +85,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private boolean preLogin(View v) {
+        
+        if (!isNetworkAvailable()) {
+            showSnackbar(v, "请连接网络，并重试");
+            return false;
+        }
         if (TextUtils.isEmpty(phone)) {
             showSnackbar(v, "请填写手机号码");
             return false;
@@ -107,10 +112,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             showSnackbar(v, "图片验证码错误，请重新输入");
             return false;
         }
-        if (!isNetworkAvailable()) {
-            showSnackbar(v, "请连接网络，并重试");
-            return false;
-        }
+
 
         return true;
     }
@@ -128,7 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     public void login(String phone, String paw) {
-        
+
         OkHttpUtils
                 .post()//
                 .url(Constant.LOGIN_URL)//
@@ -171,7 +173,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public abstract class UserLoginCallback extends Callback<CommonResultBean> {
         @Override
         public CommonResultBean parseNetworkResponse(Response response) throws IOException {
-           
+
             String string = response.body().string();
             CommonResultBean commonResultBean = new Gson().fromJson(string, CommonResultBean.class);
             Log.i(TAG, commonResultBean.getDesc());
