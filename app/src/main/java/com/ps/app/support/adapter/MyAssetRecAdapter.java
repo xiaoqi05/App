@@ -10,13 +10,11 @@ import android.widget.TextView;
 
 import com.ps.app.R;
 import com.ps.app.support.Bean.AssetListBean.DataBean.ListBean;
+import com.ps.app.support.utils.DateFormat;
 import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchAdapter {
@@ -42,18 +40,7 @@ public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (holder instanceof MyViewHolder) {
             //((MyViewHolder) holder).setImage(datas.get(position).getSn());
             ((MyViewHolder) holder).tv_name.setText(datas.get(position).getMemberTo().getDisplayName());
-           // String time = String.valueOf(datas.get(position).getEndTime());
-            // try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(datas.get(position).getEndTime());
-            Date date = calendar.getTime();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String time = simpleDateFormat.format(date);
-            //Date dates = simpleDateFormat.parse(time);
-            ((MyViewHolder) holder).tv_time.setText(time);
-            //  } catch (ParseException e) {
-            //      e.printStackTrace();
-            //}
+            ((MyViewHolder) holder).tv_time.setText(DateFormat.dateFormat(datas.get(position).getEndTime()));
         }
     }
 
