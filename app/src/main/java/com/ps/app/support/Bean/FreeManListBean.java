@@ -1,8 +1,9 @@
 package com.ps.app.support.Bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class FreeManListBean {
+public class FreeManListBean implements Serializable{
 
     /**
      * code : 2000
@@ -70,7 +71,7 @@ public class FreeManListBean {
         this.desc = desc;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         private int lastPage;
         private int startRow;
         private boolean hasNextPage;
@@ -256,7 +257,7 @@ public class FreeManListBean {
             this.list = list;
         }
 
-        public static class ListBean {
+        public static class ListBean implements Serializable{
             private String area;
             private String gender;
             private long createTime;
@@ -354,7 +355,7 @@ public class FreeManListBean {
                 this.group = group;
             }
 
-            public static class GroupBean {
+            public static class GroupBean implements Serializable{
                 private int id;
                 private String type;
                 private String desc;

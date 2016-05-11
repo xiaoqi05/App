@@ -100,7 +100,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
                     fragment.recycler.stopRefresh();
                     fragment.recycler.stopLoadMore();
                     fragment.recycler.setLoadMoreEnable(false);
-                    fragment.showLongToast(fragment.getContext(), (String) msg.obj);
+                    fragment.showShortToast(fragment.getContext(), (String) msg.obj);
                     // activity.recycler.hideSpecialInfoView();
                 } else if (msg.what == INIT_LOAD) {
                     //初始化加载

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/item_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    >
+
+
+    <ImageView
+        android:id="@+id/iv_message_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/suspect"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/itemBody"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/iv_message_icon"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text="嫌疑人"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_toRightOf="@id/name"
+                android:text="肖齐"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tv_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name"
+                android:layout_marginTop="16dp"
+                android:text="资产到期日期"
+                android:textColor="@android:color/black"
+                />
+
+            <TextView
+                android:id="@+id/tv_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_item_name"
+                android:layout_alignTop="@id/tv_item_title"
+                android:layout_below="@id/name"
+                android:layout_toRightOf="@id/name"
+                android:text="2016-5-2"
+                android:textSize="12sp"
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/del_collected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:src="@drawable/right"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/split_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:layout_alignParentBottom="true"
+        android:src="@color/gray_light"
+        />
+
+</RelativeLayout>

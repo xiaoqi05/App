@@ -103,8 +103,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private void initTab() {
-        mFragments.add(AssetsSeizedFragment.getInstance(mTitles[0]));
-        mFragments.add(WarrantyStaffFragment.getInstance(mTitles[1]));
 
 
         View decorView = getWindow().getDecorView();
@@ -275,7 +273,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
         @Override
         public int getCount() {
-            return mFragments.size();
+            return mTitles.length;
         }
 
         @Override
@@ -285,6 +283,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
         @Override
         public Fragment getItem(int position) {
+            if (position == 0) {
+                return AssetsSeizedFragment.getInstance(mTitles[0]);
+            }
+            if (position == 1) {
+                return WarrantyStaffFragment.getInstance(mTitles[1]);
+            }
             return mFragments.get(position);
         }
 
@@ -505,7 +509,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             @Override
             public void onResponse(PushMsgListBean response) {
                 badgeCount = response.getData().getTotal();
-                Log.i(TAG, badgeCount+"badgeCount");
+                Log.i(TAG, badgeCount + "badgeCount");
                 ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
 
             }

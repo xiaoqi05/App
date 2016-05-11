@@ -1,14 +1,18 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/card_title_tv"
+    <com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView
+        android:id="@+id/ptr_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:textSize="18sp"/>
+        android:fitsSystemWindows="true"
+        app:back_top_duration="250"
+        app:position_to_show="7"
+        app:max_to_pull="80dp"
+        app:refresh_distance="60dp"
+        />
 
 </RelativeLayout>
