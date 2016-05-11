@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -155,10 +154,9 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
                 if (datas.size() <= 0) {
                     return;
                 }
-                Toast.makeText(getContext(), "onItemClick: " + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("listBean", datas.get(position));
-                intent.putExtra("source",FREEMAN);
+                intent.putExtra("source", FREEMAN);
                 startActivity(intent);
                 Log.d(TAG, "onItemClick: " + position);
             }
@@ -172,7 +170,7 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
     }
 
     @Override
-    public void onStop() {        
+    public void onStop() {
         positionToRestore = recycler.getFirstVisiblePosition();
         super.onStop();
     }
@@ -182,9 +180,14 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         recycler.setSelection(positionToRestore);
         super.onResume();
     }
+
     private void getDatas(final int msg, int pages, int pageNum) {
         if (ps * pn > total && total != 0) {
             hideSpecialView("加载完成");
+            return;
+        }
+        if (!isNetworkAvailable(getContext())) {
+            hideSpecialView("网络不可以用!");
             return;
         }
         final List<ListBean> listBeen = new ArrayList<>();
@@ -214,6 +217,7 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         });
 
     }
+
     private void hideSpecialView(final String msg) {
         new Thread(new Runnable() {
             @Override
@@ -248,5 +252,5 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
     public void onRefresh() {
         getDatas(REFRESH_DATA, ps, pn);
     }
-    
+
 }

@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -156,7 +155,6 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
                 if (datas.size() <= 0) {
                     return;
                 }
-                Toast.makeText(getContext(), "onItemClick: " + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("listBean", (Serializable) datas.get(position));
                 startActivity(intent);
@@ -187,6 +185,10 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
     private void getDatas(final int msg, int pages, int pageNum) {
         if (ps * pn > total && total != 0) {
             hideSpecialView("加载完成");
+            return;
+        }
+        if (!isNetworkAvailable(getContext())){
+            hideSpecialView("网络不可以用!");
             return;
         }
         final List<ListBean> listBeen = new ArrayList<>();
