@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.ps.app.R;
 import com.ps.app.support.Bean.FreeManListBean.DataBean.ListBean;
-import com.ps.app.support.utils.DateFormat;
 import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 
@@ -30,7 +29,7 @@ public class MyFreeManAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.fr_asset_list_item, parent, false));
+        RecyclerView.ViewHolder vh = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.fr_man_list_item, parent, false));
 
 
         return vh;
@@ -41,7 +40,7 @@ public class MyFreeManAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof MyViewHolder) {
             //((MyViewHolder) holder).setImage(datas.get(position).getSn());
             ((MyViewHolder) holder).tv_name.setText(datas.get(position).getName());
-            ((MyViewHolder) holder).tv_time.setText(DateFormat.dateFormat(datas.get(position).getCreateTime()));
+            ((MyViewHolder) holder).tv_phone.setText(datas.get(position).getPhone());
         }
     }
 
@@ -72,13 +71,13 @@ public class MyFreeManAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public ImageView iv;
         public TextView tv_name;
-        public TextView tv_time;
+        public TextView tv_phone;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             iv = (ImageView) itemView.findViewById(R.id.iv_message_icon);
             tv_name = (TextView) itemView.findViewById(R.id.tv_item_name);
-            tv_time = (TextView) itemView.findViewById(R.id.tv_item_time);
+            tv_phone = (TextView) itemView.findViewById(R.id.tv_item_phone);
         }
 
         public void setImage(int idImage) {
