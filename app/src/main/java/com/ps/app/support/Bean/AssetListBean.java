@@ -1,8 +1,9 @@
 package com.ps.app.support.Bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AssetListBean {
+public class AssetListBean implements Serializable{
 
 
     /**
@@ -71,7 +72,7 @@ public class AssetListBean {
         this.desc = desc;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         private int lastPage;
         private int startRow;
         private boolean hasNextPage;
@@ -257,7 +258,7 @@ public class AssetListBean {
             this.list = list;
         }
 
-        public static class ListBean {
+        public static class ListBean implements Serializable{
             private String policeGroup;
             private long createTime;
             private int handleType;
@@ -363,7 +364,7 @@ public class AssetListBean {
                 this.memberTo = memberTo;
             }
 
-            public static class CaseToBean {
+            public static class CaseToBean implements Serializable{
                 private long createTime;
                 private String name;
                 private int id;
@@ -393,7 +394,7 @@ public class AssetListBean {
                 }
             }
 
-            public static class MemberToBean {
+            public static class MemberToBean implements Serializable{
                 private String phone;
                 private String displayName;
                 private String name;

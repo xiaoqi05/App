@@ -9,11 +9,20 @@ import android.view.ViewStub;
 import android.widget.TextView;
 
 import com.ps.app.R;
+import com.ps.app.support.Bean.AssetListBean.DataBean;
+import com.ps.app.support.utils.DateFormat;
 
-public class DetailActivity extends BaseActivity  {
+public class DetailActivity extends BaseActivity {
     private ViewStub viewStub;
     private TextView tv_show_all_info;
+
+    private TextView tv_detail_name_info;
+    private TextView tv_detail_time_info;
+    private TextView tv_detail_thing_name_info;
+    private TextView tv_detail_id_info;
+
     private boolean isShowAllInfo = false;
+    private DataBean.ListBean listBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +30,26 @@ public class DetailActivity extends BaseActivity  {
         setContentView(R.layout.activity_detail);
         initActionBar(-1, "详情");
         findView();
+        initData();
 
+    }
+
+    private void initData() {
+        listBean = (DataBean.ListBean) getIntent().getSerializableExtra("listBean");
+        tv_detail_name_info.setText(listBean.getMemberTo().getDisplayName());
+        tv_detail_time_info.setText(DateFormat.dateFormat(listBean.getEndTime()));
+        //案件名字
+        tv_detail_thing_name_info.setText(listBean.getMemberTo().getName());
+        tv_detail_id_info.setText(listBean.getCaseTo().getId() + "");
     }
 
     private void findView() {
         viewStub = (ViewStub) findViewById(R.id.vs_stub);
+        tv_detail_name_info = (TextView) findViewById(R.id.tv_detail_name_info);
+        tv_detail_time_info = (TextView) findViewById(R.id.tv_detail_time_info);
+        tv_detail_thing_name_info = (TextView) findViewById(R.id.tv_detail_thing_name_info);
         tv_show_all_info = (TextView) findViewById(R.id.tv_show_all_info);
+        tv_detail_id_info = (TextView) findViewById(R.id.tv_detail_id_info);
     }
 
     @Override
@@ -50,7 +73,12 @@ public class DetailActivity extends BaseActivity  {
     public void showAllInfo(View v) {
         tv_show_all_info.setVisibility(View.GONE);
         View vs = viewStub.inflate();
-        TextView tv_info = (TextView) vs.findViewById(R.id.tv_show_other_info);
+        TextView tv_phone = (TextView) vs.findViewById(R.id.tv_detail_phone_info);
+        TextView tv_time = (TextView) vs.findViewById(R.id.tv_detail_time_info);
+        TextView tv_type = (TextView) vs.findViewById(R.id.tv_detail_type_info);
+        tv_phone.setText(listBean.getMemberTo().getPhone());
+        tv_time.setText(DateFormat.dateFormat(listBean.getStartTime()));
+        tv_type.setText(listBean.getMemberTo().getType() + "");
         // tv_info.setText("哈哈: ");
         View view = findViewById(R.id.vs_stub);
         view = findViewById(R.id.ac_detail_id_after_inflate);

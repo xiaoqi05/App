@@ -30,6 +30,7 @@ import com.zjutkz.powerfulrecyclerview.listener.OnRefreshListener;
 import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +132,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
         if (datas == null) {
             datas = new ArrayList<>();
         }
-       
+
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         header = (HistoryThemeHeaderView) LayoutInflater.from(getContext()).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
@@ -151,8 +152,13 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
                     datas.remove(1);
                     adapter.notifyItemRemoved(1);
                 }*/
+                //数据未加载时不能点击
+                if (datas.size() <= 0) {
+                    return;
+                }
                 Toast.makeText(getContext(), "onItemClick: " + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), DetailActivity.class);
+                intent.putExtra("listBean", (Serializable) datas.get(position));
                 startActivity(intent);
                 Log.d(TAG, "onItemClick: " + position);
             }
@@ -184,7 +190,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
             return;
         }
         final List<ListBean> listBeen = new ArrayList<>();
-        String cookie = getSharePreference(getContext(),"").getString("cookie", "");
+        String cookie = getSharePreference(getContext(), "").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
         OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addHeader("cookie", cookie)
                 .url(Constant.GET_ASET_URL).build().connTimeOut(10000).execute(new UserAssetCallback() {
@@ -210,6 +216,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
         });
 
     }
+
     private void hideSpecialView(final String msg) {
         new Thread(new Runnable() {
             @Override
@@ -234,7 +241,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
             return new Gson().fromJson(string, AssetListBean.class);
         }
     }
-    
+
     @Override
     public void onLoadMore() {
         getDatas(LOAD_MORE, ps, pn);
