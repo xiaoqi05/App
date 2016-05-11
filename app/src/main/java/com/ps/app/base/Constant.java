@@ -20,11 +20,11 @@ public class Constant {
     //获取推送消息
     public static final String GET_MSG_URL = BASE_URL+"/msg/list.action";
     //获取查封资产列表
-    public static final String GET_ASET_URL = BASE_URL+"/aset/list.action";
+    public static final String GET_ASET_URL = BASE_URL+"/asset/list.action";
     //查封资产搜索
-    public static final String ASET_SEARCH_URL = BASE_URL+"/aset/search.action";
+    public static final String ASET_SEARCH_URL = BASE_URL+"/asset/search.action";
     //查封资产详情
-    public static final String ASET_DETAIL_URL = BASE_URL+"/aset/detail.action";
+    public static final String ASET_DETAIL_URL = BASE_URL+"/asset/detail.action";
     //保外人员列表
     public static final String FREE_MAN_URL = BASE_URL+"/m/list.action";
     //保外人员详情

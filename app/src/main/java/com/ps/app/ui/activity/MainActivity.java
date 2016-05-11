@@ -2,15 +2,21 @@ package com.ps.app.ui.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +28,7 @@ import android.widget.CompoundButton;
 import com.baidu.mapapi.map.MapView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.google.gson.Gson;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -41,13 +48,18 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.VersionBean;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
+import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
@@ -403,10 +415,28 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     public void checkUpdate(String firToken) {
 
+
         FIR.checkForUpdateInFIR("208f46b04efb5c2920c693094a0e22e5", new VersionCheckCallback() {
             @Override
             public void onSuccess(String versionJson) {
                 Log.i("fir", "check from fir.im success! " + "\n" + versionJson);
+                try {
+                    PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
+                    int versionCode = packageInfo.versionCode;
+                    VersionBean versionBean = new Gson().fromJson(versionJson, VersionBean.class);
+                    String name = versionBean.getName();
+                    String changelog = versionBean.getChangelog();
+                    final String direct_install_url = versionBean.getDirect_install_url();
+                    String versionBeanVersion = versionBean.getVersion();
+                    if (Integer.parseInt(versionBeanVersion) > versionCode) {
+                        //有新版本，需要更新
+                        showProgressDialog(name, direct_install_url, changelog);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
             @Override
@@ -416,14 +446,60 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onStart() {
-               // Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "正在获取", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFinish() {
-               // Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "获取完成", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showProgressDialog(String name, final String url, String changeLog) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(name);
+        builder.setMessage("检测到新版本，是否更新?\n" + changeLog);
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showShortToast("取消");
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showShortToast("确定");
+                final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.show();
+                OkHttpUtils.get().url(url).build().execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(), "ps.apk") {
+                    @Override
+                    public void inProgress(float progress, long total) {
+                        progressDialog.setProgress((int) (progress * 100));
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(File response) {
+                        progressDialog.dismiss();
+                        //install apk
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + response.getAbsolutePath()), "application/vnd.android.package-archive");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        showLongToast(response.getAbsolutePath());
+                    }
+                });
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 }
