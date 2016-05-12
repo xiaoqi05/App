@@ -16,4 +16,13 @@
         app:refresh_distance="60dp"
         />
 
+    <ImageView
+        android:id="@+id/iv_refresh_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/data_not_found"
+        android:visibility="gone"
+        />
+
 </RelativeLayout>

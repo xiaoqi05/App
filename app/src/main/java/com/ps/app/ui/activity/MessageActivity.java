@@ -167,21 +167,27 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                total = response.getData().getTotal();
-                if (pn * ps > total) {
-                    recycler.setLoadMoreEnable(false);
+                if (response.getCode() == 2000) {
+                    total = response.getData().getTotal();
+                    if (pn * ps > total) {
+                        recycler.setLoadMoreEnable(false);
+                    }
+                    if (total == 0) {
+                        recycler.showNoDataView();
+                        return;
+                    }
+                    pn++;
+                    listBeen.addAll(response.getData().getList());
+                    Log.i(TAG, listBeen.get(0).getMessage().toString());
+                    Message message = new Message();
+                    message.what = msg;
+                    message.obj = listBeen;
+                    myHandler.sendMessage(message);
                 }
-                if (total == 0) {
-                    recycler.showNoDataView();
+                if (response.getCode()==2201){
+                    hideSpecialView("你的登录失效，请重新登录");
                     return;
                 }
-                pn++;
-                listBeen.addAll(response.getData().getList());
-                Log.i(TAG, listBeen.get(0).getMessage().toString());
-                Message message = new Message();
-                message.what = msg;
-                message.obj = listBeen;
-                myHandler.sendMessage(message);
             }
         });
 

@@ -39,7 +39,7 @@ import okhttp3.Response;
 
 
 @SuppressLint("ValidFragment")
-public class WarrantyStaffFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener{
+public class WarrantyStaffFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
     private static final int DISMISS_PROGRESSBAR = 5;
     private static final int DEFAULT_LIST_SIZE = 7;
     private static final int REFRESH_DATA = 0;
@@ -124,7 +124,6 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
 
     @Override
@@ -226,6 +225,10 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
                     message.what = msg;
                     message.obj = listBeen;
                     myHandler.sendMessage(message);
+                }
+                if (response.getCode() == 2201) {
+                    hideSpecialView("你的登录失效，请重新登录");
+                    return;
                 }
             }
         });

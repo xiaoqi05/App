@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -39,7 +40,7 @@ import okhttp3.Response;
 
 
 @SuppressLint("ValidFragment")
-public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener,View.OnClickListener {
+public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, View.OnClickListener {
     private static final int DISMISS_PROGRESSBAR = 5;
     private static final int DEFAULT_LIST_SIZE = 7;
     private static final int REFRESH_DATA = 0;
@@ -57,6 +58,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
     private int positionToRestore = 0;
     private int ps = 10;
     private int pn = 1;
+    private ImageView iv_nodata_view;
 
     private int total = 0;
 
@@ -70,8 +72,8 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
 
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.iv_refresh_data){
-            showShortToast(getContext(),"刷新数据");
+        if (v.getId() == R.id.iv_refresh_data) {
+            showShortToast(getContext(), "刷新数据");
             recycler.hideSpecialInfoView();
         }
     }
@@ -139,14 +141,14 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
         if (datas == null) {
             datas = new ArrayList<>();
         }
-
+        iv_nodata_view = (ImageView) v.findViewById(R.id.iv_refresh_data);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         header = (HistoryThemeHeaderView) LayoutInflater.from(getContext()).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
         recycler.setNoDataViewLayout(R.layout.no_data_view);
-        LayoutInflater.from(getContext()).inflate(R.layout.no_data_view,recycler,false).findViewById(R.id.iv_refresh_data).setOnClickListener(this);
+        LayoutInflater.from(getContext()).inflate(R.layout.no_data_view, recycler, false).findViewById(R.id.iv_refresh_data).setOnClickListener(this);
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
         recycler.setOnRefreshListener(this);
@@ -197,7 +199,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
             hideSpecialView("加载完成");
             return;
         }
-        if (!isNetworkAvailable(getContext())){
+        if (!isNetworkAvailable(getContext())) {
             hideSpecialView("网络不可以用!");
             return;
         }
@@ -214,16 +216,28 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
 
             @Override
             public void onResponse(AssetListBean response) {
-                total = response.getData().getTotal();
-                if (pn * ps > total) {
-                    recycler.setLoadMoreEnable(false);
+                if (response.getCode() == 2000) {
+                    total = response.getData().getTotal();
+                    //无数据时返回
+                    if (total == 0) {
+                        hideSpecialView("无数据");
+                        iv_nodata_view.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    if (pn * ps > total) {
+                        recycler.setLoadMoreEnable(false);
+                    }
+                    pn++;
+                    listBeen.addAll(response.getData().getList());
+                    Message message = new Message();
+                    message.what = msg;
+                    message.obj = listBeen;
+                    myHandler.sendMessage(message);
                 }
-                pn++;
-                listBeen.addAll(response.getData().getList());
-                Message message = new Message();
-                message.what = msg;
-                message.obj = listBeen;
-                myHandler.sendMessage(message);
+                if (response.getCode() == 2201) {
+                    hideSpecialView("你的登录失效，请重新登录");
+                    return;
+                }
             }
         });
 

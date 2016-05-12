@@ -49,7 +49,7 @@ public class Splash extends BaseActivity {
         setContentView(R.layout.activity_splash);
         findView();
         initData();
-    }
+    } 
 
     private void initData() {
         showProgress(progressBar, true);
