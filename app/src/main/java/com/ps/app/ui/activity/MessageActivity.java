@@ -130,6 +130,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         footer = (HistoryThemeFooterView) LayoutInflater.from(this).inflate(R.layout.history_footer_theme, recycler, false);
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
+        recycler.setNoDataViewLayout(R.layout.no_data_view);
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
         recycler.setOnRefreshListener(this);

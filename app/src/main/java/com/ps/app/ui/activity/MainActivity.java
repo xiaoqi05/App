@@ -508,9 +508,12 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                badgeCount = response.getData().getTotal();
-                Log.i(TAG, badgeCount + "badgeCount");
-                ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+                //// TODO: 2016-05-12  bug
+                if (response.getCode() == 2000) {
+                    badgeCount = response.getData().getTotal();
+                    Log.i(TAG, badgeCount + "badgeCount");
+                    ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+                }
 
             }
         });

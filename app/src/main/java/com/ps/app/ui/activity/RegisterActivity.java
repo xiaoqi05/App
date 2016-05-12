@@ -129,8 +129,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                 } else {
                     System.out.println("返回支持发送验证码的cuowu");
-                   // myHandler.sendEmptyMessage(ERROR_GET_VER);
-                    showLongToast("返回支持发送验证码的cuowu");
+                    myHandler.sendEmptyMessage(ERROR_GET_VER);
+                    // showLongToast("返回支持发送验证码的cuowu");
                     ((Throwable) data).printStackTrace();
                 }
             }

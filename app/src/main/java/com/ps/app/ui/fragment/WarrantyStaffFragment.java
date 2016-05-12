@@ -136,6 +136,7 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
+        recycler.setNoDataViewLayout(R.layout.no_data_view);
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
         recycler.setOnRefreshListener(this);

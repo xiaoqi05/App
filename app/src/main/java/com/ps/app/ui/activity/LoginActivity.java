@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         assert mImageView != null;
         mImageView.setOnClickListener(this);
 
-        et_phone = (EditText) findViewById(R.id.et_login_phone);
+        et_phone = (EditText) findViewById(R.id.et_login_phone_num);
         et_paw = (EditText) findViewById(R.id.et_login_paw);
         et_ver_code = (EditText) findViewById(R.id.et_ver_code);
     }

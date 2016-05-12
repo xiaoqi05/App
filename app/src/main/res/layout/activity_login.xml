@@ -57,7 +57,7 @@
 
 
             <com.rey.material.widget.EditText
-                android:id="@+id/et_login_phone"
+                android:id="@+id/et_login_phone_num"
                 style="@style/DarkEditText"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

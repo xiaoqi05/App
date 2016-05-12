@@ -10,7 +10,7 @@ public class Constant {
     public static String FIRTOKEN = "525ef6d95a86dafcf4fe6c21974bce08";
     // 默认使用中国区号
     public static final String DEFAULT_COUNTRY_ID = "86";
-    public static final String BASE_URL = "http://211.149.197.241:8080/posec";//http://posec.zpy.cn
+    public static final String BASE_URL = "http://120.25.148.211/posec/";//http://posec.zpy.cn//  http://120.25.148.211/posec/  //http://211.149.197.241:8080/posec
     //登录
     public static final String LOGIN_URL = BASE_URL+"/user/login.action";
     //退出
