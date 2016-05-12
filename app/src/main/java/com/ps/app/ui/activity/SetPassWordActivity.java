@@ -100,7 +100,7 @@ public class SetPassWordActivity extends BaseActivity {
                         url = Constant.POLICE_REGISTER_URL;
                     } else {
                         params.put("phone", phone);
-                        params.put("password", MD5Util.md5(paw));
+                        params.put("newPwd", MD5Util.md5(paw));
                         url = Constant.FIND_PASSWORD_URL;
                     }
                     OkHttpUtils.post().url(url).params(params).build().execute(new UserRegCallback() {

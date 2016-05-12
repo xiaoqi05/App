@@ -137,6 +137,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void findView() {
+        //// TODO: 2016-05-12 move unused object 
         mUserName = (com.rey.material.widget.EditText) findViewById(R.id.et_register_name);
 
         mLoginFormView = findViewById(R.id.login_form);
