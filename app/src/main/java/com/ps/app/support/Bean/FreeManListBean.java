@@ -5,54 +5,47 @@ import java.util.List;
 
 public class FreeManListBean implements Serializable{
 
+
     /**
-     * code : 2000
-     * data : {"lastPage":1,"navigatepageNums":[1],"startRow":1,"hasNextPage":false,"prePage":0,"nextPage":0,"endRow":1,"orderBy":"","pageSize":5,"list":[{"area":"","gender":"UNKNOW","createTime":1462488712000,"phone":"18692885801","displayName":"","idCard":"","name":"王警官","id":17,"type":"OUT_OF_SUSPECT","group":{"id":1,"type":"POLICE","desc":"A分局"}}],"pageNum":1,"navigatePages":8,"total":1,"pages":1,"firstPage":1,"size":1,"isLastPage":true,"hasPreviousPage":false,"isFirstPage":true}
+     * desc : 成功
      * error : 
-     * desc : 成功!
+     * data : {"total":2,"lastPage":1,"hasNextPage":false,"nextPage":0,"orderBy":"","pages":1,"pageSize":10,"navigatePages":8,"hasPreviousPage":false,"list":[{"id":3,"createTime":1463041379000,"phone":"13389899871","idCard":"311411199909099909","area":"A区域","name":"嫌疑犯王","gender":"FEMALE","type":"OUT_OF_SUSPECT","group":{"id":2,"desc":"B分局","type":"POLICE"},"displayName":"嫌疑犯王"},{"id":48,"createTime":1463041389000,"phone":"13682070860","idCard":"","area":"","name":"赵中华","gender":"UNKNOW","type":"OUT_OF_SUSPECT","group":"","displayName":""}],"navigatepageNums":[1],"size":2,"pageNum":1,"prePage":0,"endRow":2,"isLastPage":true,"startRow":1,"firstPage":1,"isFirstPage":true}
+     * code : 2000
      */
 
-    private int code;
+    private String desc;
+    private String error;
     /**
+     * total : 2
      * lastPage : 1
-     * navigatepageNums : [1]
-     * startRow : 1
      * hasNextPage : false
-     * prePage : 0
      * nextPage : 0
-     * endRow : 1
      * orderBy : 
-     * pageSize : 5
-     * list : [{"area":"","gender":"UNKNOW","createTime":1462488712000,"phone":"18692885801","displayName":"","idCard":"","name":"王警官","id":17,"type":"OUT_OF_SUSPECT","group":{"id":1,"type":"POLICE","desc":"A分局"}}]
-     * pageNum : 1
-     * navigatePages : 8
-     * total : 1
      * pages : 1
-     * firstPage : 1
-     * size : 1
-     * isLastPage : true
+     * pageSize : 10
+     * navigatePages : 8
      * hasPreviousPage : false
+     * list : [{"id":3,"createTime":1463041379000,"phone":"13389899871","idCard":"311411199909099909","area":"A区域","name":"嫌疑犯王","gender":"FEMALE","type":"OUT_OF_SUSPECT","group":{"id":2,"desc":"B分局","type":"POLICE"},"displayName":"嫌疑犯王"},{"id":48,"createTime":1463041389000,"phone":"13682070860","idCard":"","area":"","name":"赵中华","gender":"UNKNOW","type":"OUT_OF_SUSPECT","group":"","displayName":""}]
+     * navigatepageNums : [1]
+     * size : 2
+     * pageNum : 1
+     * prePage : 0
+     * endRow : 2
+     * isLastPage : true
+     * startRow : 1
+     * firstPage : 1
      * isFirstPage : true
      */
 
     private DataBean data;
-    private String error;
-    private String desc;
+    private int code;
 
-    public int getCode() {
-        return code;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getError() {
@@ -63,47 +56,63 @@ public class FreeManListBean implements Serializable{
         this.error = error;
     }
 
-    public String getDesc() {
-        return desc;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public static class DataBean implements Serializable{
-        private int lastPage;
-        private int startRow;
-        private boolean hasNextPage;
-        private int prePage;
-        private int nextPage;
-        private int endRow;
-        private String orderBy;
-        private int pageSize;
-        private int pageNum;
-        private int navigatePages;
         private int total;
+        private int lastPage;
+        private boolean hasNextPage;
+        private int nextPage;
+        private String orderBy;
         private int pages;
-        private int firstPage;
-        private int size;
-        private boolean isLastPage;
+        private int pageSize;
+        private int navigatePages;
         private boolean hasPreviousPage;
+        private int size;
+        private int pageNum;
+        private int prePage;
+        private int endRow;
+        private boolean isLastPage;
+        private int startRow;
+        private int firstPage;
         private boolean isFirstPage;
-        private List<Integer> navigatepageNums;
         /**
-         * area : 
-         * gender : UNKNOW
-         * createTime : 1462488712000
-         * phone : 18692885801
-         * displayName : 
-         * idCard : 
-         * name : 王警官
-         * id : 17
+         * id : 3
+         * createTime : 1463041379000
+         * phone : 13389899871
+         * idCard : 311411199909099909
+         * area : A区域
+         * name : 嫌疑犯王
+         * gender : FEMALE
          * type : OUT_OF_SUSPECT
-         * group : {"id":1,"type":"POLICE","desc":"A分局"}
+         * group : {"id":2,"desc":"B分局","type":"POLICE"}
+         * displayName : 嫌疑犯王
          */
 
         private List<ListBean> list;
+        private List<Integer> navigatepageNums;
+
+        public int getTotal() {
+            return total;
+        }
+
+        public void setTotal(int total) {
+            this.total = total;
+        }
 
         public int getLastPage() {
             return lastPage;
@@ -111,14 +120,6 @@ public class FreeManListBean implements Serializable{
 
         public void setLastPage(int lastPage) {
             this.lastPage = lastPage;
-        }
-
-        public int getStartRow() {
-            return startRow;
-        }
-
-        public void setStartRow(int startRow) {
-            this.startRow = startRow;
         }
 
         public boolean isHasNextPage() {
@@ -129,28 +130,12 @@ public class FreeManListBean implements Serializable{
             this.hasNextPage = hasNextPage;
         }
 
-        public int getPrePage() {
-            return prePage;
-        }
-
-        public void setPrePage(int prePage) {
-            this.prePage = prePage;
-        }
-
         public int getNextPage() {
             return nextPage;
         }
 
         public void setNextPage(int nextPage) {
             this.nextPage = nextPage;
-        }
-
-        public int getEndRow() {
-            return endRow;
-        }
-
-        public void setEndRow(int endRow) {
-            this.endRow = endRow;
         }
 
         public String getOrderBy() {
@@ -161,20 +146,20 @@ public class FreeManListBean implements Serializable{
             this.orderBy = orderBy;
         }
 
+        public int getPages() {
+            return pages;
+        }
+
+        public void setPages(int pages) {
+            this.pages = pages;
+        }
+
         public int getPageSize() {
             return pageSize;
         }
 
         public void setPageSize(int pageSize) {
             this.pageSize = pageSize;
-        }
-
-        public int getPageNum() {
-            return pageNum;
-        }
-
-        public void setPageNum(int pageNum) {
-            this.pageNum = pageNum;
         }
 
         public int getNavigatePages() {
@@ -185,28 +170,12 @@ public class FreeManListBean implements Serializable{
             this.navigatePages = navigatePages;
         }
 
-        public int getTotal() {
-            return total;
+        public boolean isHasPreviousPage() {
+            return hasPreviousPage;
         }
 
-        public void setTotal(int total) {
-            this.total = total;
-        }
-
-        public int getPages() {
-            return pages;
-        }
-
-        public void setPages(int pages) {
-            this.pages = pages;
-        }
-
-        public int getFirstPage() {
-            return firstPage;
-        }
-
-        public void setFirstPage(int firstPage) {
-            this.firstPage = firstPage;
+        public void setHasPreviousPage(boolean hasPreviousPage) {
+            this.hasPreviousPage = hasPreviousPage;
         }
 
         public int getSize() {
@@ -217,6 +186,30 @@ public class FreeManListBean implements Serializable{
             this.size = size;
         }
 
+        public int getPageNum() {
+            return pageNum;
+        }
+
+        public void setPageNum(int pageNum) {
+            this.pageNum = pageNum;
+        }
+
+        public int getPrePage() {
+            return prePage;
+        }
+
+        public void setPrePage(int prePage) {
+            this.prePage = prePage;
+        }
+
+        public int getEndRow() {
+            return endRow;
+        }
+
+        public void setEndRow(int endRow) {
+            this.endRow = endRow;
+        }
+
         public boolean isIsLastPage() {
             return isLastPage;
         }
@@ -225,12 +218,20 @@ public class FreeManListBean implements Serializable{
             this.isLastPage = isLastPage;
         }
 
-        public boolean isHasPreviousPage() {
-            return hasPreviousPage;
+        public int getStartRow() {
+            return startRow;
         }
 
-        public void setHasPreviousPage(boolean hasPreviousPage) {
-            this.hasPreviousPage = hasPreviousPage;
+        public void setStartRow(int startRow) {
+            this.startRow = startRow;
+        }
+
+        public int getFirstPage() {
+            return firstPage;
+        }
+
+        public void setFirstPage(int firstPage) {
+            this.firstPage = firstPage;
         }
 
         public boolean isIsFirstPage() {
@@ -241,14 +242,6 @@ public class FreeManListBean implements Serializable{
             this.isFirstPage = isFirstPage;
         }
 
-        public List<Integer> getNavigatepageNums() {
-            return navigatepageNums;
-        }
-
-        public void setNavigatepageNums(List<Integer> navigatepageNums) {
-            this.navigatepageNums = navigatepageNums;
-        }
-
         public List<ListBean> getList() {
             return list;
         }
@@ -257,38 +250,38 @@ public class FreeManListBean implements Serializable{
             this.list = list;
         }
 
+        public List<Integer> getNavigatepageNums() {
+            return navigatepageNums;
+        }
+
+        public void setNavigatepageNums(List<Integer> navigatepageNums) {
+            this.navigatepageNums = navigatepageNums;
+        }
+
         public static class ListBean implements Serializable{
-            private String area;
-            private String gender;
+            private int id;
             private long createTime;
             private String phone;
-            private String displayName;
             private String idCard;
+            private String area;
             private String name;
-            private int id;
+            private String gender;
             private String type;
             /**
-             * id : 1
+             * id : 2
+             * desc : B分局
              * type : POLICE
-             * desc : A分局
              */
 
             private GroupBean group;
+            private String displayName;
 
-            public String getArea() {
-                return area;
+            public int getId() {
+                return id;
             }
 
-            public void setArea(String area) {
-                this.area = area;
-            }
-
-            public String getGender() {
-                return gender;
-            }
-
-            public void setGender(String gender) {
-                this.gender = gender;
+            public void setId(int id) {
+                this.id = id;
             }
 
             public long getCreateTime() {
@@ -307,20 +300,20 @@ public class FreeManListBean implements Serializable{
                 this.phone = phone;
             }
 
-            public String getDisplayName() {
-                return displayName;
-            }
-
-            public void setDisplayName(String displayName) {
-                this.displayName = displayName;
-            }
-
             public String getIdCard() {
                 return idCard;
             }
 
             public void setIdCard(String idCard) {
                 this.idCard = idCard;
+            }
+
+            public String getArea() {
+                return area;
+            }
+
+            public void setArea(String area) {
+                this.area = area;
             }
 
             public String getName() {
@@ -331,12 +324,12 @@ public class FreeManListBean implements Serializable{
                 this.name = name;
             }
 
-            public int getId() {
-                return id;
+            public String getGender() {
+                return gender;
             }
 
-            public void setId(int id) {
-                this.id = id;
+            public void setGender(String gender) {
+                this.gender = gender;
             }
 
             public String getType() {
@@ -355,10 +348,18 @@ public class FreeManListBean implements Serializable{
                 this.group = group;
             }
 
+            public String getDisplayName() {
+                return displayName;
+            }
+
+            public void setDisplayName(String displayName) {
+                this.displayName = displayName;
+            }
+
             public static class GroupBean implements Serializable{
                 private int id;
-                private String type;
                 private String desc;
+                private String type;
 
                 public int getId() {
                     return id;
@@ -368,20 +369,20 @@ public class FreeManListBean implements Serializable{
                     this.id = id;
                 }
 
-                public String getType() {
-                    return type;
-                }
-
-                public void setType(String type) {
-                    this.type = type;
-                }
-
                 public String getDesc() {
                     return desc;
                 }
 
                 public void setDesc(String desc) {
                     this.desc = desc;
+                }
+
+                public String getType() {
+                    return type;
+                }
+
+                public void setType(String type) {
+                    this.type = type;
                 }
             }
         }
