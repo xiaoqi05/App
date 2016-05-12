@@ -1,8 +1,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView
         android:id="@+id/ptr_container"
@@ -10,9 +10,18 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:back_top_duration="250"
-        app:position_to_show="7"
         app:max_to_pull="80dp"
+        app:position_to_show="7"
         app:refresh_distance="60dp"
+        />
+
+    <ImageView
+        android:id="@+id/iv_refresh_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/data_not_found"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

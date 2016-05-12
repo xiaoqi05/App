@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -38,7 +39,7 @@ import okhttp3.Response;
 
 
 @SuppressLint("ValidFragment")
-public class WarrantyStaffFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
+public class WarrantyStaffFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener{
     private static final int DISMISS_PROGRESSBAR = 5;
     private static final int DEFAULT_LIST_SIZE = 7;
     private static final int REFRESH_DATA = 0;
@@ -54,6 +55,7 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
     private List<ListBean> datas;
     private HistoryThemeFooterView footer;
     private HistoryThemeHeaderView header;
+    private ImageView iv_nodata_view;
     private int positionToRestore = 0;
     private int ps = 10;
 
@@ -123,6 +125,8 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         super.onCreate(savedInstanceState);
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_warranty_staff, null);
@@ -131,12 +135,12 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
             datas = new ArrayList<>();
         }
 
+        iv_nodata_view = (ImageView) v.findViewById(R.id.iv_refresh_data);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         header = (HistoryThemeHeaderView) LayoutInflater.from(getContext()).inflate(R.layout.history_header_theme, recycler, false);
         footer = (HistoryThemeFooterView) LayoutInflater.from(getContext()).inflate(R.layout.history_footer_theme, recycler, false);
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
-        recycler.setNoDataViewLayout(R.layout.no_data_view);
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
         recycler.setOnRefreshListener(this);
@@ -204,16 +208,25 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
 
             @Override
             public void onResponse(FreeManListBean response) {
-                total = response.getData().getTotal();
-                if (pn * ps > total) {
-                    recycler.setLoadMoreEnable(false);
+                if (response.getCode() == 2000) {
+                    total = response.getData().getTotal();
+                    if (pn * ps > total) {
+                        recycler.setLoadMoreEnable(false);
+                    }
+                    //无数据时返回
+                    if (total == 0) {
+                        hideSpecialView("无数据");
+                        iv_nodata_view.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    iv_nodata_view.setVisibility(View.GONE);
+                    pn++;
+                    listBeen.addAll(response.getData().getList());
+                    Message message = new Message();
+                    message.what = msg;
+                    message.obj = listBeen;
+                    myHandler.sendMessage(message);
                 }
-                pn++;
-                listBeen.addAll(response.getData().getList());
-                Message message = new Message();
-                message.what = msg;
-                message.obj = listBeen;
-                myHandler.sendMessage(message);
             }
         });
 

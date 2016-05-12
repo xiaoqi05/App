@@ -39,7 +39,7 @@ import okhttp3.Response;
 
 
 @SuppressLint("ValidFragment")
-public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
+public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener,View.OnClickListener {
     private static final int DISMISS_PROGRESSBAR = 5;
     private static final int DEFAULT_LIST_SIZE = 7;
     private static final int REFRESH_DATA = 0;
@@ -67,6 +67,14 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
     }
 
     private MyHandler myHandler = new MyHandler(this);
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId()==R.id.iv_refresh_data){
+            showShortToast(getContext(),"刷新数据");
+            recycler.hideSpecialInfoView();
+        }
+    }
 
     private static class MyHandler extends Handler {
         private WeakReference<AssetsSeizedFragment> activityWeakReference;
@@ -138,6 +146,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
         recycler.setHeaderView(header);
         recycler.setFooterView(footer);
         recycler.setNoDataViewLayout(R.layout.no_data_view);
+        LayoutInflater.from(getContext()).inflate(R.layout.no_data_view,recycler,false).findViewById(R.id.iv_refresh_data).setOnClickListener(this);
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
         recycler.setOnRefreshListener(this);
