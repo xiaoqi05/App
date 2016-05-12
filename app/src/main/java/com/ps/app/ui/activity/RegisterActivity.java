@@ -1,7 +1,6 @@
 package com.ps.app.ui.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -36,7 +35,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final int ERROR_GET_VER = 4;
     private static final int REGISTER_SUCCESS = 5;
 
-    private UserLoginTask mAuthTask = null;
     // UI references.
     private com.rey.material.widget.EditText mUserName;
     private View mProgressView;
@@ -158,44 +156,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mUserName.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mUserName.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mUserName.setError(getString(R.string.error_field_required));
-            focusView = mUserName;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, "");
-            mAuthTask.execute((Void) null);
-        }
-    }
 
 
     private boolean isPasswordValid(String password) {
@@ -268,55 +228,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            if (success) {
-                finish();
-            } else {
-                /*mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();*/
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-        }
-    }
 
     @Override
     protected void onDestroy() {

@@ -508,7 +508,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                //// TODO: 2016-05-12  bug
+                //// TODO: 2016-05-12  if bug exist
                 if (response.getCode() == 2000) {
                     badgeCount = response.getData().getTotal();
                     Log.i(TAG, badgeCount + "badgeCount");
