@@ -508,13 +508,15 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                //// TODO: 2016-05-12  if bug exist
                 if (response.getCode() == 2000) {
                     badgeCount = response.getData().getTotal();
                     Log.i(TAG, badgeCount + "badgeCount");
                     ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
                 }
-
+                if (response.getCode() == 2201) {
+                    showShortToast("你的登录失效，请重新登录");
+                    return;
+                }
             }
         });
     }
