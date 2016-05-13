@@ -1,15 +1,27 @@
 package com.ps.app.ui.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.ps.app.R;
+import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.CommonResultWithErrorBean;
 import com.ps.app.support.Bean.PushMsgListBean.DataBean.ListBean;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class MessageDetailActivity extends BaseActivity {
     private static final int FREEMAN = 8;
+    private static final String TAG = "MessageDetailActivity";
     private ViewStub viewStub;
     private TextView tv_show_all_info;
 
@@ -30,6 +42,35 @@ public class MessageDetailActivity extends BaseActivity {
         initActionBar(-1, "消息详情");
         findView();
         initData();
+        markMsgRead();
+    }
+
+    private void markMsgRead() {
+        String cookie = getSharePreference("").getString("cookie", "");
+        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("ids", listBean.getId() + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
+
+            @Override
+            public void onResponse(CommonResultWithErrorBean response) {
+                if (response.getCode() == 2000) {
+                    Log.i(TAG, response.getData());
+                }
+                if (response.getCode() == 2201) {
+                    Log.i(TAG, response.getData());
+                }
+            }
+        });
+    }
+
+    public abstract class UserMsgMarkCallback extends Callback<CommonResultWithErrorBean> {
+        @Override
+        public CommonResultWithErrorBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, CommonResultWithErrorBean.class);
+        }
     }
 
     private void initData() {

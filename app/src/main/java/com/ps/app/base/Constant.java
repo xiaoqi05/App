@@ -37,4 +37,6 @@ public class Constant {
     public static final String POLICE_REGISTER_URL = BASE_URL+"/p/reg.action";
     //警员修改信息
     public static final String POLICE_MODIFY_INFO_URL = BASE_URL+"/p/modify.action";
+    //推送消息全部设置为已读
+    public static final String MARK_MSG_READ_URL = BASE_URL+"/msg/allSetToRead.action";
 }
