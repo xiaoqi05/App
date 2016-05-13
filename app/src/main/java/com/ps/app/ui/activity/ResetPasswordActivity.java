@@ -25,6 +25,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     private static final int VER_SUCCESS = 1;
     private static final int GET_VER_SUCCESS = 2;
     private static final int ERROR_GET_VER = 3;
+    private static final int REGISTER_SUCCESS = 5;
     private Button bt_get_verification;
     private Button bt_next_step;
     private EditText et_phone;
@@ -54,7 +55,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                         Intent intent = new Intent(activity, SetPassWordActivity.class);
                         intent.putExtra("phone", activity.phone);
                         intent.putExtra("source",RESETPASSWORD);
-                        activity.startActivity(intent);
+                        activity.startActivityForResult(intent,1);
                         break;
                     case GET_VER_SUCCESS:
                         activity.showShortToast("获取验证码成功");
@@ -195,5 +196,15 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     protected void onDestroy() {
         SMSSDK.unregisterAllEventHandler();
         super.onDestroy();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == REGISTER_SUCCESS) {
+                //注册成功时finish
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

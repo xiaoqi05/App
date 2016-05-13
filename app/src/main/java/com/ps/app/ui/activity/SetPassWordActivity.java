@@ -75,7 +75,13 @@ public class SetPassWordActivity extends BaseActivity {
 
     public void finish_login(final View view) {
         //showProgress(mProgressView, true);
-        showNormalPrograssDailogBar(SetPassWordActivity.this,"");
+        String msg;
+        if (source==0){
+            msg="正在设置密码";
+        }else {
+            msg="正在重置密码";
+        }
+        showNormalPrograssDailogBar(SetPassWordActivity.this,msg);
         if (!isNetworkAvailable()) {
             showSnackbar(view, "请连接网络,并重试");
             return;
