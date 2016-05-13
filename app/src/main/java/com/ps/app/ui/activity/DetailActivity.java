@@ -55,8 +55,9 @@ public class DetailActivity extends BaseActivity {
             tv_detail_name.setText("姓名：    ");
             tv_detail_time.setText("创建时间：");
             tv_detail_thing_name.setText("组织：   ");
-
-            tv_detail_thing_name_info.setText(freeManBean.getGroup().getDesc());
+            if (freeManBean.getGroup()!=null){
+                tv_detail_thing_name_info.setText(freeManBean.getGroup().getDesc());
+            }
             tv_detail_id_info.setText(freeManBean.getIdCard());
         } else {
             //资产查封
@@ -122,7 +123,9 @@ public class DetailActivity extends BaseActivity {
             //案件类型
             tv_time.setText(freeManBean.getType());
             //人员类型
-            tv_type.setText(freeManBean.getGroup().getType());
+            if (freeManBean.getGroup()!=null){
+                tv_type.setText(freeManBean.getGroup().getType());
+            }
         } else {
             tv_phone.setText(listBean.getMemberTo().getPhone());
             tv_time.setText(DateFormat.dateFormat(listBean.getStartTime()));
