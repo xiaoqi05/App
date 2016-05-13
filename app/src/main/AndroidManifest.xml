@@ -52,7 +52,6 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="DAn1IHYBpOIo64OYcKj89m9gFPPYjtXW"/>
-
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
             android:value="525ef6d95a86dafcf4fe6c21974bce08"/>
@@ -126,8 +125,9 @@
         </activity>
         <activity
             android:name=".ui.activity.ResetPasswordActivity"
-            android:parentActivityName=".ui.activity.LoginActivity"
-            >
+            android:parentActivityName=".ui.activity.LoginActivity">
+        </activity>
+        <activity android:name=".ui.activity.MessageDetailActivity">
         </activity>
     </application>
 
