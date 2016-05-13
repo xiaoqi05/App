@@ -127,7 +127,10 @@
             android:name=".ui.activity.ResetPasswordActivity"
             android:parentActivityName=".ui.activity.LoginActivity">
         </activity>
-        <activity android:name=".ui.activity.MessageDetailActivity">
+        <activity
+            android:name=".ui.activity.MessageDetailActivity"
+            android:parentActivityName=".ui.activity.MessageActivity"
+            >
         </activity>
     </application>
 

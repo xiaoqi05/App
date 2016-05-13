@@ -1,13 +1,14 @@
 package com.ps.app.support.Bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PushMsgListBean {
+public class PushMsgListBean implements Serializable {
 
     /**
      * code : 2000
      * data : {"endRow":2,"firstPage":1,"hasNextPage":false,"hasPreviousPage":false,"isFirstPage":true,"isLastPage":true,"lastPage":1,"list":[{"createTime":"2016-05-05 16:15:15","id":1,"message":{"content":"即将到期","id":1,"type":"ASSET_MANAGEMENT_MSG"},"mid":1,"successed":0,"unread":0},{"createTime":"2016-05-05 16:15:15","id":2,"message":{"content":"你已离开限制区域，请回去！","id":3,"type":"ZONE_WARNING"},"mid":1,"successed":0,"unread":0}],"navigatePages":8,"navigatepageNums":[1],"nextPage":0,"orderBy":"","pageNum":1,"pageSize":5,"pages":1,"prePage":0,"size":2,"startRow":1,"total":2}
-     * error : 
+     * error :
      * desc : 成功!
      */
 
@@ -24,7 +25,7 @@ public class PushMsgListBean {
      * navigatePages : 8
      * navigatepageNums : [1]
      * nextPage : 0
-     * orderBy : 
+     * orderBy :
      * pageNum : 1
      * pageSize : 5
      * pages : 1
@@ -70,7 +71,7 @@ public class PushMsgListBean {
         this.desc = desc;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         private int endRow;
         private int firstPage;
         private boolean hasNextPage;
@@ -252,7 +253,7 @@ public class PushMsgListBean {
             this.navigatepageNums = navigatepageNums;
         }
 
-        public static class ListBean {
+        public static class ListBean implements Serializable {
             private String createTime;
             private int id;
             /**
@@ -314,7 +315,7 @@ public class PushMsgListBean {
                 this.unread = unread;
             }
 
-            public static class MessageBean {
+            public static class MessageBean implements Serializable {
                 private String content;
                 private int id;
                 private String type;

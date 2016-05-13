@@ -1,5 +1,6 @@
 package com.ps.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -138,8 +139,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
-
-                showShortToast("onItemClick: " + position);
+                Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
+                intent.putExtra("listBean", datas.get(position));
+                startActivity(intent);
+                Log.d(TAG, "onItemClick: " + position);
             }
         });
         recycler.setItemAnimator(new ZoomInAnimator());

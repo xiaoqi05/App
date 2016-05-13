@@ -1,13 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:id="@+id/rl_contain"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ps.app.ui.activity.MessageDetailActivity">
+    android:background="@color/bg_normal"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ps.app.ui.activity.DetailActivity"
+    >
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+
+        <TextView
+            android:id="@+id/tv_detail_id"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="消息序号 ："
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg_detail_id_info"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/tv_detail_id"
+            android:gravity="center"
+            android:text="EP20165021"
+            android:textSize="14sp"
+
+            />
+
+
+        <TextView
+            android:id="@+id/tv_detail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_below="@id/tv_detail_id"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="消息内容 ："
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg_detail_content_info"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignLeft="@id/tv_msg_detail_id_info"
+            android:layout_below="@id/tv_detail_id"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="哈哈"
+            android:textSize="14sp"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_detail_time"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_below="@id/tv_detail_name"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="创建时间 ："
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg_detail_time_info"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignLeft="@id/tv_msg_detail_id_info"
+            android:layout_below="@id/tv_msg_detail_content_info"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/tv_detail_time"
+            android:gravity="center"
+            android:text="2016-5-1"
+            android:textSize="14sp"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_detail_thing_name"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_below="@id/tv_detail_time"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="消息类型 ："
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg_detail_type_info"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignLeft="@id/tv_msg_detail_time_info"
+            android:layout_below="@id/tv_detail_time"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="一个馒头引发的血案"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+
+
+
+</LinearLayout>
