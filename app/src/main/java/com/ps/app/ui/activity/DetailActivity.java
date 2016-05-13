@@ -55,7 +55,7 @@ public class DetailActivity extends BaseActivity {
             tv_detail_name.setText("姓名：    ");
             tv_detail_time.setText("创建时间：");
             tv_detail_thing_name.setText("组织：   ");
-            if (freeManBean.getGroup()!=null){
+            if (freeManBean.getGroup() != null) {
                 tv_detail_thing_name_info.setText(freeManBean.getGroup().getDesc());
             }
             tv_detail_id_info.setText(freeManBean.getIdCard());
@@ -100,6 +100,8 @@ public class DetailActivity extends BaseActivity {
             return true;
         } else if (item.getItemId() == R.id.route_line) {
             Intent intent = new Intent(DetailActivity.this, RouterActivity.class);
+            //// TODO: 2016-05-13 保外人员mid 
+            intent.putExtra("mid", freeManBean.getId() + "");
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -123,7 +125,7 @@ public class DetailActivity extends BaseActivity {
             //案件类型
             tv_time.setText(freeManBean.getType());
             //人员类型
-            if (freeManBean.getGroup()!=null){
+            if (freeManBean.getGroup() != null) {
                 tv_type.setText(freeManBean.getGroup().getType());
             }
         } else {

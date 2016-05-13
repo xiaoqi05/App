@@ -1,6 +1,8 @@
 package com.ps.app.ui.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -15,19 +17,32 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
 import com.ps.app.R;
+import com.ps.app.base.Constant;
 import com.ps.app.base.MyApplication;
 import com.ps.app.service.LocationService;
+import com.ps.app.support.Bean.FreeManLocationRoad;
 import com.rey.material.app.DatePickerDialog;
 import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.widget.Button;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class RouterActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = "RouterActivity";
     private Button bt_get_start_time;
     private Button bt_get_end_time;
     private Button bt_search;
@@ -40,16 +55,22 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     double i = 0;
     double j = 0;
     private List<LatLng> points = new ArrayList<>();
+    private String mid;
+    private Calendar end_calendar;
+    private Calendar start_calendar;
+    private String start_time;
+    private String end_time;
+
 
     private boolean isFirstLoc = true;
     private BDLocationListener mListener = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
             System.out.println("经纬度" + location.getLongitude() + location.getLatitude());
-            points.add(new LatLng(location.getLatitude()+j, location.getLongitude()+i));
-            i=i+0.001;
-            j+=0.002;
-            showShortToast(location.getAddrStr()+i);
+            points.add(new LatLng(location.getLatitude() + j, location.getLongitude() + i));
+            i = i + 0.001;
+            j += 0.002;
+            showShortToast(location.getAddrStr() + i);
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMapView == null) {
                 return;
@@ -82,13 +103,13 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
+        mid = getIntent().getStringExtra("mid");
         mLocationService = ((MyApplication) getApplicationContext()).locationService;
         mLocationService.registerListener(mListener);
         mLocationService.start();
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
-
-      //  addCustomElementsDemo();
+        //  addCustomElementsDemo();
     }
 
     private void findView() {
@@ -116,8 +137,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
-                        String date = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
-                        bt_get_start_time.setText(date);
+                        start_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                        start_calendar = dialog.getCalendar();
+                        bt_get_start_time.setText(start_time);
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -138,8 +160,10 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
-                        String date = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
-                        bt_get_end_time.setText(date);
+                        end_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                        end_calendar = dialog.getCalendar();
+
+                        bt_get_end_time.setText(end_time);
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -157,11 +181,73 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
 
             case R.id.bt_date_search:
                 clearClick();
-                addCustomElementsDemo();
+                // addCustomElementsDemo();
+                if (prepareForSearch()) return;
+                StartSearch(mid, start_time, end_time);
                 break;
         }
 
 
+    }
+
+    private boolean prepareForSearch() {
+        if (!isNetworkAvailable()) {
+            showShortToast("网络不可用");
+            return true;
+        }
+        if (TextUtils.isEmpty(start_time)) {
+            showShortToast("请选择开始时间");
+            return true;
+        }
+        if (TextUtils.isEmpty(end_time)) {
+            showShortToast("请选择结束时间");
+            return true;
+        }
+
+        int result = end_calendar.compareTo(start_calendar);
+        if (result == -1) {
+            showShortToast("结束时间要大于开始时间");
+            return true;
+        }
+        return false;
+    }
+
+
+    private void StartSearch(String mid, String start_date, String end_date) {
+        String cookie = getSharePreference("").getString("cookie", "");
+        Log.i(TAG, "cookie:" + cookie);
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", mid);
+        params.put("startTime", start_date);
+        params.put("end_date", end_date);
+        OkHttpUtils.post().params(params).addHeader("endTime", cookie)
+                .url(Constant.FREE_MAN_LOCATION_SEARCH_URL).build().connTimeOut(10000).execute(new UserLocationRoadCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
+
+            @Override
+            public void onResponse(FreeManLocationRoad response) {
+                if (response.getCode() == 2000) {
+                    Log.i(TAG, "getLatitude" + response.getData().get(0).getLatitude());
+                }
+                if (response.getCode() == 2201) {
+                    showShortToast("2201");
+                    Log.i(TAG, "getLatitude" + response.getDesc());
+                }
+            }
+        });
+
+    }
+
+    public abstract class UserLocationRoadCallback extends Callback<FreeManLocationRoad> {
+        @Override
+        public FreeManLocationRoad parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            Log.i(TAG, string);
+            return new Gson().fromJson(string, FreeManLocationRoad.class);
+        }
     }
 
 
