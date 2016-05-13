@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.FreeManListBean;
 import com.ps.app.support.Bean.FreeManListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyFreeManAdapter;
+import com.ps.app.support.utils.NullStringToEmptyAdapterFactory;
 import com.ps.app.ui.activity.DetailActivity;
 import com.ps.app.ui.widget.HistoryThemeFooterView;
 import com.ps.app.ui.widget.HistoryThemeHeaderView;
@@ -256,8 +258,12 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         @Override
         public FreeManListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            return new Gson().fromJson(string, FreeManListBean.class);
-        }
+            Gson gson  = new GsonBuilder().registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory()).create();
+           // gson.fromJson(string, FreeManListBean.class);
+            String s = gson.toJson(FreeManListBean.class);
+            Log.i(TAG,s);
+            return gson.fromJson(string, FreeManListBean.class);
+    }
     }
 
     @Override

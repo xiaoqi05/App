@@ -217,6 +217,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         @Override
         public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
+            Log.i(TAG,string);
             return new Gson().fromJson(string, PushMsgListBean.class);
         }
     }

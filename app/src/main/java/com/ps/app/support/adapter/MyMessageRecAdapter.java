@@ -44,7 +44,12 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 ((MyViewHolder) holder).setImage(R.drawable.suspect);
             }
-
+            if (datas.get(position).getUnread() != 0) {
+                ((MyViewHolder) holder).iv_flag.setVisibility(View.INVISIBLE);
+            } else {
+                ((MyViewHolder) holder).iv_flag.setVisibility(View.VISIBLE);
+            }
+            
         }
     }
 
