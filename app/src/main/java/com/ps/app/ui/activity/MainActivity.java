@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +49,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.CommonResultWithErrorBean;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.VersionBean;
 import com.ps.app.support.utils.ViewFindUtils;
@@ -357,7 +359,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                             } else if (drawerItem.getIdentifier() == 2) {
                                 intent = new Intent(MainActivity.this, AboutActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
-                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+                                logout();
                             } else if (drawerItem.getIdentifier() == 19) {
                                 //showcase a simple collapsable functionality
                                 if (opened) {
@@ -400,6 +402,41 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         }
 
         result.updateBadge(4, new StringHolder(10 + ""));
+    }
+
+    private void logout() {
+        showNormalPrograssDailogBar(this, "正在注销");
+        String sid = getSharePreference("").getString("sid", "");
+        String cookie = getSharePreference("").getString("cookie", "");
+        if (TextUtils.isEmpty(sid)) {
+            showShortToast("请先登录");
+            return;
+        }
+        Log.i(TAG, "sid"+sid);
+        Log.i(TAG, "cookie"+cookie);
+        OkHttpUtils.get().addParams("sid", sid).url(Constant.LOGOUT_URL).addHeader("cookie", cookie).build().execute(new UserLogoutCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+                dismissNormalPrograssDailogBar();
+            }
+
+            @Override
+            public void onResponse(CommonResultWithErrorBean response) {
+                dismissNormalPrograssDailogBar();
+                if (response.getCode() == 2000) {
+                    showShortToast("注销" + response.getDesc());
+                }
+            }
+        });
+    }
+
+    public abstract class UserLogoutCallback extends Callback<CommonResultWithErrorBean> {
+        @Override
+        public CommonResultWithErrorBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, CommonResultWithErrorBean.class);
+        }
     }
 
 

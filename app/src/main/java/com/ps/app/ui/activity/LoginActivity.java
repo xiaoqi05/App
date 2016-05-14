@@ -157,7 +157,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             //cookie 持久化管理
                             //// TODO: 2016-05-10 退出登录时清除sp，cookies 
                             List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
-                            getSharePreference("").edit().putString("cookie", String.valueOf(cookies)).apply();
+                            getSharePreference("").edit().putString("cookie", String.valueOf(cookies.get(0))).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
