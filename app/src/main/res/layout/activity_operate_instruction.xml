@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F6"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="20dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:background="@drawable/title_bg"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="注册"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@id/title_1"
+                    android:layout_marginBottom="14dp"
+                    android:layout_toRightOf="@id/title_1"
+                    android:background="@color/red"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="注册。请认真填写姓名、警员编号和手机号码，注册完成后，将由警员审核通过后，方能登录使用。"
+                android:textSize="10sp"
+                />
+
+            <ImageView
+                android:id="@+id/iv_image_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/a"
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:background="@drawable/title_bg"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="查看信息"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@id/title_2"
+                    android:layout_marginBottom="14dp"
+                    android:layout_toRightOf="@id/title_2"
+                    android:background="@color/red"
+                    />
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_image_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/e"
+                />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:background="@drawable/title_bg"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="定位信息"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@id/title_3"
+                    android:layout_marginBottom="14dp"
+                    android:layout_toRightOf="@id/title_3"
+                    android:background="@color/red"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_text_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="查看保外人员定位信息。查看保外人员最新的定位信息和历史轨迹。"
+                android:textSize="10sp"/>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/f"
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:background="@drawable/title_bg"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="消息提醒"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignBottom="@id/title_4"
+                    android:layout_marginBottom="14dp"
+                    android:layout_toRightOf="@id/title_4"
+                    android:background="@color/red"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_text_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="提醒警员将要到期的查封资产和醒保外人员的违规行为。"
+                android:textSize="10sp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/g"
+                android:layout_gravity="center_horizontal"
+                />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

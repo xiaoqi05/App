@@ -335,10 +335,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 .withHasStableIds(true)
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("修改密码").withIcon(getResources().getDrawable(R.drawable.change_password)).withIdentifier(2).withSelectable(false),
+                        new PrimaryDrawerItem().withName("修改密码").withIcon(getResources().getDrawable(R.drawable.change_password)).withIdentifier(0).withSelectable(false),
                         new PrimaryDrawerItem().withName("操作指南").withIcon(getResources().getDrawable(R.drawable.operations_guide)).withIdentifier(1).withSelectable(false),
-                        new PrimaryDrawerItem().withName("关于").withIcon(getResources().getDrawable(R.drawable.about)).withIdentifier(3).withSelectable(false),
-                        new PrimaryDrawerItem().withName("退出").withIcon(getResources().getDrawable(R.drawable.logout)).withIdentifier(14).withSelectable(false)
+                        new PrimaryDrawerItem().withName("关于").withIcon(getResources().getDrawable(R.drawable.about)).withIdentifier(2).withSelectable(false),
+                        new PrimaryDrawerItem().withName("退出").withIcon(getResources().getDrawable(R.drawable.logout)).withIdentifier(3).withSelectable(false)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -353,7 +353,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                             if (drawerItem.getIdentifier() == 0) {
                                 intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 1) {
-                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+                                intent = new Intent(MainActivity.this, OperateInstructionActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
                                 intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
