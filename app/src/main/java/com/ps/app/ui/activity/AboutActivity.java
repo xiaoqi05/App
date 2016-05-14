@@ -5,13 +5,13 @@ import android.view.MenuItem;
 
 import com.ps.app.R;
 
-public class OperateInstructionActivity extends BaseActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_operate_instruction);
-        initActionBar(-1,"操作指南");
+        setContentView(R.layout.activity_about);
+        initActionBar(-1,"关于");
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -24,5 +24,4 @@ public class OperateInstructionActivity extends BaseActivity {
 
         }
     }
-    
 }

@@ -131,7 +131,12 @@
             android:name=".ui.activity.MessageDetailActivity"
             android:parentActivityName=".ui.activity.MessageActivity">
         </activity>
-        <activity android:name=".ui.activity.OperateInstructionActivity"
+        <activity
+            android:name=".ui.activity.OperateInstructionActivity"
+            android:parentActivityName=".ui.activity.MainActivity">
+        </activity>
+        <activity
+            android:name=".ui.activity.AboutActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             >
         </activity>

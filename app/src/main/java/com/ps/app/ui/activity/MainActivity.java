@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         //获取地图控件引用
         //  mMapView = (MapView) findViewById(R.id.bmapView);
         getPersimmions();
-        initActionBar(-1, "肖齐");
+        initActionBar(-1, "警务小秘书");
         initTab();
         initDraw(mToolbar, savedInstanceState);
         checkUpdate(Constant.FIRTOKEN);
@@ -295,7 +295,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private void initDraw(Toolbar toolbar, Bundle savedInstanceState) {
-        final IProfile profile3 = new ProfileDrawerItem().withName("肖齐").withEmail("15682070830").withIcon(R.drawable.profile2).withIdentifier(102);
+        final IProfile profile3 = new ProfileDrawerItem().withName("警务小秘书").withEmail("15682070830").withIcon(R.drawable.profile2).withIdentifier(102);
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -355,7 +355,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                             } else if (drawerItem.getIdentifier() == 1) {
                                 intent = new Intent(MainActivity.this, OperateInstructionActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
-                                intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+                                intent = new Intent(MainActivity.this, AboutActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
                                 intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                             } else if (drawerItem.getIdentifier() == 19) {
