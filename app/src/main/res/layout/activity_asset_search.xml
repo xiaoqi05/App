@@ -29,7 +29,7 @@
             />
 
         <com.rey.material.widget.Button
-            android:id="@+id/bt_asset_search"
+            android:id="@+id/bt_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

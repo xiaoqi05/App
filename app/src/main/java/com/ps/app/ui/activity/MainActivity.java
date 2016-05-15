@@ -86,6 +86,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private Drawer result = null;
     private boolean opened = false;
     private Menu menu;
+    //用于搜索界面
+    private int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +112,24 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         View decorView = getWindow().getDecorView();
         ViewPager vp = ViewFindUtils.find(decorView, R.id.vp);
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i(TAG, "position" + position + "positionOffset" + positionOffset + "positionOffsetPixels" + positionOffsetPixels);
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "position" + position);
+                id = position;
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.i(TAG, "state" + state);
+            }
+        });
 
         /**自定义部分属性*/
         SlidingTabLayout tabLayout_2 = ViewFindUtils.find(decorView, R.id.tl_2);
@@ -118,7 +137,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
         tabLayout_2.setViewPager(vp);
         tabLayout_2.setOnTabSelectListener(this);
-
         /*vp.setCurrentItem(1);
         tabLayout_2.showDot(1);
 */
@@ -160,6 +178,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         switch (item.getItemId()) {
             case R.id.user_search:
                 Intent intents = new Intent(MainActivity.this, AssetSearchActivity.class);
+                intents.putExtra("id", id);
+                Log.i(TAG, id + "id" + id);
                 startActivity(intents);
                 return true;
             case R.id.user_message:
@@ -272,6 +292,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public int getCount() {
