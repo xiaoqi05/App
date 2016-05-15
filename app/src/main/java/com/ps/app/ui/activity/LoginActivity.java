@@ -47,7 +47,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initData() {
         mImageView.setImageBitmap(Code.getInstance().createBitmap());
-
+        if (!TextUtils.isEmpty(getSharePreference("").getString("phone", ""))) {
+            et_phone.setText(getSharePreference("").getString("phone", ""));
+        }
     }
 
     private void findView() {
@@ -85,7 +87,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private boolean preLogin(View v) {
-        
+
         if (!isNetworkAvailable()) {
             showSnackbar(v, "请连接网络，并重试");
             return false;
@@ -129,7 +131,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    public void login(String phone, String paw) {
+    public void login(final String phone, String paw) {
 
         OkHttpUtils
                 .post()//
@@ -144,6 +146,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         dismissNormalPrograssDailogBar();
                         System.out.println("异常" + e
                         );
+                        showShortToast("你的密码错误，请重新登录");
                     }
 
                     @Override
@@ -155,9 +158,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             //退出的时候上传sid
                             getSharePreference("").edit().putString("sid", response.getData()).apply();
                             //cookie 持久化管理
-                            //// TODO: 2016-05-10 退出登录时清除sp，cookies 
                             List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
                             getSharePreference("").edit().putString("cookie", String.valueOf(cookies.get(0))).apply();
+                            getSharePreference("").edit().putString("phone", phone).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();

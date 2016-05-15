@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 import android.widget.ProgressBar;
 
 import com.ps.app.R;
@@ -30,7 +29,7 @@ public class Splash extends BaseActivity {
                 switch (msg.what) {
                     case DISMISS_PROGRESSBAR:
                         activity.showProgress(activity.progressBar, false);
-                        if (activity.getSharePreference("").getBoolean("isLogin", true)) {
+                        if (activity.getSharePreference("").getBoolean("isLogin", false)) {
                             activity.startActivity(new Intent(activity, MainActivity.class));
                             activity.finish();
                         } else {
@@ -49,7 +48,7 @@ public class Splash extends BaseActivity {
         setContentView(R.layout.activity_splash);
         findView();
         initData();
-    } 
+    }
 
     private void initData() {
         showProgress(progressBar, true);
@@ -57,8 +56,8 @@ public class Splash extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(4000);
-                    // myHandler.sendEmptyMessage(DISMISS_PROGRESSBAR);
+                    Thread.sleep(3000);
+                    myHandler.sendEmptyMessage(DISMISS_PROGRESSBAR);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -70,22 +69,5 @@ public class Splash extends BaseActivity {
     private void findView() {
         progressBar = (ProgressBar) findViewById(R.id.splash_progress);
     }
-
-    public void toLogin(View v) {
-        startActivity(new Intent(Splash.this, LoginActivity.class));
-    }
-
-    public void toMain(View v) {
-        if (!getSharePreference("").getBoolean("isLogin", false)) {
-            showShortToast("请先登录");
-            return;
-        }
-        startActivity(new Intent(Splash.this, MainActivity.class));
-    }
-
-    public void http_test(View v) {
-        startActivity(new Intent(Splash.this, LocationActivity.class));
-    }
-
 
 }

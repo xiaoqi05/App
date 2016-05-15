@@ -1,6 +1,6 @@
 package com.ps.app.support.Bean;
 
-public class LocationRoadError {
+public class CommonError {
 
 
     /**

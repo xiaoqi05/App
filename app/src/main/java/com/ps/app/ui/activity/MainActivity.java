@@ -49,7 +49,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.RecyclerViewCacheUtil;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
-import com.ps.app.support.Bean.CommonResultWithErrorBean;
+import com.ps.app.support.Bean.CommonError;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.VersionBean;
 import com.ps.app.support.utils.ViewFindUtils;
@@ -422,11 +422,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             }
 
             @Override
-            public void onResponse(CommonResultWithErrorBean response) {
+            public void onResponse(CommonError response) {
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     showShortToast("注销" + response.getDesc());
-                    getSharePreference("").edit().clear();
+                    getSharePreference("").edit().clear().apply();
                     Intent intent = new Intent(MainActivity.this, Splash.class);
                     startActivity(intent);
                 }
@@ -434,11 +434,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         });
     }
 
-    public abstract class UserLogoutCallback extends Callback<CommonResultWithErrorBean> {
+    public abstract class UserLogoutCallback extends Callback<CommonError> {
         @Override
-        public CommonResultWithErrorBean parseNetworkResponse(Response response) throws IOException {
+        public CommonError parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            return new Gson().fromJson(string, CommonResultWithErrorBean.class);
+            return new Gson().fromJson(string, CommonError.class);
         }
     }
 
@@ -555,6 +555,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 }
                 if (response.getCode() == 2201) {
                     showShortToast("你的登录失效，请重新登录");
+                    //getSharePreference("").edit().clear().apply();
+                    Intent intent = new Intent(MainActivity.this, Splash.class);
+                    startActivity(intent);
                     return;
                 }
             }
