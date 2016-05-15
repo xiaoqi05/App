@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.ps.app.R;
 import com.ps.app.support.Bean.AssetListBean.DataBean.ListBean;
-import com.ps.app.support.utils.DateFormat;
 import com.squareup.picasso.Picasso;
 import com.zjutkz.powerfulrecyclerview.listener.ItemTouchAdapter;
 
@@ -39,8 +38,9 @@ public class MyAssetRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             //((MyViewHolder) holder).setImage(datas.get(position).getSn());
-            ((MyViewHolder) holder).tv_name.setText(datas.get(position).getMemberTo().getDisplayName());
-            ((MyViewHolder) holder).tv_time.setText(DateFormat.dateFormat(datas.get(position).getEndTime()));
+            ((MyViewHolder) holder).tv_name.setText(datas.get(position).getName());
+            ((MyViewHolder) holder).tv_time.setText(datas.get(position).getCloseEndTime());
+            //Log.i("MyAssetRecAdapter",datas.get(position).getEndTime());
         }
     }
 

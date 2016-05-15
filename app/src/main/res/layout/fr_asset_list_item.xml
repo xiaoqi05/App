@@ -14,7 +14,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/suspect"
+        android:src="@drawable/house"
         />
 
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name"
                 android:layout_marginTop="16dp"
-                android:text="资产到期日期"
+                android:text="查封到期日期"
                 android:textColor="@android:color/black"
                 />
 

@@ -30,7 +30,6 @@ import com.zjutkz.powerfulrecyclerview.listener.OnRefreshListener;
 import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,7 +167,7 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
                     return;
                 }
                 Intent intent = new Intent(getContext(), DetailActivity.class);
-                intent.putExtra("listBean", (Serializable) datas.get(position));
+                intent.putExtra("listBean", datas.get(position));
                 startActivity(intent);
                 Log.d(TAG, "onItemClick: " + position);
             }

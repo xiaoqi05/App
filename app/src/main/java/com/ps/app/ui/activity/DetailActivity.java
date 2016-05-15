@@ -62,11 +62,11 @@ public class DetailActivity extends BaseActivity {
         } else {
             //资产查封
             listBean = (AssetListBean.DataBean.ListBean) getIntent().getSerializableExtra("listBean");
-            tv_detail_name_info.setText(listBean.getMemberTo().getDisplayName());
-            tv_detail_time_info.setText(DateFormat.dateFormat(listBean.getEndTime()));
+            tv_detail_name_info.setText(listBean.getName());
+            tv_detail_time_info.setText(listBean.getCreateTime());
             //案件名字
-            tv_detail_thing_name_info.setText(listBean.getMemberTo().getName());
-            tv_detail_id_info.setText(listBean.getCaseTo().getId() + "");
+            tv_detail_thing_name_info.setText(listBean.getCaseName());
+            tv_detail_id_info.setText(listBean.getId() + "");
         }
     }
 
@@ -113,10 +113,14 @@ public class DetailActivity extends BaseActivity {
         TextView tv_phone = (TextView) vs.findViewById(R.id.tv_detail_phone_info);
         TextView tv_time = (TextView) vs.findViewById(R.id.tv_detail_time_info);
         TextView tv_type = (TextView) vs.findViewById(R.id.tv_detail_type_info);
+        TextView tv_type2 = (TextView) vs.findViewById(R.id.tv_detail_type_info2);
+
+        TextView tv_gender = (TextView) vs.findViewById(R.id.tv_show_phone);
+        TextView tv_type_thing_info = (TextView) vs.findViewById(R.id.tv_detail_time);
+        TextView tv_type_info = (TextView) vs.findViewById(R.id.tv_detail_type);
+        TextView tv_type_info2 = (TextView) vs.findViewById(R.id.tv_detail_type2);
         if (source == FREEMAN) {
-            TextView tv_gender = (TextView) vs.findViewById(R.id.tv_show_phone);
-            TextView tv_type_thing_info = (TextView) vs.findViewById(R.id.tv_detail_time);
-            TextView tv_type_info = (TextView) vs.findViewById(R.id.tv_detail_type);
+
             tv_type_info.setText("人员类型： ");
             tv_type_thing_info.setText("案件类型： ");
             tv_gender.setText("性别：   ");
@@ -129,13 +133,20 @@ public class DetailActivity extends BaseActivity {
                 tv_type.setText(freeManBean.getGroup().getType());
             }
         } else {
-            tv_phone.setText(listBean.getMemberTo().getPhone());
-            tv_time.setText(DateFormat.dateFormat(listBean.getStartTime()));
-            tv_type.setText(listBean.getMemberTo().getType() + "");
+            tv_gender.setText("承办警组：   ");
+            tv_type_info.setText("冻结日期： ");
+            tv_type_thing_info.setText("财产类型： ");
+            tv_type_info2.setText("处理方式：   ");
+            //冻结日期
+            tv_phone.setText(listBean.getPoliceGroup());
+            tv_type.setText(listBean.getFreezeEndTime());
+            tv_time.setText(listBean.getType());
+            tv_type2.setText(listBean.getHandleType());
         }
         // tv_info.setText("哈哈: ");
         View view = findViewById(R.id.vs_stub);
         view = findViewById(R.id.ac_detail_id_after_inflate);
     }
+
 
 }
