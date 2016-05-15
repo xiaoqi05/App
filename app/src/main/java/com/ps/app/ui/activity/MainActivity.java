@@ -412,8 +412,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             showShortToast("请先登录");
             return;
         }
-        Log.i(TAG, "sid"+sid);
-        Log.i(TAG, "cookie"+cookie);
+        Log.i(TAG, "sid" + sid);
+        Log.i(TAG, "cookie" + cookie);
         OkHttpUtils.get().addParams("sid", sid).url(Constant.LOGOUT_URL).addHeader("cookie", cookie).build().execute(new UserLogoutCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -426,6 +426,9 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     showShortToast("注销" + response.getDesc());
+                    getSharePreference("").edit().clear();
+                    Intent intent = new Intent(MainActivity.this, Splash.class);
+                    startActivity(intent);
                 }
             }
         });
