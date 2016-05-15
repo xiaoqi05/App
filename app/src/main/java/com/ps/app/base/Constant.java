@@ -25,8 +25,8 @@ public class Constant {
     public static final String ASET_SEARCH_URL = BASE_URL+"/asset/search.action";
     //查封资产详情
     public static final String ASET_DETAIL_URL = BASE_URL+"/asset/detail.action";
-    //保外人员列表
-    public static final String FREE_MAN_URL = BASE_URL+"/m/list.action";
+    //保外人员列表 //case/list.action
+    public static final String FREE_MAN_URL = BASE_URL+"/case/list.action";
     //保外人员详情
     public static final String FREE_MAN_DETAIL_URL = BASE_URL+"/m/detail.action";
     //保外人员当前位置

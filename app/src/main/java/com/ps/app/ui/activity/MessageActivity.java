@@ -200,6 +200,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     hideSpecialView("你的登录失效，请重新登录");
                     return;
                 }
+                if (response.getCode() == 2204) {
+                    hideSpecialView("你的登录失效，请重新登录");
+                    return;
+                }
             }
         });
 

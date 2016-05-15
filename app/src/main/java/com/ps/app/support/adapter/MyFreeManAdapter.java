@@ -39,8 +39,8 @@ public class MyFreeManAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             //((MyViewHolder) holder).setImage(datas.get(position).getSn());
-            ((MyViewHolder) holder).tv_name.setText(datas.get(position).getName());
-            ((MyViewHolder) holder).tv_phone.setText(datas.get(position).getPhone());
+            ((MyViewHolder) holder).tv_name.setText(datas.get(position).getMemberName());
+            ((MyViewHolder) holder).tv_phone.setText(datas.get(position).getMemberTo().getPhone());
         }
     }
 

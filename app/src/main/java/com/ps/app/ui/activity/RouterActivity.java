@@ -23,6 +23,7 @@ import com.ps.app.base.Constant;
 import com.ps.app.base.MyApplication;
 import com.ps.app.service.LocationService;
 import com.ps.app.support.Bean.FreeManLocationRoad;
+import com.ps.app.support.utils.DateFormat;
 import com.rey.material.app.DatePickerDialog;
 import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
@@ -67,7 +68,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onReceiveLocation(BDLocation location) {
             System.out.println("经纬度" + location.getLongitude() + location.getLatitude());
-            points.add(new LatLng(location.getLatitude() + j, location.getLongitude() + i));
+            //points.add(new LatLng(location.getLatitude() + j, location.getLongitude() + i));
             i = i + 0.001;
             j += 0.002;
             showShortToast(location.getAddrStr() + i);
@@ -137,9 +138,10 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
-                        start_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                        //start_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
                         start_calendar = dialog.getCalendar();
-                        bt_get_start_time.setText(start_time);
+                        start_time = DateFormat.dateFormat(dialog.getCalendar().getTimeInMillis()) + "";
+                        bt_get_start_time.setText(dialog.getFormattedDate(SimpleDateFormat.getDateInstance()));
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -160,10 +162,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
-                        end_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                        end_time = DateFormat.dateFormat(dialog.getCalendar().getTimeInMillis()) + "";
                         end_calendar = dialog.getCalendar();
-
-                        bt_get_end_time.setText(end_time);
+                        bt_get_end_time.setText(dialog.getFormattedDate(SimpleDateFormat.getDateInstance()));
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -219,8 +220,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         Map<String, String> params = new HashMap<>();
         params.put("mid", mid);
         params.put("startTime", start_date);
-        params.put("end_date", end_date);
-        OkHttpUtils.post().params(params).addHeader("endTime", cookie)
+        params.put("endTime", end_date);
+        //addParams("mid",mid).addParams("start_time",start_time).addParams("endTime",end_date
+        OkHttpUtils.post().params(params).addHeader("cookie", cookie)
                 .url(Constant.FREE_MAN_LOCATION_SEARCH_URL).build().connTimeOut(10000).execute(new UserLocationRoadCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -231,7 +233,22 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(FreeManLocationRoad response) {
                 if (response.getCode() == 2000) {
                     Log.i(TAG, "getLatitude" + response.getData().get(0).getLatitude());
+                    for (int i = 0; i < response.getData().size(); i++) {
+                        double latitude = Double.parseDouble(response.getData().get(i).getLatitude());
+                        double longitude = Double.parseDouble(response.getData().get(i).getLongitude());
+                        points.add(new LatLng(latitude, longitude));
+                    }
+
                 }
+                LatLng ll = points.get(0);
+                MapStatus.Builder builder = new MapStatus.Builder();
+                builder.target(ll).zoom(16.0f);
+                if (points.size() < 2) {
+                    showShortToast("无历史轨迹");
+                    return;
+                }
+                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                addCustomElementsDemo();
                 if (response.getCode() == 2201) {
                     showShortToast("2201");
                     Log.i(TAG, "getLatitude" + response.getDesc());
@@ -299,7 +316,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         mPolyline.setDottedLine(true);
 
         // 添加多颜色分段的折线绘制
-        LatLng p11 = new LatLng(39.965, 116.444);
+     /*   LatLng p11 = new LatLng(39.965, 116.444);
         LatLng p21 = new LatLng(39.925, 116.494);
         LatLng p31 = new LatLng(39.955, 116.534);
         LatLng p41 = new LatLng(39.905, 116.594);
@@ -316,7 +333,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         colorValue.add(0xAA0000FF);
         OverlayOptions ooPolyline1 = new PolylineOptions().width(10)
                 .color(0xAAFF0000).points(points1).colorsValues(colorValue);
-        mColorfulPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline1);
+        mColorfulPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline1);*/
 
     }
 

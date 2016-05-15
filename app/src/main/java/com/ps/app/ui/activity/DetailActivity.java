@@ -48,17 +48,20 @@ public class DetailActivity extends BaseActivity {
             //保外人员
             source = FREEMAN;
             freeManBean = (FreeManListBean.DataBean.ListBean) getIntent().getSerializableExtra("listBean");
-            tv_detail_name_info.setText(freeManBean.getName());
-            tv_detail_time_info.setText(DateFormat.dateFormat(freeManBean.getCreateTime()));
-
-            tv_detail_id.setText("证件号码:");
-            tv_detail_name.setText("姓名：    ");
-            tv_detail_time.setText("创建时间：");
-            tv_detail_thing_name.setText("组织：   ");
-            if (freeManBean.getGroup() != null) {
-                tv_detail_thing_name_info.setText(freeManBean.getGroup().getDesc());
+            tv_detail_id.setText("案件序号: ");
+            tv_detail_name.setText("嫌疑人：    ");
+            tv_detail_time.setText("案件名称：");
+            tv_detail_thing_name.setText("立案时间：   ");
+            if (freeManBean.getMemberTo().getGroup() != null) {
+                //立案时间
+                tv_detail_thing_name_info.setText(DateFormat.dateFormat(freeManBean.getCreateTime()));
             }
-            tv_detail_id_info.setText(freeManBean.getIdCard());
+            //嫌疑人
+            tv_detail_name_info.setText(freeManBean.getMemberName());
+            //案件名称  //DateFormat.dateFormat(freeManBean.getCreateTime()
+            tv_detail_time_info.setText(freeManBean.getName());
+            //案件序号
+            tv_detail_id_info.setText(freeManBean.getId() + "");
         } else {
             //资产查封
             listBean = (AssetListBean.DataBean.ListBean) getIntent().getSerializableExtra("listBean");
@@ -110,33 +113,100 @@ public class DetailActivity extends BaseActivity {
     public void showAllInfo(View v) {
         tv_show_all_info.setVisibility(View.GONE);
         View vs = viewStub.inflate();
+
+        TextView tv_gender = (TextView) vs.findViewById(R.id.tv_show_phone);
+        TextView tv_type_thing_info = (TextView) vs.findViewById(R.id.tv_detail_time);
+        TextView tv_detail_type1 = (TextView) vs.findViewById(R.id.tv_detail_type);
+        TextView tv_detail_type2 = (TextView) vs.findViewById(R.id.tv_detail_type2);
+
+        TextView tv_detail_more3 = (TextView) vs.findViewById(R.id.tv_detail_more3);
+        TextView tv_detail_more4 = (TextView) vs.findViewById(R.id.tv_detail_more4);
+        TextView tv_detail_more5 = (TextView) vs.findViewById(R.id.tv_detail_more5);
+        TextView tv_detail_more6 = (TextView) vs.findViewById(R.id.tv_detail_more6);
+        TextView tv_detail_more7 = (TextView) vs.findViewById(R.id.tv_detail_more7);
+        TextView tv_detail_more8 = (TextView) vs.findViewById(R.id.tv_detail_more8);
+        TextView tv_detail_more9 = (TextView) vs.findViewById(R.id.tv_detail_more9);
+        TextView tv_detail_more10 = (TextView) vs.findViewById(R.id.tv_detail_more10);
+        TextView tv_detail_more11 = (TextView) vs.findViewById(R.id.tv_detail_more11);
+        TextView tv_detail_more12 = (TextView) vs.findViewById(R.id.tv_detail_more12);
+        TextView tv_detail_more13 = (TextView) vs.findViewById(R.id.tv_detail_more13);
+
+
         TextView tv_phone = (TextView) vs.findViewById(R.id.tv_detail_phone_info);
         TextView tv_time = (TextView) vs.findViewById(R.id.tv_detail_time_info);
         TextView tv_type = (TextView) vs.findViewById(R.id.tv_detail_type_info);
         TextView tv_type2 = (TextView) vs.findViewById(R.id.tv_detail_type_info2);
 
-        TextView tv_gender = (TextView) vs.findViewById(R.id.tv_show_phone);
-        TextView tv_type_thing_info = (TextView) vs.findViewById(R.id.tv_detail_time);
-        TextView tv_type_info = (TextView) vs.findViewById(R.id.tv_detail_type);
-        TextView tv_type_info2 = (TextView) vs.findViewById(R.id.tv_detail_type2);
-        if (source == FREEMAN) {
+        TextView tv_detail_more_info3 = (TextView) vs.findViewById(R.id.tv_detail_more_info3);
+        TextView tv_detail_more_info4 = (TextView) vs.findViewById(R.id.tv_detail_more_info4);
+        TextView tv_detail_more_info5 = (TextView) vs.findViewById(R.id.tv_detail_more_info5);
+        TextView tv_detail_more_info6 = (TextView) vs.findViewById(R.id.tv_detail_more_info6);
+        TextView tv_detail_more_info7 = (TextView) vs.findViewById(R.id.tv_detail_more_info7);
+        TextView tv_detail_more_info8 = (TextView) vs.findViewById(R.id.tv_detail_more_info8);
+        TextView tv_detail_more_info9 = (TextView) vs.findViewById(R.id.tv_detail_more_info9);
+        TextView tv_detail_more_info10 = (TextView) vs.findViewById(R.id.tv_detail_more_info10);
+        TextView tv_detail_more_info11 = (TextView) vs.findViewById(R.id.tv_detail_more_info11);
+        TextView tv_detail_more_info12 = (TextView) vs.findViewById(R.id.tv_detail_more_info12);
+        TextView tv_detail_more_info13 = (TextView) vs.findViewById(R.id.tv_detail_more_info13);
 
-            tv_type_info.setText("人员类型： ");
-            tv_type_thing_info.setText("案件类型： ");
-            tv_gender.setText("性别：   ");
-            //gender
-            tv_phone.setText(freeManBean.getGender());
-            //案件类型
-            tv_time.setText(freeManBean.getType());
-            //人员类型
-            if (freeManBean.getGroup() != null) {
-                tv_type.setText(freeManBean.getGroup().getType());
+        if (source == FREEMAN) {
+            //取保日期
+            tv_gender.setText("拘留日期：");
+            tv_phone.setText(DateFormat.dateFormat(freeManBean.getArrestStartTime()));
+            //拘留到期日期
+            tv_type_thing_info.setText("拘留到期日期:");
+            tv_time.setText(DateFormat.dateFormat(freeManBean.getArrestEndTime()));
+            //取保日期
+            tv_detail_type1.setText("取保日期： ");
+            tv_type.setText(DateFormat.dateFormat(freeManBean.getDetainStartTime()));
+            //取保到期日期
+            tv_detail_type2.setText("取保到期日期:");
+            tv_type2.setText(DateFormat.dateFormat(freeManBean.getDetainEndTime()));
+            //监居日期
+            tv_detail_more3.setText("监居日期:");
+            tv_detail_more_info3.setText(DateFormat.dateFormat(freeManBean.getPrisonedStartTime()));
+            //监居到期日期
+            tv_detail_more4.setText("监居到期日期:");
+            tv_detail_more_info4.setText(DateFormat.dateFormat(freeManBean.getPrisonedEndTime()));
+            //逮捕日期
+            tv_detail_more5.setText("逮捕日期:");
+            tv_detail_more_info5.setText(DateFormat.dateFormat(freeManBean.getReleaseStartTime()));
+            //逮捕到期日期
+            tv_detail_more6.setText("逮捕到期日期:");
+            tv_detail_more_info6.setText(DateFormat.dateFormat(freeManBean.getReleaseEndTime()));
+            //移诉日期
+            tv_detail_more7.setText("移诉日期:");
+            tv_detail_more_info7.setText(DateFormat.dateFormat(freeManBean.getShiftTime()));
+            //办案民警
+            tv_detail_more8.setText("办案民警:");
+            tv_detail_more_info8.setText(freeManBean.getPoliceName());
+            //level
+            tv_detail_more9.setText("level:");
+            tv_detail_more_info9.setText(freeManBean.getLevel() + "");
+
+            tv_detail_more10.setText("(1：继续追究刑事责任:");
+            tv_detail_more10.setTextSize(12);
+            tv_detail_more_info10.setText("0：解除强措1年后未诉出案件需撤销)");
+            tv_detail_more_info10.setTextSize(12);
+
+            if (freeManBean.getMemberTo() != null) {
+                //性别
+                tv_detail_more11.setText("性别:");
+                tv_detail_more_info11.setText(freeManBean.getMemberTo().getGender());
+                //电话
+                tv_detail_more12.setText("电话:");
+                tv_detail_more_info12.setText(freeManBean.getMemberTo().getPhone());
+                //身份证号码
+                tv_detail_more13.setText("身份证号码:");
+                tv_detail_more_info13.setText(freeManBean.getMemberTo().getIdCard());
+
             }
+
         } else {
             tv_gender.setText("承办警组：   ");
-            tv_type_info.setText("冻结日期： ");
+            tv_detail_type1.setText("冻结日期： ");
             tv_type_thing_info.setText("财产类型： ");
-            tv_type_info2.setText("处理方式：   ");
+            tv_detail_type2.setText("处理方式：   ");
             //冻结日期
             tv_phone.setText(listBean.getPoliceGroup());
             tv_type.setText(listBean.getFreezeEndTime());
