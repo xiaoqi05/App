@@ -52,10 +52,8 @@ public class DetailActivity extends BaseActivity {
             tv_detail_name.setText("嫌疑人：    ");
             tv_detail_time.setText("案件名称：");
             tv_detail_thing_name.setText("立案时间：   ");
-            if (freeManBean.getMemberTo().getGroup() != null) {
-                //立案时间
-                tv_detail_thing_name_info.setText(DateFormat.dateFormat(freeManBean.getCreateTime()));
-            }
+            //立案时间
+            tv_detail_thing_name_info.setText(DateFormat.dateFormat(freeManBean.getCreateTime()));
             //嫌疑人
             tv_detail_name_info.setText(freeManBean.getMemberName());
             //案件名称  //DateFormat.dateFormat(freeManBean.getCreateTime()
