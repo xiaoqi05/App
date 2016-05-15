@@ -16,6 +16,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.CommonResultWithErrorBean;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.PushMsgListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyMessageRecAdapter;
@@ -43,6 +44,8 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     private static final int NO_DATA = 2;
     private static final int LOAD_MORE = 1;
     private static final int ERROR_LOAD = 3;
+    private static final int RELOAD = 8;
+
 
     private static final String TAG = "MessageActivity";
 
@@ -107,6 +110,12 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     }
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
+                } else if (msg.what == RELOAD) {
+                    activity.datas.clear();
+                    activity.adapter.notifyDataSetChanged();
+                    activity.ps = 10;
+                    activity.pn = 1;
+                    activity.getDatas(INIT_LOAD, activity.ps, activity.pn);
                 }
             }
         }
@@ -141,7 +150,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
                 intent.putExtra("listBean", datas.get(position));
-                startActivity(intent);
+                startActivityForResult(intent, RELOAD);
                 Log.d(TAG, "onItemClick: " + position);
             }
         });
@@ -187,7 +196,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     message.obj = listBeen;
                     myHandler.sendMessage(message);
                 }
-                if (response.getCode()==2201){
+                if (response.getCode() == 2201) {
                     hideSpecialView("你的登录失效，请重新登录");
                     return;
                 }
@@ -217,7 +226,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         @Override
         public PushMsgListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            Log.i(TAG,string);
+            Log.i(TAG, string);
             return new Gson().fromJson(string, PushMsgListBean.class);
         }
     }
@@ -244,7 +253,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 footer.setVisibility(View.INVISIBLE);
                 return true;
             case R.id.marker_already_read:
-                showShortToast("标记为已读");
+                markMsgRead();
                 return true;
             case android.R.id.home:
                 finish();
@@ -266,4 +275,48 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     }
 
 
+    private void markMsgRead() {
+        String cookie = getSharePreference("").getString("cookie", "");
+        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("flag", 1 + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
+
+            @Override
+            public void onResponse(CommonResultWithErrorBean response) {
+                if (response.getCode() == 2000) {
+                    showShortToast(response.getDesc());
+                    Log.i(TAG, response.getData());
+                    myHandler.sendEmptyMessage(RELOAD);
+                }
+                if (response.getCode() == 2205) {
+                    showShortToast(response.getDesc());
+                    Log.i(TAG, response.getDesc());
+                }
+                if (response.getCode() == 2204) {
+                    showShortToast(response.getDesc());
+                    Log.i(TAG, response.getDesc());
+                }
+            }
+        });
+    }
+
+    public abstract class UserMsgMarkCallback extends Callback<CommonResultWithErrorBean> {
+        @Override
+        public CommonResultWithErrorBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, CommonResultWithErrorBean.class);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RELOAD) {
+            if (resultCode == RESULT_OK) {
+                myHandler.sendEmptyMessage(RELOAD);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

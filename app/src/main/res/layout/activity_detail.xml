@@ -39,7 +39,6 @@
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/tv_detail_id"
             android:gravity="center"
-            android:text="EP20165021"
             android:textSize="14sp"
             
             />
@@ -64,7 +63,6 @@
             android:layout_below="@id/tv_detail_id"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="哈哈"
             android:textSize="14sp"
             />
 
@@ -89,7 +87,6 @@
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/tv_detail_time"
             android:gravity="center"
-            android:text="2016-5-1"
             android:textSize="14sp"
             />
 
@@ -113,7 +110,6 @@
             android:layout_below="@id/tv_detail_time"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="一个馒头引发的血案"
             android:textSize="14sp"
             />
     </RelativeLayout>

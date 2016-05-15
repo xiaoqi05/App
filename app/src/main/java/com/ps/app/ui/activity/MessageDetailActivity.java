@@ -32,7 +32,7 @@ public class MessageDetailActivity extends BaseActivity {
 
     private int source = 0;
 
-    private boolean isShowAllInfo = false;
+    private boolean isMarked = false;
     private ListBean listBean;
 
     @Override
@@ -47,7 +47,7 @@ public class MessageDetailActivity extends BaseActivity {
 
     private void markMsgRead() {
         String cookie = getSharePreference("").getString("cookie", "");
-        Log.i(TAG,listBean.getId()+">>>>>>>>>>>>>>>");
+        Log.i(TAG, listBean.getId() + ">>>>>>>>>>>>>>>");
         OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("ids", listBean.getId() + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -57,7 +57,10 @@ public class MessageDetailActivity extends BaseActivity {
             @Override
             public void onResponse(CommonResultWithErrorBean response) {
                 if (response.getCode() == 2000) {
-                    Log.i(TAG, response.getData());
+                    Log.i(TAG, response.getDesc());
+                    showShortToast(response.getDesc());
+                    isMarked = true;
+                    setResult(RESULT_OK);
                 }
                 if (response.getCode() == 2201) {
                     Log.i(TAG, response.getData());
@@ -93,6 +96,7 @@ public class MessageDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+           
             finish();
             return true;
         }
