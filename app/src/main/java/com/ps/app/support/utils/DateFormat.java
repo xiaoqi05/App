@@ -14,6 +14,14 @@ public class DateFormat {
         return simpleDateFormat.format(date);
     }
 
+    public static String dateSimpleFormat(long time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        Date date = calendar.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date);
+    }
+
     public static Calendar dateFormatString(String time) {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

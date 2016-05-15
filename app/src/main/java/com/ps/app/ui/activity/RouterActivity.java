@@ -34,7 +34,6 @@ import com.zhy.http.okhttp.callback.Callback;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,8 +56,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     double j = 0;
     private List<LatLng> points = new ArrayList<>();
     private String mid;
-    private Calendar end_calendar;
-    private Calendar start_calendar;
     private String start_time;
     private String end_time;
 
@@ -71,7 +68,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
             //points.add(new LatLng(location.getLatitude() + j, location.getLongitude() + i));
             i = i + 0.001;
             j += 0.002;
-            showShortToast(location.getAddrStr() + i);
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMapView == null) {
                 return;
@@ -138,10 +134,11 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
+                        String formattedDate = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
                         //start_time = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
-                        start_calendar = dialog.getCalendar();
-                        start_time = DateFormat.dateFormat(dialog.getCalendar().getTimeInMillis()) + "";
-                        bt_get_start_time.setText(dialog.getFormattedDate(SimpleDateFormat.getDateInstance()));
+                        start_time = DateFormat.dateSimpleFormat(dialog.getCalendar().getTimeInMillis());
+                        Log.i(TAG, start_time + "start_time");
+                        bt_get_start_time.setText(formattedDate);
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -162,9 +159,13 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
-                        end_time = DateFormat.dateFormat(dialog.getCalendar().getTimeInMillis()) + "";
-                        end_calendar = dialog.getCalendar();
                         bt_get_end_time.setText(dialog.getFormattedDate(SimpleDateFormat.getDateInstance()));
+                        end_time = DateFormat.dateSimpleFormat(dialog.getCalendar().getTimeInMillis());
+                        if (end_time.equals(start_time)) {
+                            showShortToast("开始时间与结束时间不能相同，请重新选择");
+                            return;
+                        }
+                        Log.i(TAG, end_time + "endtime");
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -204,19 +205,13 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
             showShortToast("请选择结束时间");
             return true;
         }
-
-        int result = end_calendar.compareTo(start_calendar);
-        if (result == -1) {
-            showShortToast("结束时间要大于开始时间");
-            return true;
-        }
         return false;
     }
 
 
     private void StartSearch(String mid, String start_date, String end_date) {
         String cookie = getSharePreference("").getString("cookie", "");
-        Log.i(TAG, "cookie:" + cookie);
+        Log.i(TAG, "start_date:" + start_date + "end_date" + end_date);
         Map<String, String> params = new HashMap<>();
         params.put("mid", mid);
         params.put("startTime", start_date);
@@ -227,11 +222,14 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                showShortToast("无历史轨迹");
             }
 
             @Override
             public void onResponse(FreeManLocationRoad response) {
                 if (response.getCode() == 2000) {
+                    //清除数据
+                    points.clear();
                     Log.i(TAG, "getLatitude" + response.getData().get(0).getLatitude());
                     for (int i = 0; i < response.getData().size(); i++) {
                         double latitude = Double.parseDouble(response.getData().get(i).getLatitude());
@@ -248,6 +246,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                clearClick();
                 addCustomElementsDemo();
                 if (response.getCode() == 2201) {
                     showShortToast("2201");
@@ -263,6 +262,15 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         public FreeManLocationRoad parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
             Log.i(TAG, string);
+           /* try {
+                JSONObject jsonObject = new JSONObject(string);
+                int code = (int) jsonObject.opt("code");
+                if (code==2206){
+                    
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
             return new Gson().fromJson(string, FreeManLocationRoad.class);
         }
     }
@@ -301,6 +309,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
      * 添加点、线、多边形、圆、文字
      */
     public void addCustomElementsDemo() {
+
         // 添加普通折线绘制
         /*LatLng p1 = new LatLng(39.97923, 116.357428);
         LatLng p2 = new LatLng(39.94923, 116.397428);

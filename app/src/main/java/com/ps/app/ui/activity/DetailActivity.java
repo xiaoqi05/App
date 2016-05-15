@@ -104,7 +104,7 @@ public class DetailActivity extends BaseActivity {
         } else if (item.getItemId() == R.id.route_line) {
             Intent intent = new Intent(DetailActivity.this, RouterActivity.class);
             //// TODO: 2016-05-13 保外人员mid 
-            intent.putExtra("mid", freeManBean.getId() + "");
+            intent.putExtra("mid", freeManBean.getMemberTo().getId() + "");
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
