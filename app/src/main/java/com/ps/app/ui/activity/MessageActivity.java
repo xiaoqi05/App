@@ -111,15 +111,14 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     activity.adapter.notifyDataSetChanged();
                     activity.recycler.stopRefresh();
                 } else if (msg.what == RELOAD) {
-                    activity.datas.clear();
-                    activity.adapter.notifyDataSetChanged();
+                    activity.removeAllData();
                     activity.ps = 10;
                     activity.pn = 1;
                     activity.getDatas(INIT_LOAD, activity.ps, activity.pn);
                 }
             }
         }
-    }
+    }  
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,14 +246,8 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         switch (item.getItemId()) {
             case R.id.clear_message:
                 showShortToast("清空消息");
-                //带动画的删除所有
-                int item_data = datas.size();
-                for (int i = item_data - 1; i >= 0; i--) {
-                    adapter.notifyItemRemoved(i);
-                    datas.remove(i);
-                    --item_data;
-                }
-                footer.setVisibility(View.INVISIBLE);
+                removeAllData();
+
                 return true;
             case R.id.marker_already_read:
                 markMsgRead();
@@ -266,6 +259,17 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void removeAllData() {
+        //带动画的删除所有
+        int item_data = datas.size();
+        for (int i = item_data - 1; i >= 0; i--) {
+            adapter.notifyItemRemoved(i);
+            datas.remove(i);
+            --item_data;
+        }
+        footer.setVisibility(View.INVISIBLE);
     }
 
     @Override
