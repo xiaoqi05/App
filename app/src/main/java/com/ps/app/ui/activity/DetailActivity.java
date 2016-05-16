@@ -61,6 +61,8 @@ public class DetailActivity extends BaseActivity {
             //案件序号
             tv_detail_id_info.setText(freeManBean.getId() + "");
         } else {
+
+
             //资产查封
             listBean = (AssetListBean.DataBean.ListBean) getIntent().getSerializableExtra("listBean");
             tv_detail_name_info.setText(listBean.getName());
@@ -202,14 +204,34 @@ public class DetailActivity extends BaseActivity {
 
         } else {
             tv_gender.setText("承办警组：   ");
-            tv_detail_type1.setText("冻结日期： ");
-            tv_type_thing_info.setText("财产类型： ");
-            tv_detail_type2.setText("处理方式：   ");
-            //冻结日期
+            tv_detail_type1.setText("编号： ");
+            tv_type_thing_info.setText("查封日期： ");
+            tv_detail_type2.setText("查封到期日期：   ");
+
             tv_phone.setText(listBean.getPoliceGroup());
-            tv_type.setText(listBean.getFreezeEndTime());
-            tv_time.setText(listBean.getType());
-            tv_type2.setText(listBean.getHandleType());
+            tv_type.setText(listBean.getSn1()+"");
+            tv_time.setText(listBean.getCloseStartTime());
+            tv_type2.setText(listBean.getCloseEndTime());
+
+            //编号
+            tv_detail_more3.setText("编号:");
+            tv_detail_more_info3.setText(listBean.getSn2()+"");
+            //冻结日期
+            tv_detail_more4.setText("冻结日期:");
+            tv_detail_more_info4.setText(listBean.getFreezeStartTime()+"");
+            //冻结到期日期
+            tv_detail_more5.setText("冻结到期日期:");
+            tv_detail_more_info5.setText(listBean.getFreezeEndTime()+"");
+            //财产类型
+            tv_detail_more6.setText("财产类型:");
+            tv_detail_more_info6.setText(listBean.getType());
+            //处理方式
+            tv_detail_more7.setText("处理方式:");
+            tv_detail_more_info7.setText(listBean.getHandleType());
+            //备注
+            //tv_detail_more8.setText("备注:");
+            //tv_detail_more_info8.setText(freeManBean.getRemark()+"");
+
         }
         // tv_info.setText("哈哈: ");
         View view = findViewById(R.id.vs_stub);

@@ -191,10 +191,6 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         }
         if (v.getId() == R.id.bt_search) {
             String search_content = et_asset_search.getText().toString().trim();
-            if (TextUtils.isEmpty(search_content)) {
-                showShortToast("请填写搜索内容");
-                return;
-            }
             removeAllData();
             if (id == 0) {
                 //资产搜索
@@ -202,6 +198,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
                     showShortToast("请选择时间");
                     return;
                 }*/
+                
                 showNormalPrograssDailogBar(this, "正在搜索");
                 startAssetSearch(search_content);
             } else if (id == 1) {
@@ -296,16 +293,18 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
         HashMap<String, String> params = new HashMap<>();
-
         params.put("pn", "1");
         params.put("ps", "10");
-        params.put("name", search_content);
+        if (!TextUtils.isEmpty(search_content)){
+            params.put("name", search_content);
+        }
         if (!TextUtils.isEmpty(start_time)) {
             params.put("startTime", start_time);
         }
         if (!TextUtils.isEmpty(end_time)) {
             params.put("endTime", end_time);
         }
+        
         OkHttpUtils.post().params(params).addHeader("cookie", cookie)
                 .url(Constant.ASET_SEARCH_URL).build().connTimeOut(10000).execute(new UserAssetDetailCallback() {
             @Override
