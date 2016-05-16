@@ -199,6 +199,10 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(FreeManListBean response) {
                 if (response.getCode() == 2000) {
+                    if (response.getData().getTotal() == 0) {
+                        showShortToast("该数据不存在，请重新输入");
+                        return;
+                    }
                     freeManListdatas.addAll(response.getData().getList());
                     myFreeManAdapter.notifyDataSetChanged();
                 }
@@ -223,6 +227,10 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(AssetListBean response) {
                 if (response.getCode() == 2000) {
+                    if (response.getData().getTotal() == 0) {
+                        showShortToast("该数据不存在，请重新输入");
+                        return;
+                    }
                     datas.addAll(response.getData().getList());
                     adapter.notifyDataSetChanged();
                 }
