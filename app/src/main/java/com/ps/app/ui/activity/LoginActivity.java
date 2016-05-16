@@ -19,6 +19,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.Call;
@@ -127,6 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     public void resetPassword(View v) {
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+        intent.putExtra("source",8);
         startActivity(intent);
     }
 
@@ -161,7 +163,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
                             getSharePreference("").edit().putString("cookie", String.valueOf(cookies.get(0))).apply();
                             getSharePreference("").edit().putString("phone", phone).apply();
+                            getSharePreference("").edit().putInt("valid", 30).apply();
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTimeInMillis(System.currentTimeMillis());
+                            getSharePreference("").edit().putInt("date", calendar.DAY_OF_YEAR).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("phone", phone);
                             startActivity(intent);
                             finish();
                         }

@@ -58,6 +58,7 @@ import com.zhy.http.okhttp.callback.FileCallBack;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
@@ -98,13 +99,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initActionBar(-1, "警务小秘书");
         initTab();
         initDraw(mToolbar, savedInstanceState);
-        checkUpdate(Constant.FIRTOKEN);
         setMsgNoteNum();
     }
 
     private void initTab() {
-
-
         View decorView = getWindow().getDecorView();
         ViewPager vp = ViewFindUtils.find(decorView, R.id.vp);
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
@@ -314,7 +312,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     }
 
     private void initDraw(Toolbar toolbar, Bundle savedInstanceState) {
-        final IProfile profile3 = new ProfileDrawerItem().withName("警务小秘书").withEmail("15682070830").withIcon(R.drawable.profile2).withIdentifier(102);
+        String phone = getSharePreference("").getString("phone", "");
+        final IProfile profile3 = new ProfileDrawerItem().withName("警务小秘书").withEmail(phone).withIcon(R.drawable.profile2).withIdentifier(102);
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -568,9 +567,20 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             @Override
             public void onResponse(PushMsgListBean response) {
                 if (response.getCode() == 2000) {
+                    //验证的cookie有效
                     badgeCount = response.getData().getTotal();
                     Log.i(TAG, badgeCount + "badgeCount");
                     ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+                    //应用更新
+                    checkUpdate(Constant.FIRTOKEN);
+                    //检查应用有效期
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    int today = calendar.DAY_OF_YEAR;
+                    int loginDay = getSharePreference("").getInt("date", 0);
+                    int valid = 30 - (today - loginDay);
+                    showShortToast("试用软件，" + valid + "天后到期");
+
                 }
                 if (response.getCode() == 2201) {
                     //getSharePreference("").edit().clear().apply();

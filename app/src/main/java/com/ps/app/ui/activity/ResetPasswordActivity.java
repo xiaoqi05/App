@@ -54,8 +54,8 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                         activity.showShortToast("验证成功");
                         Intent intent = new Intent(activity, SetPassWordActivity.class);
                         intent.putExtra("phone", activity.phone);
-                        intent.putExtra("source",RESETPASSWORD);
-                        activity.startActivityForResult(intent,1);
+                        intent.putExtra("source", RESETPASSWORD);
+                        activity.startActivityForResult(intent, 1);
                         break;
                     case GET_VER_SUCCESS:
                         activity.showShortToast("获取验证码成功");
@@ -96,9 +96,14 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.bt_get_verification:
-                phone = et_phone.getText().toString().trim();
+                if (getIntent().getIntExtra("source", 0) == 8) {
+                    et_phone.setEnabled(true);
+                    phone = et_phone.getText().toString().trim();
+                }
                 if (TextUtils.isEmpty(phone)) {
                     showSnackbar(v, "请输入电话号码");
+                    // et_phone.setEnabled(true);
+                    //phone = et_phone.getText().toString().trim();
                     return;
                 }
                 if (!CheckPhone.isMobileNO(phone)) {
@@ -164,6 +169,20 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initData() {
+        //=8来自与mainActivity
+        if (getIntent().getIntExtra("source", 0) == 8) {
+            et_phone.setEnabled(true);
+            phone = et_phone.getText().toString().trim();
+        } else {
+            phone = getSharePreference("").getString("phone", "");
+            et_phone.setEnabled(false);
+            et_phone.setText(phone);
+        }
+
+        if (!TextUtils.isEmpty(phone)) {
+            showShortToast("请输入手机号码");
+            return;
+        }
         SMSSDK.initSDK(this, Constant.APPKEY, Constant.APPSECRET, true);
         EventHandler eh = new EventHandler() {
             @Override
@@ -197,6 +216,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         SMSSDK.unregisterAllEventHandler();
         super.onDestroy();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {

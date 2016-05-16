@@ -1,5 +1,6 @@
 package com.ps.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -15,7 +16,7 @@ import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.ps.app.base.MyApplication;
 import com.ps.app.service.LocationService;
-import com.ps.app.support.Bean.CommonResultBean;
+import com.ps.app.support.Bean.CommonError;
 import com.ps.app.support.utils.MD5Util;
 import com.rey.material.widget.EditText;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -76,12 +77,12 @@ public class SetPassWordActivity extends BaseActivity {
     public void finish_login(final View view) {
         //showProgress(mProgressView, true);
         String msg;
-        if (source==0){
-            msg="正在设置密码";
-        }else {
-            msg="正在重置密码";
+        if (source == 0) {
+            msg = "正在设置密码";
+        } else {
+            msg = "正在重置密码";
         }
-        showNormalPrograssDailogBar(SetPassWordActivity.this,msg);
+        showNormalPrograssDailogBar(SetPassWordActivity.this, msg);
         if (!isNetworkAvailable()) {
             showSnackbar(view, "请连接网络,并重试");
             return;
@@ -117,16 +118,18 @@ public class SetPassWordActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onResponse(CommonResultBean response) {
+                        public void onResponse(CommonError response) {
                             dismissNormalPrograssDailogBar();
                             if (response.getCode() == 2000 && response.getDesc().equals("成功")) {
-                                showLongToast("注册成功,请重新登录");
+                                showLongToast("设置成功,请重新登录");
                                 //注册成功
                                 setResult(REGISTER_SUCCESS);
+                                Intent intent = new Intent(SetPassWordActivity.this, LoginActivity.class);
+                                startActivity(intent);
                                 finish();
                             }
                             if (response.getCode() == 2202) {
-                                showSnackbar(view, response.getData());
+                                showSnackbar(view, response.getDesc());
                             }
                         }
                     });
@@ -184,11 +187,11 @@ public class SetPassWordActivity extends BaseActivity {
         super.onStop();
     }
 
-    public abstract class UserRegCallback extends Callback<CommonResultBean> {
+    public abstract class UserRegCallback extends Callback<CommonError> {
         @Override
-        public CommonResultBean parseNetworkResponse(Response response) throws IOException {
+        public CommonError parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            CommonResultBean commonResultBean = new Gson().fromJson(string, CommonResultBean.class);
+            CommonError commonResultBean = new Gson().fromJson(string, CommonError.class);
             Log.i(TAG, commonResultBean.getDesc());
             return commonResultBean;
         }
