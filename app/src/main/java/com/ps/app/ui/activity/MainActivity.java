@@ -446,7 +446,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             public void onResponse(CommonError response) {
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
-                    showShortToast("注销" + response.getDesc());
+                    showShortToast("注销成功");
                     getSharePreference("").edit().clear().apply();
                     Intent intent = new Intent(MainActivity.this, Splash.class);
                     startActivity(intent);
@@ -565,6 +565,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                showShortToast("你的登录失效，请重新登录" + e.toString());
             }
 
             @Override
@@ -575,11 +576,14 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                     ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
                 }
                 if (response.getCode() == 2201) {
-                    showShortToast("你的登录失效，请重新登录");
                     //getSharePreference("").edit().clear().apply();
                     Intent intent = new Intent(MainActivity.this, Splash.class);
                     startActivity(intent);
                     return;
+                }
+                if (response.getCode() == 2204) {
+                    showShortToast("你的登录失效，请重新登录");
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             }
         });

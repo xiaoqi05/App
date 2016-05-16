@@ -118,7 +118,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 }
             }
         }
-    }  
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,6 +305,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 if (response.getCode() == 2204) {
                     showShortToast(response.getDesc());
                     Log.i(TAG, response.getDesc());
+                    startActivity(new Intent(MessageActivity.this, LoginActivity.class));
                 }
             }
         });
