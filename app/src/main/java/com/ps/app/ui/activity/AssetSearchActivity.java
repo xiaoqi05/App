@@ -1,14 +1,17 @@
 package com.ps.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,7 +19,9 @@ import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.AssetListBean;
-import com.ps.app.support.adapter.MyAssetRecentSearchRecAdapter;
+import com.ps.app.support.Bean.FreeManListBean;
+import com.ps.app.support.adapter.MyAssetRecAdapter;
+import com.ps.app.support.adapter.MyFreeManAdapter;
 import com.rey.material.widget.Button;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
@@ -31,13 +36,18 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Response;
 
+//资产搜索和保外人员搜索
 public class AssetSearchActivity extends BaseActivity implements View.OnClickListener {
     public static final int DISMISS_PROGRESSBAR = 1;
     private static final String TAG = "AssetSearchActivity";
+    private static final int FREEMAN = 8;
     private PowerfulRecyclerView recycler;
     private Button bt_search;
-    private MyAssetRecentSearchRecAdapter adapter;
-    private List<Integer> datas;
+    private MyAssetRecAdapter adapter;
+    private MyFreeManAdapter myFreeManAdapter;
+    private List<AssetListBean.DataBean.ListBean> datas;
+    private List<FreeManListBean.DataBean.ListBean> freeManListdatas;
+    private EditText et_asset_search;
     private int loadMoreCount = 0;
     private int positionToRestore = 0;
     private int id;
@@ -58,20 +68,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         public void handleMessage(Message msg) {
             AssetSearchActivity activity = activityWeakReference.get();
             if (activity != null) {
-                if (msg.what == 0) {
-                    activity.getDatas(0);
-                    activity.adapter.notifyDataSetChanged();
-                    activity.loadMoreCount = 0;
 
-                } else if (msg.what == 1) {
-                    activity.getDatas(1);
-                    activity.adapter.notifyItemRangeInserted(activity.adapter.getItemCount(), 9);
-                    activity.recycler.stopLoadMore();
-                } else if (msg.what == 2) {
-                    activity.recycler.setLoadMoreEnable(false);
-                } else if (msg.what == 3) {
-                    activity.recycler.hideSpecialInfoView();
-                }
             }
         }
 
@@ -87,13 +84,14 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         } else {
             initActionBar(-1, "保外人员查询");
         }
-        Log.i(TAG,id+"id"+id);
+        Log.i(TAG, id + "id" + id);
         findView();
         initRecyclerView();
     }
 
     private void findView() {
         bt_search = (Button) findViewById(R.id.bt_search);
+        et_asset_search = (EditText) findViewById(R.id.et_asset_search);
         assert bt_search != null;
         bt_search.setOnClickListener(this);
     }
@@ -101,29 +99,21 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        if (id == 0) {
-            initActionBar(-1, "资产查封查询");
-        } else {
-            initActionBar(-1, "保外人员查询");
-        }
     }
 
     private void initRecyclerView() {
         recycler = (PowerfulRecyclerView) findViewById(R.id.ptr_recent_search_container);
-        if (datas == null) {
-            datas = new ArrayList<Integer>();
+        if (datas == null || freeManListdatas == null) {
+            datas = new ArrayList<>();
+            freeManListdatas = new ArrayList<>();
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getDatas(1);
-                adapter.notifyDataSetChanged();
-                recycler.stopRefresh();
-                recycler.stopLoadMore();
-            }
-        }, 500);
-        adapter = new MyAssetRecentSearchRecAdapter(this, datas);
-        recycler.setAdapter(adapter);
+        if (id == 0) {
+            adapter = new MyAssetRecAdapter(this, datas);
+            recycler.setAdapter(adapter);
+        } else {
+            myFreeManAdapter = new MyFreeManAdapter(this, freeManListdatas);
+            recycler.setAdapter(myFreeManAdapter);
+        }
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
@@ -134,36 +124,25 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
-               /* if (position == 0) {
-                    datas.add(1, R.mipmap.ic_launcher);
-                    adapter.notifyItemInserted(1);
-                } else if (position == 1) {
-                    datas.remove(1);
-                    adapter.notifyItemRemoved(1);
-                }*/
                 showShortToast("onItemClick: " + position);
+                if (id == 0) {
+                    Intent intent = new Intent(AssetSearchActivity.this, DetailActivity.class);
+                    intent.putExtra("listBean", datas.get(position));
+                    startActivity(intent);
+                }
+                if (id == 1) {
+                    Intent intent = new Intent(AssetSearchActivity.this, DetailActivity.class);
+                    intent.putExtra("listBean", freeManListdatas.get(position));
+                    intent.putExtra("source", FREEMAN);
+                    startActivity(intent);
+                }
             }
         });
-
         recycler.setItemAnimator(new ZoomInAnimator());
     }
 
-    private void getDatas(int msg) {
-        if (msg == 0) {
-            datas.clear();
-        }
-        datas.add(R.drawable.img1);
-        datas.add(R.drawable.img1);
-        datas.add(R.drawable.img1);
-        datas.add(R.drawable.img1);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.iv_search_delete) {
-            showShortToast("删除最近搜索");
-            //带动画的删除所有
+    private void removeAllData() {
+        if (id == 0) {
             int item = datas.size();
             for (int i = item - 1; i >= 0; i--) {
                 adapter.notifyItemRemoved(i);
@@ -171,27 +150,70 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
                 --item;
             }
         }
+
+        if (id == 1) {
+            int item = freeManListdatas.size();
+            for (int i = item - 1; i >= 0; i--) {
+                myFreeManAdapter.notifyItemRemoved(i);
+                freeManListdatas.remove(i);
+                --item;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_search_delete) {
+            showShortToast("删除最近搜索");
+            //带动画的删除所有
+            removeAllData();
+        }
         if (v.getId() == R.id.bt_search) {
-            //// TODO: 2016-05-15 搜索
+            String search_content = et_asset_search.getText().toString().trim();
+            if (TextUtils.isEmpty(search_content)) {
+                showShortToast("请填写搜索内容");
+                return;
+            }
+            removeAllData();
             if (id == 0) {
                 //资产搜索
-                startAssetSearch();
+                startAssetSearch(search_content);
             } else if (id == 1) {
                 //保外人员搜索
-                startFreeManSearch();
+                startFreeManSearch(search_content);
             }
         }
 
     }
 
-    private void startFreeManSearch() {
-
-    }
-
-    private void startAssetSearch() {
+    private void startFreeManSearch(String search_content) {
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.post().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name","A").addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addHeader("cookie", cookie)
+                .url(Constant.FREE_MAN_URL).build().connTimeOut(10000).execute(new UserFreemanDetailCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+                Log.i(TAG, e.toString());
+            }
+
+            @Override
+            public void onResponse(FreeManListBean response) {
+                if (response.getCode() == 2000) {
+                    freeManListdatas.addAll(response.getData().getList());
+                    myFreeManAdapter.notifyDataSetChanged();
+                }
+                if (response.getCode() == 2201) {
+
+                    return;
+                }
+            }
+        });
+    }
+
+    private void startAssetSearch(String search_content) {
+        String cookie = getSharePreference("").getString("cookie", "");
+        Log.i(TAG, "cookie:" + cookie);
+        OkHttpUtils.post().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addHeader("cookie", cookie)
                 .url(Constant.ASET_SEARCH_URL).build().connTimeOut(10000).execute(new UserAssetDetailCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -201,8 +223,11 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(AssetListBean response) {
                 if (response.getCode() == 2000) {
+                    datas.addAll(response.getData().getList());
+                    adapter.notifyDataSetChanged();
                 }
                 if (response.getCode() == 2201) {
+
                     return;
                 }
             }
@@ -214,6 +239,14 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         public AssetListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
             return new Gson().fromJson(string, AssetListBean.class);
+        }
+    }
+
+    private abstract class UserFreemanDetailCallback extends Callback<FreeManListBean> {
+        @Override
+        public FreeManListBean parseNetworkResponse(Response response) throws IOException {
+            String string = response.body().string();
+            return new Gson().fromJson(string, FreeManListBean.class);
         }
     }
 
