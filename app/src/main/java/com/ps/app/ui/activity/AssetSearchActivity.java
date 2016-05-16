@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Call;
@@ -198,13 +199,15 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             removeAllData();
             if (id == 0) {
                 //资产搜索
-                if (TextUtils.isEmpty(start_time) || TextUtils.isEmpty(end_time)) {
+                /*if (TextUtils.isEmpty(start_time) || TextUtils.isEmpty(end_time)) {
                     showShortToast("请选择时间");
                     return;
-                }
+                }*/
+                showNormalPrograssDailogBar(this, "正在搜索");
                 startAssetSearch(search_content);
             } else if (id == 1) {
                 //保外人员搜索
+                showNormalPrograssDailogBar(this, "正在搜索");
                 startFreeManSearch(search_content);
             }
         }
@@ -268,10 +271,12 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                dismissNormalPrograssDailogBar();
             }
 
             @Override
             public void onResponse(FreeManListBean response) {
+                dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     if (response.getData().getTotal() == 0) {
                         showShortToast("该数据不存在，请重新输入");
@@ -291,15 +296,28 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private void startAssetSearch(String search_content) {
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.post().addParams("name", search_content).addParams("startTime", start_time).addParams("endTime", end_time).addHeader("cookie", cookie)
+        HashMap<String, String> params = new HashMap<>();
+
+        params.put("pn", "1");
+        params.put("ps", "10");
+        params.put("name", search_content);
+        if (!TextUtils.isEmpty(start_time)) {
+            params.put("startTime", start_time);
+        }
+        if (!TextUtils.isEmpty(end_time)) {
+            params.put("endTime", end_time);
+        }
+        OkHttpUtils.post().params(params).addHeader("cookie", cookie)
                 .url(Constant.ASET_SEARCH_URL).build().connTimeOut(10000).execute(new UserAssetDetailCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                dismissNormalPrograssDailogBar();
             }
 
             @Override
             public void onResponse(AssetListBean response) {
+                dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     if (response.getData().getTotal() == 0) {
                         showShortToast("该数据不存在，请重新输入");
