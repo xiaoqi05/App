@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ps.app.ui.activity.AssetSearchActivity"
     android:background="@color/bg_dark_normal"
+    android:orientation="vertical"
+    tools:context="com.ps.app.ui.activity.AssetSearchActivity"
     >
 
     <LinearLayout
         android:id="@+id/ll_asset_search"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:background="@color/white"
         >
 
         <EditText
@@ -24,12 +25,13 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="@null"
-            android:hint="输入关键字或时间查询"
+            android:hint="输入关键字"
             android:textSize="14sp"
             />
 
         <com.rey.material.widget.Button
             android:id="@+id/bt_search"
+            style="@style/LightRaiseWaveColorButtonRippleStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,27 +42,70 @@
             android:text="搜索"
             android:textColor="@color/colorPrimary"
             android:textSize="14sp"
-            style="@style/LightRaiseWaveColorButtonRippleStyle"
             />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_time_search"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <com.rey.material.widget.Button
+            android:id="@+id/bt_start_time"
+            style="@style/LightNoPaddingButtonRippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:paddingRight="10dp"
+            android:text="开始时间"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="@color/gray"
+            />
+
+        <com.rey.material.widget.Button
+            android:id="@+id/bt_end_time"
+            style="@style/LightNoPaddingButtonRippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:paddingRight="10dp"
+            android:text="结束时间"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textColor="@color/gray"
+            />
+
+        <ImageView
+            android:layout_width="0.2dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_light"
+            />
+
+
+    </LinearLayout>
+
 
     <com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView
         android:id="@+id/ptr_recent_search_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_asset_search"
         android:layout_marginTop="16dp"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
         app:back_top_duration="250"
         app:max_to_pull="80dp"
         app:position_to_show="7"
         app:refresh_distance="60dp"
-        android:background="@color/white"
         >
 
 
     </com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView>
 
 
-</RelativeLayout>
+</LinearLayout>

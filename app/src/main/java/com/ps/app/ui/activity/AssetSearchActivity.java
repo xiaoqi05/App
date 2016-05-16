@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -22,6 +23,10 @@ import com.ps.app.support.Bean.AssetListBean;
 import com.ps.app.support.Bean.FreeManListBean;
 import com.ps.app.support.adapter.MyAssetRecAdapter;
 import com.ps.app.support.adapter.MyFreeManAdapter;
+import com.ps.app.support.utils.DateFormat;
+import com.rey.material.app.DatePickerDialog;
+import com.rey.material.app.Dialog;
+import com.rey.material.app.DialogFragment;
 import com.rey.material.widget.Button;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
@@ -30,6 +35,7 @@ import com.zjutkz.powerfulrecyclerview.ptr.PowerfulRecyclerView;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +49,9 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private static final int FREEMAN = 8;
     private PowerfulRecyclerView recycler;
     private Button bt_search;
+    private LinearLayout ll_time_search;
+    private Button bt_start_time;
+    private Button bt_end_time;
     private MyAssetRecAdapter adapter;
     private MyFreeManAdapter myFreeManAdapter;
     private List<AssetListBean.DataBean.ListBean> datas;
@@ -54,6 +63,8 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private MyHandler myHandler = new MyHandler(this);
     private int ps = 10;
     private int pn = 1;
+    private String start_time;
+    private String end_time;
 
     private static class MyHandler extends Handler {
 
@@ -94,6 +105,14 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         et_asset_search = (EditText) findViewById(R.id.et_asset_search);
         assert bt_search != null;
         bt_search.setOnClickListener(this);
+
+        ll_time_search = (LinearLayout) findViewById(R.id.ll_time_search);
+        bt_start_time = (Button) findViewById(R.id.bt_start_time);
+        assert bt_start_time != null;
+        bt_start_time.setOnClickListener(this);
+        bt_end_time = (Button) findViewById(R.id.bt_end_time);
+        assert bt_end_time != null;
+        bt_end_time.setOnClickListener(this);
     }
 
     @Override
@@ -108,6 +127,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             freeManListdatas = new ArrayList<>();
         }
         if (id == 0) {
+            ll_time_search.setVisibility(View.VISIBLE);
             adapter = new MyAssetRecAdapter(this, datas);
             recycler.setAdapter(adapter);
         } else {
@@ -163,6 +183,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        Dialog.Builder builder = null;
         if (v.getId() == R.id.iv_search_delete) {
             showShortToast("删除最近搜索");
             //带动画的删除所有
@@ -177,11 +198,64 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             removeAllData();
             if (id == 0) {
                 //资产搜索
+                if (TextUtils.isEmpty(start_time) || TextUtils.isEmpty(end_time)) {
+                    showShortToast("请选择时间");
+                    return;
+                }
                 startAssetSearch(search_content);
             } else if (id == 1) {
                 //保外人员搜索
                 startFreeManSearch(search_content);
             }
+        }
+        if (v.getId() == R.id.bt_start_time) {
+            builder = new DatePickerDialog.Builder(R.style.Material_App_Dialog_DatePicker_Light) {
+                @Override
+                public void onPositiveActionClicked(DialogFragment fragment) {
+                    DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
+                    String formattedDate = dialog.getFormattedDate(SimpleDateFormat.getDateInstance());
+                    start_time = DateFormat.dateSimpleFormat(dialog.getCalendar().getTimeInMillis());
+                    Log.i(TAG, start_time + "start_time");
+                    bt_start_time.setText(formattedDate);
+                    super.onPositiveActionClicked(fragment);
+                }
+
+                @Override
+                public void onNegativeActionClicked(DialogFragment fragment) {
+                    //showShortToast("Date is Cancelled");
+                    super.onNegativeActionClicked(fragment);
+                }
+            };
+            builder.positiveAction("确认")
+                    .negativeAction("取消");
+            DialogFragment fragment = DialogFragment.newInstance(builder);
+            fragment.show(getSupportFragmentManager(), null);
+        }
+        if (v.getId() == R.id.bt_end_time) {
+            builder = new DatePickerDialog.Builder(R.style.Material_App_Dialog_DatePicker_Light) {
+                @Override
+                public void onPositiveActionClicked(DialogFragment fragment) {
+                    DatePickerDialog dialog = (DatePickerDialog) fragment.getDialog();
+                    bt_end_time.setText(dialog.getFormattedDate(SimpleDateFormat.getDateInstance()));
+                    end_time = DateFormat.dateSimpleFormat(dialog.getCalendar().getTimeInMillis());
+                    if (end_time.equals(start_time)) {
+                        showShortToast("开始时间与结束时间不能相同，请重新选择");
+                        return;
+                    }
+                    Log.i(TAG, end_time + "endtime");
+                    super.onPositiveActionClicked(fragment);
+                }
+
+                @Override
+                public void onNegativeActionClicked(DialogFragment fragment) {
+                    //showShortToast("Date is Cancelled");
+                    super.onNegativeActionClicked(fragment);
+                }
+            };
+            builder.positiveAction("确认")
+                    .negativeAction("取消");
+            DialogFragment fragments = DialogFragment.newInstance(builder);
+            fragments.show(getSupportFragmentManager(), null);
         }
 
     }
@@ -217,7 +291,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private void startAssetSearch(String search_content) {
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.post().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addHeader("cookie", cookie)
+        OkHttpUtils.post().addParams("name", search_content).addParams("startTime", start_time).addParams("endTime", end_time).addHeader("cookie", cookie)
                 .url(Constant.ASET_SEARCH_URL).build().connTimeOut(10000).execute(new UserAssetDetailCallback() {
             @Override
             public void onError(Call call, Exception e) {

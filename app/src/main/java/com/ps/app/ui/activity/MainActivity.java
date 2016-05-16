@@ -31,8 +31,6 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -41,8 +39,6 @@ import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
@@ -323,7 +319,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.color.colorPrimary)
-                .addProfiles(
+             /*   .addProfiles(
                         profile3,
                         new ProfileSettingDrawerItem().withName("添加账户").withDescription("Add new GitHub Account").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_plus).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
                         new ProfileSettingDrawerItem().withName("账户管理").withIcon(GoogleMaterial.Icon.gmd_settings)
@@ -346,7 +342,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         //false if you have not consumed the event and it should close the drawer
                         return false;
                     }
-                })
+                })*/
                 .withSavedInstance(savedInstanceState)
                 .build();
 
@@ -381,7 +377,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                                 intent = new Intent(MainActivity.this, AboutActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
                                 logout();
-                            } else if (drawerItem.getIdentifier() == 19) {
+                            }
+                            /*else if (drawerItem.getIdentifier() == 19) {
                                 //showcase a simple collapsable functionality
                                 if (opened) {
                                     //remove the items which are hidden
@@ -396,7 +393,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                                 }
                                 opened = !opened;
                                 return true;
-                            }
+                            }*/
                             if (intent != null) {
                                 MainActivity.this.startActivity(intent);
                             }
