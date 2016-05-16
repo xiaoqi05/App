@@ -264,7 +264,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
         OkHttpUtils.get().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addHeader("cookie", cookie)
-                .url(Constant.FREE_MAN_URL).build().connTimeOut(10000).execute(new UserFreemanDetailCallback() {
+                .url(Constant.FREE_MAN_SEARCH_URL).build().connTimeOut(10000).execute(new UserFreemanDetailCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
