@@ -145,7 +145,6 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
-                showShortToast("onItemClick: " + position);
                 if (id == 0) {
                     Intent intent = new Intent(AssetSearchActivity.this, DetailActivity.class);
                     intent.putExtra("listBean", datas.get(position));
