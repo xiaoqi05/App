@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -180,7 +179,14 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private TagGroup.OnTagClickListener mTagClickListener = new TagGroup.OnTagClickListener() {
         @Override
         public void onTagClick(String tag) {
-            Toast.makeText(AssetSearchActivity.this, tag, Toast.LENGTH_SHORT).show();
+            showNormalPrograssDailogBar(AssetSearchActivity.this, "正在搜索");
+            removeAllData();
+            if (id == 0) {
+                startAssetSearch(tag);
+            }
+            if (id == 1) {
+                startFreeManSearch(tag);
+            }
         }
     };
 
@@ -214,9 +220,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         Dialog.Builder builder = null;
         if (v.getId() == R.id.iv_search_delete) {
-            showShortToast("删除最近搜索");
             //删除所有
-            //mTagGroup.submitTag();
             startActivity(new Intent(AssetSearchActivity.this, EditRecSearchTagActivity.class));
 
         }
