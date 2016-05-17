@@ -63,9 +63,12 @@
                 android:layout_marginTop="5dp"
                 android:src="@drawable/d"
                 />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                >
 
                 <TextView
                     android:id="@+id/title_2"
@@ -100,7 +103,9 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                >
 
                 <TextView
                     android:id="@+id/title_3"
@@ -139,9 +144,13 @@
                 android:layout_marginTop="5dp"
                 android:src="@drawable/f"
                 />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+
+                >
 
                 <TextView
                     android:id="@+id/title_4"
@@ -164,6 +173,7 @@
                     android:background="@color/red"
                     />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/tv_text_4"
                 android:layout_width="wrap_content"
@@ -171,12 +181,13 @@
                 android:layout_marginTop="17dp"
                 android:text="提醒警员将要到期的查封资产和醒保外人员的违规行为。"
                 android:textSize="10sp"/>
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
                 android:src="@drawable/g"
-                android:layout_gravity="center_horizontal"
                 />
 
         </LinearLayout>
