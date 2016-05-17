@@ -189,8 +189,10 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
 
     private void getDatas(final int msg, int pages, int pageNum) {
         if (ps * pn > total && total != 0) {
-            hideSpecialView("加载完成");
-            return;
+            if ((ps * pn - total) > ps) {
+                hideSpecialView("加载完成");
+                return;
+            }
         }
         if (!isNetworkAvailable(getContext())) {
             hideSpecialView("网络不可以用!");
@@ -211,9 +213,9 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
             public void onResponse(FreeManListBean response) {
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
-                    if (pn * ps > total) {
+                    /*if (pn * ps > total) {
                         recycler.setLoadMoreEnable(false);
-                    }
+                    }*/
                     //无数据时返回
                     if (total == 0) {
                         hideSpecialView("无数据");

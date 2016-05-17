@@ -557,7 +557,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     private void setMsgNoteNum() {
         String cookie = getSharePreference("").getString("cookie", "");
-        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(20)).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(50)).addHeader("cookie", cookie)
                 .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -572,22 +572,27 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                     //验证cookie有效
                     for (int j = 0; j < response.getData().getTotal(); j++) {
                         if (response.getData().getList().get(j).getUnread() == 0) {
-                            badgeCount++;
+                            ++badgeCount;
                         }
                     }
+                    Log.i(TAG, "badgeCount" + badgeCount + "getTotal" + response.getData().getTotal());
                     // badgeCount = response.getData().getTotal();
                     if (badgeCount != 0) {
                         ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
                     }
-                    //应用更新
-                    checkUpdate(Constant.FIRTOKEN);
-                    //检查应用有效期
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-                    int today = calendar.DAY_OF_YEAR;
-                    int loginDay = getSharePreference("").getInt("date", 0);
-                    int valid = 30 - (today - loginDay);
-                    showShortToast("试用软件，" + valid + "天后到期");
+                    if (!opened) {
+                        //只有第一次打开软件时 提示
+                        //应用更新
+                        checkUpdate(Constant.FIRTOKEN);
+                        //检查应用有效期
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        int today = calendar.DAY_OF_YEAR;
+                        int loginDay = getSharePreference("").getInt("date", 0);
+                        int valid = 30 - (today - loginDay);
+                        showShortToast("试用软件，" + valid + "天后到期");
+                        opened = true;
+                    }
 
                 }
                 if (response.getCode() == 2201) {

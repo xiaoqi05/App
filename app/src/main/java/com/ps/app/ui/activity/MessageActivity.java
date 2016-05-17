@@ -162,8 +162,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     private void getDatas(final int msg, int pages, int pageNum) {
         if (ps * pn > total && total != 0) {
-            hideSpecialView("加载完成");
-            return;
+            if ((ps * pn - total) > ps) {
+                hideSpecialView("加载完成");
+                return;
+            }
         }
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference("").getString("cookie", "");
@@ -182,9 +184,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
-                    if (pn * ps > total) {
+                    /*if (response.getData().getSize() > total) {
                         recycler.setLoadMoreEnable(false);
-                    }
+                        return;
+                    }*/
                     if (total == 0) {
                         recycler.showNoDataView();
                         return;
@@ -251,7 +254,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 removeAllData();
                 return true;*/
             case R.id.marker_already_read:
-                showNormalPrograssDailogBar(MessageActivity.this,"正在加载");
+                showNormalPrograssDailogBar(MessageActivity.this, "正在加载");
                 markMsgRead();
                 return true;
             case android.R.id.home:
@@ -276,6 +279,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     @Override
     public void onLoadMore() {
+
         getDatas(LOAD_MORE, ps, pn);
     }
 
@@ -326,7 +330,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RELOAD) {
             if (resultCode == RESULT_OK) {
-                showNormalPrograssDailogBar(MessageActivity.this,"正在加载中");
+                showNormalPrograssDailogBar(MessageActivity.this, "正在加载中");
                 myHandler.sendEmptyMessage(RELOAD);
             }
         }

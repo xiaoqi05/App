@@ -195,8 +195,10 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
 
     private void getDatas(final int msg, int pages, int pageNum) {
         if (ps * pn > total && total != 0) {
-            hideSpecialView("加载完成");
-            return;
+            if ((ps * pn - total) > ps) {
+                hideSpecialView("加载完成");
+                return;
+            }
         }
         if (!isNetworkAvailable(getContext())) {
             hideSpecialView("网络不可以用!");
@@ -222,9 +224,6 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
                         hideSpecialView("无数据");
                         iv_nodata_view.setVisibility(View.VISIBLE);
                         return;
-                    }
-                    if (pn * ps > total) {
-                        recycler.setLoadMoreEnable(false);
                     }
                     pn++;
                     listBeen.addAll(response.getData().getList());
