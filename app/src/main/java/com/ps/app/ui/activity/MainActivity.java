@@ -546,7 +546,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         intent.setDataAndType(Uri.parse("file://" + response.getAbsolutePath()), "application/vnd.android.package-archive");
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        showLongToast(response.getAbsolutePath());
+                        //showLongToast(response.getAbsolutePath());
                     }
                 });
             }
@@ -567,7 +567,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onResponse(PushMsgListBean response) {
-                badgeCount=0;
+                badgeCount = 0;
                 if (response.getCode() == 2000) {
                     //验证cookie有效
                     for (int j = 0; j < response.getData().getTotal(); j++) {
@@ -576,7 +576,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         }
                     }
                     // badgeCount = response.getData().getTotal();
-                    if (badgeCount!=0){
+                    if (badgeCount != 0) {
                         ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
                     }
                     //应用更新
