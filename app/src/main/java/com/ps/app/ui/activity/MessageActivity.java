@@ -38,7 +38,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 public class MessageActivity extends BaseActivity implements OnRefreshListener, OnLoadMoreListener {
-    private static final int DEFAULT_LIST_SIZE = 7;
+    private static final int DEFAULT_LIST_SIZE = 9;
     private static final int REFRESH_DATA = 0;
     private static final int INIT_LOAD = 4;
     private static final int NO_DATA = 2;
@@ -184,10 +184,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
-                    /*if (response.getData().getSize() > total) {
+                    if (response.getData().getTotal() <= DEFAULT_LIST_SIZE) {
                         recycler.setLoadMoreEnable(false);
                         return;
-                    }*/
+                    }
                     if (total == 0) {
                         recycler.showNoDataView();
                         return;

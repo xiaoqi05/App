@@ -213,9 +213,9 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
             public void onResponse(FreeManListBean response) {
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
-                    /*if (pn * ps > total) {
+                    if (response.getData().getTotal() <= DEFAULT_LIST_SIZE) {
                         recycler.setLoadMoreEnable(false);
-                    }*/
+                    }
                     //无数据时返回
                     if (total == 0) {
                         hideSpecialView("无数据");

@@ -219,6 +219,9 @@ public class AssetsSeizedFragment extends BaseFragment implements OnRefreshListe
             public void onResponse(AssetListBean response) {
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
+                    if (response.getData().getTotal() <= DEFAULT_LIST_SIZE) {
+                        recycler.setLoadMoreEnable(false);
+                    }
                     //无数据时返回
                     if (total == 0) {
                         hideSpecialView("无数据");
