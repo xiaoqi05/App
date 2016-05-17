@@ -15,6 +15,6 @@
         android:id="@+id/tag_group"
         style="@style/TagGroup"
         app:atg_isAppendMode="true"
-        app:atg_inputHint="最近搜索"
+        app:atg_inputHint="添加常用搜索"
         />
 </RelativeLayout>

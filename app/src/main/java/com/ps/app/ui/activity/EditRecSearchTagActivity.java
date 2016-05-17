@@ -20,7 +20,6 @@ public class EditRecSearchTagActivity extends BaseActivity {
         initActionBar(-1, "编辑最近搜索");
         mTagsManager = TagsManager.getInstance(getApplicationContext());
         String[] tags = mTagsManager.getTags();
-
         mTagGroup = (TagGroup) findViewById(R.id.tag_group);
         mTagGroup.setTags(tags);
 
@@ -28,7 +27,7 @@ public class EditRecSearchTagActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tag, menu);
+       // getMenuInflater().inflate(R.menu.menu_tag, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -39,14 +38,6 @@ public class EditRecSearchTagActivity extends BaseActivity {
             mTagsManager.updateTags(mTagGroup.getTags());
             finish();
             return true;
-        }
-        if (item.getItemId() == R.id.clear_tag_message) {
-            mTagsManager.clearTags();
-            mTagGroup.submitTag();
-
-            showShortToast("xx");
-            //mTagsManager.updateTags(mTagGroup.getTags());
-          //  mTagGroup.submitTag();
         }
         return super.onOptionsItemSelected(item);
     }

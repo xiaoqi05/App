@@ -571,7 +571,6 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 if (response.getCode() == 2000) {
                     //验证cookie有效
                     for (int j = 0; j < response.getData().getTotal(); j++) {
-                        Log.i(TAG, badgeCount + "badgeCount"+"getUnread"+response.getData().getList().get(j).getUnread());
                         if (response.getData().getList().get(j).getUnread() == 0) {
                             badgeCount++;
                         }

@@ -233,8 +233,11 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
                     showShortToast("请选择时间");
                     return;
                 }*/
+                //添加标签
                 mTagsManager.addTag(search_content);
                 mTagsManager.updateTags(mTagsManager.getTags());
+                mTagGroup.submitTag();
+                mTagGroup.setTags(mTagsManager.getTags());
                 showNormalPrograssDailogBar(this, "正在搜索");
                 startAssetSearch(search_content);
             } else if (id == 1) {
