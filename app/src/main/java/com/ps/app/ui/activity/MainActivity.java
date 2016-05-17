@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initActionBar(-1, "警务小秘书");
         initTab();
         initDraw(mToolbar, savedInstanceState);
-        setMsgNoteNum();
+
     }
 
     private void initTab() {
@@ -257,6 +257,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     protected void onResume() {
         super.onResume();
         //  mMapView.onResume();
+        setMsgNoteNum();
     }
 
     @Override
@@ -556,7 +557,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     private void setMsgNoteNum() {
         String cookie = getSharePreference("").getString("cookie", "");
-        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(5)).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(20)).addHeader("cookie", cookie)
                 .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -566,11 +567,19 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
             @Override
             public void onResponse(PushMsgListBean response) {
+                badgeCount=0;
                 if (response.getCode() == 2000) {
-                    //验证的cookie有效
-                    badgeCount = response.getData().getTotal();
-                    Log.i(TAG, badgeCount + "badgeCount");
-                    ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+                    //验证cookie有效
+                    for (int j = 0; j < response.getData().getTotal(); j++) {
+                        Log.i(TAG, badgeCount + "badgeCount"+"getUnread"+response.getData().getList().get(j).getUnread());
+                        if (response.getData().getList().get(j).getUnread() == 0) {
+                            badgeCount++;
+                        }
+                    }
+                    // badgeCount = response.getData().getTotal();
+                    if (badgeCount!=0){
+                        ActionItemBadge.update(MainActivity.this, menu.findItem(R.id.user_message), getResources().getDrawable(R.drawable.massage), ActionItemBadge.BadgeStyles.RED, badgeCount);
+                    }
                     //应用更新
                     checkUpdate(Constant.FIRTOKEN);
                     //检查应用有效期

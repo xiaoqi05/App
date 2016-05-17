@@ -139,6 +139,10 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             case R.id.bt_next_step:
                 // Intent intent = new Intent(ResetPasswordActivity.this,SetPassWordActivity.class);
                 // startActivity(intent);
+                if (getIntent().getIntExtra("source", 0) == 8) {
+                    et_phone.setEnabled(false);
+                    phone = et_phone.getText().toString().trim();
+                }
                 String verificationCode = et_reset_verification.getText().toString().trim();
                 if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(verificationCode)) {
                     showSnackbar(v, "请填写完整信息");
@@ -183,7 +187,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             showShortToast("请输入手机号码");
             return;
         }
-        SMSSDK.initSDK(this, Constant.APPKEY, Constant.APPSECRET, true);
+        SMSSDK.initSDK(this, Constant.APPKEY, Constant.APPSECRET, false);
         EventHandler eh = new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
