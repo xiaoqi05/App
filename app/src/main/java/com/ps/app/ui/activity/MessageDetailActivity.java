@@ -33,7 +33,6 @@ public class MessageDetailActivity extends BaseActivity {
 
     private int source = 0;
 
-    private boolean isMarked = false;
     private ListBean listBean;
     private HashMap<String, String> message_type_map = new HashMap<>();
 
@@ -61,7 +60,6 @@ public class MessageDetailActivity extends BaseActivity {
                 if (response.getCode() == 2000) {
                     Log.i(TAG, response.getDesc());
                     showShortToast(response.getDesc());
-                    isMarked = true;
                     setResult(RESULT_OK);
                 }
                 if (response.getCode() == 2201) {

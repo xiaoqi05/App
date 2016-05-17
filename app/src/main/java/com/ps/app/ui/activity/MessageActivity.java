@@ -186,7 +186,6 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     total = response.getData().getTotal();
                     if (response.getData().getTotal() <= DEFAULT_LIST_SIZE) {
                         recycler.setLoadMoreEnable(false);
-                        return;
                     }
                     if (total == 0) {
                         recycler.showNoDataView();
@@ -254,8 +253,10 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                 removeAllData();
                 return true;*/
             case R.id.marker_already_read:
-                showNormalPrograssDailogBar(MessageActivity.this, "正在加载");
-                markMsgRead();
+                if (total!=0){
+                    showNormalPrograssDailogBar(MessageActivity.this, "正在加载");
+                    markMsgRead();
+                }
                 return true;
             case android.R.id.home:
                 finish();

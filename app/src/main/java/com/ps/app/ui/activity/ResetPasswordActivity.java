@@ -203,7 +203,6 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                     }
                 } else {
                     myHandler.sendEmptyMessage(ERROR_GET_VER);
-                    showLongToast("返回支持发送验证码的cuowu");
                     ((Throwable) data).printStackTrace();
                 }
             }
