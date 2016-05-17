@@ -183,10 +183,6 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
             et_phone.setText(phone);
         }
 
-        if (!TextUtils.isEmpty(phone)) {
-            showShortToast("请输入手机号码");
-            return;
-        }
         SMSSDK.initSDK(this, Constant.APPKEY, Constant.APPSECRET, false);
         EventHandler eh = new EventHandler() {
             @Override
