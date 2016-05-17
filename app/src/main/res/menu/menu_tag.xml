@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/clear_tag_message"
+        android:title="清楚所有"
+        app:showAsAction="never"/>
+
+</menu>

@@ -8,13 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ps.app.R;
@@ -23,6 +22,7 @@ import com.ps.app.support.Bean.AssetListBean;
 import com.ps.app.support.Bean.FreeManListBean;
 import com.ps.app.support.adapter.MyAssetRecAdapter;
 import com.ps.app.support.adapter.MyFreeManAdapter;
+import com.ps.app.support.db.TagsManager;
 import com.ps.app.support.utils.DateFormat;
 import com.rey.material.app.DatePickerDialog;
 import com.rey.material.app.Dialog;
@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.gujun.android.taggroup.TagGroup;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -67,10 +68,13 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private String start_time;
     private String end_time;
 
+    private TagsManager mTagsManager;
+    private TagGroup mTagGroup;
+
     private static class MyHandler extends Handler {
 
-
         private WeakReference<AssetSearchActivity> activityWeakReference;
+
 
         public MyHandler(AssetSearchActivity activity) {
             activityWeakReference = new WeakReference<>(activity);
@@ -118,6 +122,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onResume() {
+        mTagGroup.setTags(mTagsManager.getTags());
         super.onResume();
     }
 
@@ -138,10 +143,14 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.prepareForDragAndSwipe(false, false);
         recycler.setScrollBarEnable(false);
-        RelativeLayout rl_ptr_asset_search_header = (RelativeLayout) LayoutInflater.from(AssetSearchActivity.this).inflate(R.layout.ptr_asset_search_header, recycler, false);
-        ImageView iv_delete = (ImageView) rl_ptr_asset_search_header.findViewById(R.id.iv_search_delete);
+        //RelativeLayout rl_ptr_asset_search_header = (RelativeLayout) LayoutInflater.from(AssetSearchActivity.this).inflate(R.layout.ptr_asset_search_header, recycler, false);
+        ImageView iv_delete = (ImageView) findViewById(R.id.iv_search_delete);
+        assert iv_delete != null;
         iv_delete.setOnClickListener(this);
-        recycler.addRecyclerViewHeader(rl_ptr_asset_search_header);
+        //LinearLayout ll_tag = (LinearLayout) LayoutInflater.from(AssetSearchActivity.this).inflate(R.layout.tag_cloud_view, recycler, false);
+        initTagGroup();
+        //recycler.addRecyclerViewHeader(rl_ptr_asset_search_header);
+        //  recycler.addRecyclerViewHeader(ll_tag);
         recycler.setOnItemClickListener(new PowerfulRecyclerView.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, RecyclerView.ViewHolder holder, int position) {
@@ -159,6 +168,26 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
             }
         });
         recycler.setItemAnimator(new ZoomInAnimator());
+    }
+
+    private void initTagGroup() {
+        mTagGroup = (TagGroup) findViewById(R.id.tag_group);
+        mTagsManager = TagsManager.getInstance(getApplicationContext());
+        mTagGroup.setOnTagClickListener(mTagClickListener);
+    }
+
+
+    private TagGroup.OnTagClickListener mTagClickListener = new TagGroup.OnTagClickListener() {
+        @Override
+        public void onTagClick(String tag) {
+            Toast.makeText(AssetSearchActivity.this, tag, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    public void onBackPressed() {
+        mTagsManager.updateTags(mTagGroup.getTags());
+        super.onBackPressed();
     }
 
     private void removeAllData() {
@@ -186,8 +215,10 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         Dialog.Builder builder = null;
         if (v.getId() == R.id.iv_search_delete) {
             showShortToast("删除最近搜索");
-            //带动画的删除所有
-            removeAllData();
+            //删除所有
+            //mTagGroup.submitTag();
+            startActivity(new Intent(AssetSearchActivity.this, EditRecSearchTagActivity.class));
+
         }
         if (v.getId() == R.id.bt_search) {
             String search_content = et_asset_search.getText().toString().trim();
@@ -198,7 +229,8 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
                     showShortToast("请选择时间");
                     return;
                 }*/
-                
+                mTagsManager.addTag(search_content);
+                mTagsManager.updateTags(mTagsManager.getTags());
                 showNormalPrograssDailogBar(this, "正在搜索");
                 startAssetSearch(search_content);
             } else if (id == 1) {
@@ -295,7 +327,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         HashMap<String, String> params = new HashMap<>();
         params.put("pn", "1");
         params.put("ps", "10");
-        if (!TextUtils.isEmpty(search_content)){
+        if (!TextUtils.isEmpty(search_content)) {
             params.put("name", search_content);
         }
         if (!TextUtils.isEmpty(start_time)) {
@@ -304,7 +336,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         if (!TextUtils.isEmpty(end_time)) {
             params.put("endTime", end_time);
         }
-        
+
         OkHttpUtils.post().params(params).addHeader("cookie", cookie)
                 .url(Constant.ASET_SEARCH_URL).build().connTimeOut(10000).execute(new UserAssetDetailCallback() {
             @Override
@@ -333,6 +365,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     }
 
     private abstract class UserAssetDetailCallback extends Callback<AssetListBean> {
+
         @Override
         public AssetListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
@@ -341,13 +374,13 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     }
 
     private abstract class UserFreemanDetailCallback extends Callback<FreeManListBean> {
+
         @Override
         public FreeManListBean parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
             return new Gson().fromJson(string, FreeManListBean.class);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -360,4 +393,6 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         }
 
     }
+
+
 }
