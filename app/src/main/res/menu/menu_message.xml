@@ -7,11 +7,11 @@
         android:title="全部标记为已读"
         app:showAsAction="never"
         />
-
+<!--
     <item
         android:id="@+id/clear_message"
         android:title="清空消息"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/>-->
 
 
 </menu>

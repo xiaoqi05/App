@@ -16,7 +16,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
-import com.ps.app.support.Bean.CommonResultWithErrorBean;
+import com.ps.app.support.Bean.CommonError;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.PushMsgListBean.DataBean.ListBean;
 import com.ps.app.support.adapter.MyMessageRecAdapter;
@@ -174,10 +174,12 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
                 hideSpecialView("加载失败，请重试");
+                dismissNormalPrograssDailogBar();
             }
 
             @Override
             public void onResponse(PushMsgListBean response) {
+                dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     total = response.getData().getTotal();
                     if (pn * ps > total) {
@@ -244,12 +246,12 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.clear_message:
+            /*case R.id.clear_message:
                 showShortToast("清空消息");
                 removeAllData();
-
-                return true;
+                return true;*/
             case R.id.marker_already_read:
+                showNormalPrograssDailogBar(MessageActivity.this,"正在加载");
                 markMsgRead();
                 return true;
             case android.R.id.home:
@@ -289,13 +291,14 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
+                dismissNormalPrograssDailogBar();
             }
 
             @Override
-            public void onResponse(CommonResultWithErrorBean response) {
+            public void onResponse(CommonError response) {
+                dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     showShortToast(response.getDesc());
-                    Log.i(TAG, response.getData());
                     myHandler.sendEmptyMessage(RELOAD);
                 }
                 if (response.getCode() == 2205) {
@@ -311,11 +314,11 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         });
     }
 
-    public abstract class UserMsgMarkCallback extends Callback<CommonResultWithErrorBean> {
+    public abstract class UserMsgMarkCallback extends Callback<CommonError> {
         @Override
-        public CommonResultWithErrorBean parseNetworkResponse(Response response) throws IOException {
+        public CommonError parseNetworkResponse(Response response) throws IOException {
             String string = response.body().string();
-            return new Gson().fromJson(string, CommonResultWithErrorBean.class);
+            return new Gson().fromJson(string, CommonError.class);
         }
     }
 
@@ -323,6 +326,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RELOAD) {
             if (resultCode == RESULT_OK) {
+                showNormalPrograssDailogBar(MessageActivity.this,"正在加载中");
                 myHandler.sendEmptyMessage(RELOAD);
             }
         }

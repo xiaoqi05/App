@@ -24,6 +24,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public MyMessageRecAdapter(Context mContext, List<DataBean.ListBean> datas) {
         this.mContext = mContext;
         this.datas = datas;
+      
     }
 
     @Override
@@ -49,7 +50,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else {
                 ((MyViewHolder) holder).iv_flag.setVisibility(View.VISIBLE);
             }
-            
+
         }
     }
 
