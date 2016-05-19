@@ -3,14 +3,11 @@ package com.ps.app.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
-import com.ps.app.support.Bean.CommonResultBean;
 import com.ps.app.support.utils.CheckPhone;
 import com.ps.app.support.utils.MD5Util;
 import com.ps.app.support.view.Code;
@@ -18,7 +15,9 @@ import com.rey.material.widget.EditText;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -141,45 +140,57 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .addParams("phone", phone)//
                 .addParams("password", MD5Util.md5(paw))//MD5Util.md5(paw)
                 .build()//
-                .execute(new UserLoginCallback() {
+                .execute(new Callback() {
+                    @Override
+                    public Object parseNetworkResponse(Response response) throws Exception {
+                        return response.body().string();
+                    }
 
                     @Override
                     public void onError(Call call, Exception e) {
                         dismissNormalPrograssDailogBar();
-                        System.out.println("异常" + e
-                        );
-                        showShortToast("你的密码错误，请重新登录");
+                        System.out.println("异常" + e);
                     }
 
                     @Override
-                    public void onResponse(CommonResultBean response) {
-                        dismissNormalPrograssDailogBar();
-                        if (response.getCode() == 2000) {
-                            showLongToast("登录" + response.getDesc());
-                            getSharePreference("").edit().putBoolean("isLogin", true).apply();
-                            //退出的时候上传sid
-                            getSharePreference("").edit().putString("sid", response.getData()).apply();
-                            //cookie 持久化管理
-                            List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
-                            getSharePreference("").edit().putString("cookie", String.valueOf(cookies.get(0))).apply();
-                            getSharePreference("").edit().putString("phone", phone).apply();
-                            getSharePreference("").edit().putInt("valid", 30).apply();
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTimeInMillis(System.currentTimeMillis());
-                            getSharePreference("").edit().putInt("date", calendar.DAY_OF_YEAR).apply();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("phone", phone);
-                            startActivity(intent);
-                            finish();
-                        }
-                        if (response.getCode() == 2202) {
-                            showLongToast(response.getData());
+                    public void onResponse(Object response) {
+                        String response1 = (String) response;
+                        try {
+                            JSONObject jsonObject = new JSONObject(response1);
+                            int code = jsonObject.optInt("code");
+                            dismissNormalPrograssDailogBar();
+                            if (code == 2000) {
+                                showLongToast("登录" + jsonObject.optString("desc"));
+                                getSharePreference("").edit().putBoolean("isLogin", true).apply();
+                                //退出的时候上传sid
+                                getSharePreference("").edit().putString("sid", jsonObject.optString("data")).apply();
+                                //cookie 持久化管理
+                                ////  退出登录时清除sp，cookies 
+                                List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
+                                getSharePreference("").edit().putString("cookie", String.valueOf(cookies)).apply();
+                                getSharePreference("").edit().putString("phone", phone).apply();
+                                getSharePreference("").edit().putInt("valid", 30).apply();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(System.currentTimeMillis());
+                                getSharePreference("").edit().putInt("date", calendar.DAY_OF_YEAR).apply();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            if (code == 2202) {
+                                showLongToast(jsonObject.optString("desc"));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
+
                 });
     }
 
 
+/*
     public abstract class UserLoginCallback extends Callback<CommonResultBean> {
         @Override
         public CommonResultBean parseNetworkResponse(Response response) throws IOException {
@@ -191,5 +202,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+*/
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

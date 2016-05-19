@@ -604,6 +604,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 if (response.getCode() == 2204) {
                     showShortToast("你的登录失效，请重新登录");
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });
