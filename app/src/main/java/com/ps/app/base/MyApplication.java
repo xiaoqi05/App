@@ -10,6 +10,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.JPushInterface;
 import im.fir.sdk.FIR;
 
 
@@ -28,6 +29,9 @@ public class MyApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
         OkHttpUtils.getInstance().setConnectTimeout(10000, TimeUnit.MILLISECONDS);
         FIR.init(this);
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);     		// 初始化 JPush
+
     }
     private void setupTheme() {
       

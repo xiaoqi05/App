@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.ps.app.R;
 import com.ps.app.support.utils.NetWorkHelper;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class BaseActivity extends AppCompatActivity {
     private ProgressDialog progress;
 
@@ -163,5 +165,15 @@ public class BaseActivity extends AppCompatActivity {
         progress.dismiss();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 }

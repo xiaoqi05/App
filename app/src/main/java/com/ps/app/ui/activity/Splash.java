@@ -70,4 +70,6 @@ public class Splash extends BaseActivity {
         progressBar = (ProgressBar) findViewById(R.id.splash_progress);
     }
 
+   
+    
 }

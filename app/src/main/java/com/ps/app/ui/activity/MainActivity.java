@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import cn.jpush.android.api.JPushInterface;
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 import okhttp3.Call;
@@ -85,6 +86,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private Menu menu;
     //用于搜索界面
     private int id = 0;
+    public static boolean isForeground = false;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,13 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initActionBar(-1, "警务小秘书");
         initTab();
         initDraw(mToolbar, savedInstanceState);
+        initPush();
 
+    }
+
+    private void initPush() {
+        JPushInterface.init(getApplicationContext());
+        JPushInterface.resumePush(getApplicationContext());
     }
 
     private void initTab() {
@@ -257,12 +269,15 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     protected void onResume() {
         super.onResume();
         //  mMapView.onResume();
+        JPushInterface.resumePush(getApplicationContext());
+        isForeground = true;
         setMsgNoteNum();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        isForeground = false;
         // mMapView.onPause();
     }
 
