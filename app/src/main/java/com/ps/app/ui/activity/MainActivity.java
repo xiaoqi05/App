@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -48,6 +50,7 @@ import com.ps.app.base.Constant;
 import com.ps.app.support.Bean.CommonError;
 import com.ps.app.support.Bean.PushMsgListBean;
 import com.ps.app.support.Bean.VersionBean;
+import com.ps.app.support.utils.PhoneInfo;
 import com.ps.app.support.utils.ViewFindUtils;
 import com.ps.app.ui.fragment.AssetsSeizedFragment;
 import com.ps.app.ui.fragment.WarrantyStaffFragment;
@@ -57,10 +60,13 @@ import com.zhy.http.okhttp.callback.FileCallBack;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 import okhttp3.Call;
@@ -68,6 +74,7 @@ import okhttp3.Response;
 
 public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private static final int SDK_PERMISSION_REQUEST = 127;
+    public static final int MSG_SET_ALIAS = 1001;
     private static final int PROFILE_SETTING = 1;
     private static final String TAG = "MainActivity";
     private MapView mMapView;
@@ -77,8 +84,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     private final String[] mTitles = {
             "资产查封", "保外人员"
     };
-    private int badgeCount = 0;
 
+    private int badgeCount = 0;
     //save our header or result
     private AccountHeader headerResult = null;
     private Drawer result = null;
@@ -90,7 +97,30 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
     public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
+
     public static final String KEY_EXTRAS = "extras";
+    private MyHandler myHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private WeakReference<MainActivity> activityWeakReference;
+
+        public MyHandler(MainActivity activity) {
+            activityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = activityWeakReference.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case MSG_SET_ALIAS:
+                        Log.i(TAG, "Set alias in handler.");
+                        JPushInterface.setAliasAndTags(activity, (String) msg.obj, null, activity.mAliasCallback);
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -418,7 +448,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                     }
                 })
                 .withSavedInstance(savedInstanceState)
-                .withShowDrawerOnFirstLaunch(true)
+                .withShowDrawerOnFirstLaunch(false)
                 .build();
 
         //if you have many different types of DrawerItems you can magically pre-cache those items to get a better scroll performance
@@ -632,6 +662,41 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
             return new Gson().fromJson(string, PushMsgListBean.class);
         }
     }
+
+    private void setAlias() {
+        //调用JPush API设置Alias
+        myHandler.sendMessage(myHandler.obtainMessage(MSG_SET_ALIAS, PhoneInfo.getImei(MainActivity.this)));
+    }
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (isNetworkAvailable()) {
+                        myHandler.sendMessageDelayed(myHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+            Log.e(TAG, logs);
+        }
+
+    };
 
 
 }
