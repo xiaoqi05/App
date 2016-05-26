@@ -555,13 +555,11 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                showShortToast("取消");
             }
         });
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                showShortToast("确定");
                 final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 progressDialog.show();
