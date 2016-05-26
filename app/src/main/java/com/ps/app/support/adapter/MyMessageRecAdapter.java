@@ -38,8 +38,8 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
-            ((MyViewHolder) holder).tv_title.setText(datas.get(position).getMessage().getContent());
-            ((MyViewHolder) holder).iv_icon.setTag(datas.get(position).getMessage().getType());
+            ((MyViewHolder) holder).tv_title.setText(datas.get(position).getContent());
+            ((MyViewHolder) holder).iv_icon.setTag(datas.get(position).getType());
             if (((MyViewHolder) holder).iv_icon.getTag() != null && ((MyViewHolder) holder).iv_icon.getTag().equals("ASSET_MANAGEMENT_MSG")) {
                 ((MyViewHolder) holder).setImage(R.drawable.house);
             } else {

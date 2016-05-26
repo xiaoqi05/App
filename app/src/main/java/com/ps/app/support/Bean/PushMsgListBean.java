@@ -5,39 +5,40 @@ import java.util.List;
 
 public class PushMsgListBean implements Serializable {
 
+
     /**
      * code : 2000
-     * data : {"endRow":2,"firstPage":1,"hasNextPage":false,"hasPreviousPage":false,"isFirstPage":true,"isLastPage":true,"lastPage":1,"list":[{"createTime":"2016-05-05 16:15:15","id":1,"message":{"content":"即将到期","id":1,"type":"ASSET_MANAGEMENT_MSG"},"mid":1,"successed":0,"unread":0},{"createTime":"2016-05-05 16:15:15","id":2,"message":{"content":"你已离开限制区域，请回去！","id":3,"type":"ZONE_WARNING"},"mid":1,"successed":0,"unread":0}],"navigatePages":8,"navigatepageNums":[1],"nextPage":0,"orderBy":"","pageNum":1,"pageSize":5,"pages":1,"prePage":0,"size":2,"startRow":1,"total":2}
-     * error :
+     * data : {"endRow":5,"firstPage":1,"hasNextPage":true,"hasPreviousPage":false,"isFirstPage":true,"isLastPage":false,"lastPage":3,"list":[{"content":"嫌疑犯李四今日还未签到","createTime":"2016-05-22 15:10:43","id":1,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"嫌疑犯张三今日还未签到","createTime":"2016-05-22 15:10:35","id":2,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"嫌疑犯王三风今日还未签到","createTime":"2016-05-22 15:12:12","id":3,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"2","createTime":"2016-05-17 14:48:17","id":4,"mid":52,"successed":0,"type":null,"unread":1},{"content":"1","createTime":"2016-05-17 15:34:53","id":5,"mid":52,"successed":0,"type":null,"unread":1}],"navigatePages":8,"navigatepageNums":[1,2,3],"nextPage":2,"orderBy":"","pageNum":1,"pageSize":5,"pages":3,"prePage":0,"size":5,"startRow":1,"total":15}
      * desc : 成功!
+     * error : 
      */
 
     private int code;
     /**
-     * endRow : 2
+     * endRow : 5
      * firstPage : 1
-     * hasNextPage : false
+     * hasNextPage : true
      * hasPreviousPage : false
      * isFirstPage : true
-     * isLastPage : true
-     * lastPage : 1
-     * list : [{"createTime":"2016-05-05 16:15:15","id":1,"message":{"content":"即将到期","id":1,"type":"ASSET_MANAGEMENT_MSG"},"mid":1,"successed":0,"unread":0},{"createTime":"2016-05-05 16:15:15","id":2,"message":{"content":"你已离开限制区域，请回去！","id":3,"type":"ZONE_WARNING"},"mid":1,"successed":0,"unread":0}]
+     * isLastPage : false
+     * lastPage : 3
+     * list : [{"content":"嫌疑犯李四今日还未签到","createTime":"2016-05-22 15:10:43","id":1,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"嫌疑犯张三今日还未签到","createTime":"2016-05-22 15:10:35","id":2,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"嫌疑犯王三风今日还未签到","createTime":"2016-05-22 15:12:12","id":3,"mid":52,"successed":0,"type":"SIGN_IN_TIP","unread":1},{"content":"2","createTime":"2016-05-17 14:48:17","id":4,"mid":52,"successed":0,"type":null,"unread":1},{"content":"1","createTime":"2016-05-17 15:34:53","id":5,"mid":52,"successed":0,"type":null,"unread":1}]
      * navigatePages : 8
-     * navigatepageNums : [1]
-     * nextPage : 0
-     * orderBy :
+     * navigatepageNums : [1,2,3]
+     * nextPage : 2
+     * orderBy : 
      * pageNum : 1
      * pageSize : 5
-     * pages : 1
+     * pages : 3
      * prePage : 0
-     * size : 2
+     * size : 5
      * startRow : 1
-     * total : 2
+     * total : 15
      */
 
     private DataBean data;
-    private String error;
     private String desc;
+    private String error;
 
     public int getCode() {
         return code;
@@ -55,14 +56,6 @@ public class PushMsgListBean implements Serializable {
         this.data = data;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
     public String getDesc() {
         return desc;
     }
@@ -71,7 +64,15 @@ public class PushMsgListBean implements Serializable {
         this.desc = desc;
     }
 
-    public static class DataBean implements Serializable {
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public static class DataBean implements Serializable{
         private int endRow;
         private int firstPage;
         private boolean hasNextPage;
@@ -90,12 +91,13 @@ public class PushMsgListBean implements Serializable {
         private int startRow;
         private int total;
         /**
-         * createTime : 2016-05-05 16:15:15
+         * content : 嫌疑犯李四今日还未签到
+         * createTime : 2016-05-22 15:10:43
          * id : 1
-         * message : {"content":"即将到期","id":1,"type":"ASSET_MANAGEMENT_MSG"}
-         * mid : 1
+         * mid : 52
          * successed : 0
-         * unread : 0
+         * type : SIGN_IN_TIP
+         * unread : 1
          */
 
         private List<ListBean> list;
@@ -253,19 +255,22 @@ public class PushMsgListBean implements Serializable {
             this.navigatepageNums = navigatepageNums;
         }
 
-        public static class ListBean implements Serializable {
+        public static class ListBean implements Serializable{
+            private String content;
             private String createTime;
             private int id;
-            /**
-             * content : 即将到期
-             * id : 1
-             * type : ASSET_MANAGEMENT_MSG
-             */
-
-            private MessageBean message;
             private int mid;
             private int successed;
+            private String type;
             private int unread;
+
+            public String getContent() {
+                return content;
+            }
+
+            public void setContent(String content) {
+                this.content = content;
+            }
 
             public String getCreateTime() {
                 return createTime;
@@ -281,14 +286,6 @@ public class PushMsgListBean implements Serializable {
 
             public void setId(int id) {
                 this.id = id;
-            }
-
-            public MessageBean getMessage() {
-                return message;
-            }
-
-            public void setMessage(MessageBean message) {
-                this.message = message;
             }
 
             public int getMid() {
@@ -307,42 +304,20 @@ public class PushMsgListBean implements Serializable {
                 this.successed = successed;
             }
 
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
             public int getUnread() {
                 return unread;
             }
 
             public void setUnread(int unread) {
                 this.unread = unread;
-            }
-
-            public static class MessageBean implements Serializable {
-                private String content;
-                private int id;
-                private String type;
-
-                public String getContent() {
-                    return content;
-                }
-
-                public void setContent(String content) {
-                    this.content = content;
-                }
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getType() {
-                    return type;
-                }
-
-                public void setType(String type) {
-                    this.type = type;
-                }
             }
         }
     }

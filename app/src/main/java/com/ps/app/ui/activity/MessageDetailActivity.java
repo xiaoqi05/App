@@ -86,9 +86,9 @@ public class MessageDetailActivity extends BaseActivity {
         //消息详情
         listBean = (ListBean) getIntent().getSerializableExtra("listBean");
         tv_msg_detail_id_info.setText(listBean.getId() + "");
-        tv_msg_detail_content_info.setText(listBean.getMessage().getContent());
+        tv_msg_detail_content_info.setText(listBean.getContent());
         tv_msg_detail_time_info.setText(listBean.getCreateTime());
-        tv_msg_detail_type_info.setText(message_type_map.get(listBean.getMessage().getType()));
+        tv_msg_detail_type_info.setText(message_type_map.get(listBean.getType()));
 
     }
 

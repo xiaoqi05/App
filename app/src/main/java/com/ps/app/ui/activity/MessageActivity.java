@@ -170,7 +170,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addParams("mid", getSharePreference("").getInt("mid", -1) + "").addHeader("cookie", cookie)
                 .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -193,7 +193,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
                     }
                     pn++;
                     listBeen.addAll(response.getData().getList());
-                    Log.i(TAG, listBeen.get(0).getMessage().toString());
+                    Log.i(TAG, listBeen.get(0).toString());
                     Message message = new Message();
                     message.what = msg;
                     message.obj = listBeen;
@@ -292,7 +292,7 @@ public class MessageActivity extends BaseActivity implements OnRefreshListener, 
 
     private void markMsgRead() {
         String cookie = getSharePreference("").getString("cookie", "");
-        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("flag", 1 + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
+        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("flag", 1 + "").addParams("mid", getSharePreference("").getInt("mid", -1) + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
