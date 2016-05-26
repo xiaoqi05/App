@@ -49,7 +49,7 @@ public class MessageDetailActivity extends BaseActivity {
     private void markMsgRead() {
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, listBean.getId() + ">>>>>>>>>>>>>>>");
-        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("ids", listBean.getId() + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
+        OkHttpUtils.get().url(Constant.MARK_MSG_READ_URL).addParams("ids", listBean.getId() + "").addParams("mid", getSharePreference("").getInt("mid", -1) + "").addHeader("cookie", cookie).build().execute(new UserMsgMarkCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());

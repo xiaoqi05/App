@@ -301,7 +301,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
     private void startFreeManSearch(String search_content) {
         String cookie = getSharePreference("").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.get().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(pn)).addParams("ps", String.valueOf(ps)).addParams("name", search_content).addParams("mid",getSharePreference("").getInt("mid", -1) + "").addHeader("cookie", cookie)
                 .url(Constant.FREE_MAN_SEARCH_URL).build().connTimeOut(10000).execute(new UserFreemanDetailCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -334,6 +334,7 @@ public class AssetSearchActivity extends BaseActivity implements View.OnClickLis
         HashMap<String, String> params = new HashMap<>();
         params.put("pn", "1");
         params.put("ps", "10");
+        params.put("mid",getSharePreference("").getInt("mid", -1) + "");
         if (!TextUtils.isEmpty(search_content)) {
             params.put("name", search_content);
         }

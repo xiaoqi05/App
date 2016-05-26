@@ -201,7 +201,7 @@ public class WarrantyStaffFragment extends BaseFragment implements OnRefreshList
         final List<ListBean> listBeen = new ArrayList<>();
         String cookie = getSharePreference(getContext(), "").getString("cookie", "");
         Log.i(TAG, "cookie:" + cookie);
-        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(pageNum)).addParams("ps", String.valueOf(pages)).addParams("mid",getSharePreference(getContext(),"").getInt("mid", -1) + "").addHeader("cookie", cookie)
                 .url(Constant.FREE_MAN_URL).build().connTimeOut(10000).execute(new UserAssetCallback() {
             @Override
             public void onError(Call call, Exception e) {

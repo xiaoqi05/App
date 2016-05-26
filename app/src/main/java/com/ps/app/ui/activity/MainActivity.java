@@ -20,7 +20,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -470,15 +469,8 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     private void logout() {
         showNormalPrograssDailogBar(this, "正在注销");
-        String sid = getSharePreference("").getString("sid", "");
         String cookie = getSharePreference("").getString("cookie", "");
-        if (TextUtils.isEmpty(sid)) {
-            showShortToast("请先登录");
-            return;
-        }
-        Log.i(TAG, "sid" + sid);
-        Log.i(TAG, "cookie" + cookie);
-        OkHttpUtils.get().addParams("sid", sid).url(Constant.LOGOUT_URL).addHeader("cookie", cookie).build().execute(new UserLogoutCallback() {
+        OkHttpUtils.get().addParams("sid", getSharePreference("").getInt("mid", -1) + "").url(Constant.LOGOUT_URL).addHeader("cookie", cookie).build().execute(new UserLogoutCallback() {
             @Override
             public void onError(Call call, Exception e) {
                 Log.i(TAG, e.toString());
@@ -493,6 +485,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                     getSharePreference("").edit().clear().apply();
                     Intent intent = new Intent(MainActivity.this, Splash.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
