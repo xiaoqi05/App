@@ -136,6 +136,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
         initTab();
         initDraw(mToolbar, savedInstanceState);
         initPush();
+        setAlias();
 
     }
 
@@ -602,7 +603,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
 
     private void setMsgNoteNum() {
         String cookie = getSharePreference("").getString("cookie", "");
-        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(50)).addHeader("cookie", cookie)
+        OkHttpUtils.get().addParams("pn", String.valueOf(1)).addParams("ps", String.valueOf(50)).addParams("mid", getSharePreference("").getInt("mid", -1) + "").addHeader("cookie", cookie)
                 .url(Constant.GET_MSG_URL).build().connTimeOut(10000).execute(new UserMsgCallback() {
             @Override
             public void onError(Call call, Exception e) {

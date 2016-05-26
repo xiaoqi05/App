@@ -23,6 +23,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,6 +125,10 @@ public class SetPassWordActivity extends BaseActivity {
                                 showLongToast("设置成功,请重新登录");
                                 //注册成功
                                 setResult(REGISTER_SUCCESS);
+                                getSharePreference("").edit().putInt("valid", 30).apply();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(System.currentTimeMillis());
+                                getSharePreference("").edit().putInt("date", calendar.DAY_OF_YEAR).apply();
                                 Intent intent = new Intent(SetPassWordActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();

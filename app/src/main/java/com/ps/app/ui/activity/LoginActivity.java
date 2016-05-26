@@ -6,8 +6,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.ps.app.R;
 import com.ps.app.base.Constant;
+import com.ps.app.support.Bean.LoginSuccessBean;
 import com.ps.app.support.utils.CheckPhone;
 import com.ps.app.support.utils.MD5Util;
 import com.ps.app.support.view.Code;
@@ -18,7 +20,6 @@ import com.zhy.http.okhttp.callback.Callback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.Call;
@@ -127,7 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     public void resetPassword(View v) {
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-        intent.putExtra("source",8);
+        intent.putExtra("source", 8);
         startActivity(intent);
     }
 
@@ -139,6 +140,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .url(Constant.LOGIN_URL)//
                 .addParams("phone", phone)//
                 .addParams("password", MD5Util.md5(paw))//MD5Util.md5(paw)
+                .addParams("type", "POLICE")
                 .build()//
                 .execute(new Callback() {
                     @Override
@@ -160,19 +162,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             int code = jsonObject.optInt("code");
                             dismissNormalPrograssDailogBar();
                             if (code == 2000) {
-                                showLongToast("登录" + jsonObject.optString("desc"));
+                                LoginSuccessBean loginSuccessBean = new Gson().fromJson(response1, LoginSuccessBean.class);
+                                showLongToast("登录" + loginSuccessBean.getDesc());
+                                int id = loginSuccessBean.getData().getMember().getId();
                                 getSharePreference("").edit().putBoolean("isLogin", true).apply();
-                                //退出的时候上传sid
-                                getSharePreference("").edit().putString("sid", jsonObject.optString("data")).apply();
+                                getSharePreference("").edit().putInt("mid", id).apply();
+                                //退出的时候上传sid mid id
                                 //cookie 持久化管理
-                                ////  退出登录时清除sp，cookies 
+                                //退出登录时清除sp 
                                 List<Cookie> cookies = OkHttpUtils.getInstance().getCookieStore().getCookies();
                                 getSharePreference("").edit().putString("cookie", String.valueOf(cookies)).apply();
                                 getSharePreference("").edit().putString("phone", phone).apply();
-                                getSharePreference("").edit().putInt("valid", 30).apply();
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.setTimeInMillis(System.currentTimeMillis());
-                                getSharePreference("").edit().putInt("date", calendar.DAY_OF_YEAR).apply();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
