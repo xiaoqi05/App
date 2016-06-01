@@ -175,9 +175,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 getSharePreference("").edit().putString("phone", phone).apply();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
-                                finish();
+                                LoginActivity.this.finish();
                             }
-                            if (code == 2202) {
+                            if (code == 2202 || code == 2200) {
                                 showLongToast(jsonObject.optString("desc"));
                             }
 
