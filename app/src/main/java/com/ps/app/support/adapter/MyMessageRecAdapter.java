@@ -24,7 +24,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public MyMessageRecAdapter(Context mContext, List<DataBean.ListBean> datas) {
         this.mContext = mContext;
         this.datas = datas;
-      
+
     }
 
     @Override
@@ -40,6 +40,7 @@ public class MyMessageRecAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             // ((MyViewHolder) holder).setImage(datas.get(position).getMessage());
             ((MyViewHolder) holder).tv_title.setText(datas.get(position).getContent());
             ((MyViewHolder) holder).iv_icon.setTag(datas.get(position).getType());
+            ((MyViewHolder) holder).tv_content.setText(datas.get(position).getCreateTime());
             if (((MyViewHolder) holder).iv_icon.getTag() != null && ((MyViewHolder) holder).iv_icon.getTag().equals("ASSET_MANAGEMENT_MSG")) {
                 ((MyViewHolder) holder).setImage(R.drawable.house);
             } else {

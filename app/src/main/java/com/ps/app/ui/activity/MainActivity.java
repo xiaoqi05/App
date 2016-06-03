@@ -482,7 +482,10 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                 dismissNormalPrograssDailogBar();
                 if (response.getCode() == 2000) {
                     showShortToast("注销成功");
-                    getSharePreference("").edit().clear().apply();
+                    getSharePreference("").edit().clear().commit();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    getSharePreference("").edit().putInt("date", calendar.get(Calendar.DAY_OF_YEAR)).apply();
                     Intent intent = new Intent(MainActivity.this, Splash.class);
                     startActivity(intent);
                     finish();
@@ -624,7 +627,7 @@ public class MainActivity extends BaseActivity implements OnTabSelectListener {
                         //检查应用有效期
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(System.currentTimeMillis());
-                        int today = calendar.DAY_OF_YEAR;
+                        int today = calendar.get(Calendar.DAY_OF_YEAR);
                         int loginDay = getSharePreference("").getInt("date", 0);
                         int valid = 30 - (today - loginDay);
                         showShortToast("试用软件，" + valid + "天后到期");
